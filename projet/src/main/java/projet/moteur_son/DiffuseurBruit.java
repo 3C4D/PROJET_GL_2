@@ -7,9 +7,9 @@ public class DiffuseurBruit{
   private AudioClip bruit;
 
   /**
-    * Exception levée si le fichier de bruit
+    * Exception levée si le fichier de bruit est introuvable
   */
-  private class BruitIntrouvableException extends Exception{
+  public class BruitIntrouvableException extends Exception{
     /**
       * Constructeur de l'exception
       * @param chemin Mauvais chemin spécifié en construisant un diffuseur
@@ -41,8 +41,9 @@ public class DiffuseurBruit{
   /**
     * Joue un bruit
   */
-  public void jouer(){
+  public void jouer(double volume){
     if(bruit != null){
+      bruit.setVolume(volume);
       bruit.play();
     }
   }
