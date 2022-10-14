@@ -20,25 +20,22 @@ import java.net.Socket;
 public class Server extends Thread {
 
     /***** PARAMETERS *****/
-
-    ServerSocket listener;
-    Socket connection;
-    Boolean exit;
-    Object msg;
-
+    
     ObjectOutputStream out;
     ObjectInputStream in;
+    ServerSocket listener;
+    Socket connection;
+    Data msg;
 
     /***** METHODS *****/
 
     /***
      * Constructor
-     * @param port Where the server will listen
+     * @param _port Where the server will listen
      */
-    Server(int port) {
+    Server(int _port) {
         try {
-            listener = new ServerSocket(port);
-            exit = false;
+            listener = new ServerSocket(_port);
         } catch (IOException e) {
             System.out.println("Invalid port number");
         }
@@ -60,10 +57,9 @@ public class Server extends Thread {
             do {
                 try {
                     
-                    msg = in.readObject();
+                    msg = (Data) in.readObject();
                     System.out.println("From client -> " + msg);
                 } catch (EOFException | ClassNotFoundException end) {
-                    System.out.println("Data received in wrong format");
                     break;
                 }
             } while (msg != null);

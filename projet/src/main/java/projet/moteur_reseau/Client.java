@@ -10,32 +10,32 @@ import java.io.IOException;
 // Networking things
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 /***** CLASS *****/
 
 /***
  * Client class
  */
-public class Client {
+public class Client extends Thread {
 
     /***** PARAMETERS *****/
 
-    Socket connection;
     ObjectOutputStream out;
     ObjectInputStream in;
+    Socket connection;
+    Data msg;
 
     /***** METHODS *****/
 
     /***
      * Constructor
-     * @param address Server's IP address
-     * @param port Server's listenning port
+     * @param _address Server's IP address
+     * @param _port Server's listenning port
      */
-    Client(InetAddress address, int port) {
+    Client(InetAddress _address, int _port) {
         try {
-            connection = new Socket(address, port);
-            System.out.println("Connected to " + address.getHostName() + " on port " + port);
+            connection = new Socket(_address, _port);
+            System.out.println("Connected to " + _address.getHostName() + " on port " + _port);
         } catch (IOException e) {
             System.out.println("Invalid IP address or port number");
         }
@@ -51,11 +51,14 @@ public class Client {
             in = new ObjectInputStream(connection.getInputStream());
 
             // Sending messages
-            out.writeObject("Hello server !");
+            msg = new Data("Hello server !");
+            out.writeObject(msg);
             out.flush();
-            out.writeObject("I am your best client");
+            msg = new Data("I am your best client");
+            out.writeObject(msg);
             out.flush();
 
+            // Closing I/O streams and socket
             in.close();
             out.close();
             connection.close();
@@ -67,15 +70,13 @@ public class Client {
 
     /***
      * Main method, in charge of running the run method
-     * @param args
+     * @param args No arguments needed here
+     * @throws InterruptedException
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         byte addr[] = { 127, 0, 0, 1 };
-        try {
-            Client client = new Client(InetAddress.getByAddress(addr), 4000);
-            client.run();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        Client client = new Client(InetAddress.getByAddress(addr), 4000);
+        client.start();
+        client.join();
     }
 }
