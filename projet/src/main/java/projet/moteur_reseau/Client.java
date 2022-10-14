@@ -5,6 +5,7 @@ package projet.moteur_reseau;
 // Input/Output
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 
 // Networking things
@@ -51,12 +52,23 @@ public class Client extends Thread {
             in = new ObjectInputStream(connection.getInputStream());
 
             // Sending messages
-            msg = new Data("Hello server !");
-            out.writeObject(msg);
+            out.writeObject(new Data("Hello server !"));
             out.flush();
-            msg = new Data("I am your best client");
-            out.writeObject(msg);
+            out.writeObject(new Data("I am your best client"));
             out.flush();
+            out.writeObject(null);
+            out.flush();
+
+            // Reading and displaying things
+            do {
+                try {
+                    
+                    msg = (Data) in.readObject();
+                    System.out.println("From server -> " + msg);
+                } catch (EOFException | ClassNotFoundException end) {
+                    break;
+                }
+            } while (msg != null);
 
             // Closing I/O streams and socket
             in.close();

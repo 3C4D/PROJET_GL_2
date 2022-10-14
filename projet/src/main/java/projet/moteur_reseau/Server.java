@@ -53,6 +53,12 @@ public class Server extends Thread {
             in = new ObjectInputStream(connection.getInputStream());
             System.out.println("Connection established with " + connection.getInetAddress().getHostName());
 
+            // Sending messages
+            out.writeObject(new Data("Hello client !"));
+            out.flush();
+            out.writeObject(new Data("I am the best server"));
+            out.flush();
+
             // Reading and displaying things
             do {
                 try {
@@ -64,6 +70,7 @@ public class Server extends Thread {
                 }
             } while (msg != null);
             
+            // Closing I/O streams and sockets
             in.close();
             out.close();
             connection.close();
