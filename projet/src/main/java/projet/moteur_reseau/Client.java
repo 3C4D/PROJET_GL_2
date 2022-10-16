@@ -17,7 +17,7 @@ import java.net.Socket;
 /***
  * Client class
  */
-public class Client extends Thread {
+public class Client {
 
     /***** PARAMETERS *****/
 
@@ -88,7 +88,6 @@ public class Client extends Thread {
     public static void main(String[] args) throws Exception {
         byte addr[] = { 127, 0, 0, 1 };
         Client client = new Client(InetAddress.getByAddress(addr), 4000);
-        client.start();
-        client.join();
+        client.run();
     }
 }
