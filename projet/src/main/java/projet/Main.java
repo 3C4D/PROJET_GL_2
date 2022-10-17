@@ -1,10 +1,22 @@
 package projet;
 
-/** Classe principale du projet */
+
+
 
 public class Main{
-  /** Fonction principale du programme */
-  public static void main(String[] args) {
-    System.out.println("Begin");
-  }
+  public static void main(String[] arguments) {  
+
+    PWindow window = new PWindow("test1", 400, 400);
+
+    PContext context1 = new PContext(300, 400);
+    PContext context2 = new PContext(200, 400);
+    window.addContext(context1);
+    window.addContext(context2);
+
+    window.setFullScreenMode();
+
+    window.setWindowMode();
+
+    while(true);
+  }  
 }
