@@ -21,10 +21,15 @@ public class Client {
 
     /***** PARAMETERS *****/
 
+    // Networking
+    Socket connection;
+
+    // Input/Output
     ObjectOutputStream out;
     ObjectInputStream in;
-    Socket connection;
-    Data msg;
+
+    // Others
+    Data serverMessage;
 
     /***** METHODS *****/
 
@@ -62,13 +67,14 @@ public class Client {
             // Reading and displaying things
             do {
                 try {
-                    
-                    msg = (Data) in.readObject();
-                    System.out.println("From server -> " + msg);
+                    serverMessage = (Data) in.readObject();
+                    if (serverMessage != null) {
+                        System.out.println("From server -> " + serverMessage);
+                    }
                 } catch (EOFException | ClassNotFoundException end) {
                     break;
                 }
-            } while (msg != null);
+            } while (serverMessage != null);
 
             // Closing I/O streams and socket
             in.close();

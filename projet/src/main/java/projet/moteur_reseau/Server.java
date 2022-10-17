@@ -1,17 +1,16 @@
 package projet.moteur_reseau;
 
+import java.io.IOException;
+
 /***** IMPORTS *****/
 
 // Input/Output
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.IOException;
-
-// Components
-import java.util.Vector;
-
 // Networking things
 import java.net.ServerSocket;
+// Components
+import java.util.Vector;
 
 /***** CLASS *****/
 
@@ -26,6 +25,7 @@ public class Server {
     Vector<Thread> clientThreads;
     Vector<ObjectOutputStream> out;         // Output streams for every client
     Vector<ObjectInputStream> in;           // Input stream for every client
+    boolean isRunning;
     int clientsConnected;
     int port;
 
@@ -44,6 +44,7 @@ public class Server {
             out = new Vector<>();
             in = new Vector<>();
             clientsConnected = 0;
+            isRunning = true;
         } catch (IOException e) {
             System.out.println("Invalid port number");
         }
@@ -69,10 +70,10 @@ public class Server {
     synchronized public void disconnectClient(int _clientID) {
         clientsConnected--;
         if (out.elementAt(_clientID) != null) {
-            out.removeElementAt(_clientID);
+            out.setElementAt(null,_clientID);
         }
         if (in.elementAt(_clientID) != null) {
-            in.removeElementAt(_clientID);
+            in.setElementAt(null,_clientID);
         }
     }
 
@@ -82,25 +83,41 @@ public class Server {
      */
     synchronized public void diffuseMessage(Data _message)
     {
-        ObjectOutputStream send;
         for (int i=0; i<out.size(); i++) {
-            send = out.elementAt(i);
-            if (send != null) {
-                try {
-                    send.writeObject(_message);
-                    send.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            sendMessage(_message, i);
+        }
+    }
+
+    /***
+     * Send a message to a client
+     * @param _message  The message to diffuse
+     * @param _clientID The ID of the client
+     */
+    synchronized public void sendMessage(Data _message, int _clientID)
+    {
+        ObjectOutputStream send;
+        send = out.elementAt(_clientID);
+        if (send != null) {
+            try {
+                send.writeObject(_message);
+                send.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
-    public void end() {
+    /***
+     * Wait for the end of client threads
+     */
+    synchronized public void end() {
+        System.out.println("Disconnecting...");
+        isRunning = false;
         for (int i=0; i<clientThreads.size(); i++) {
             try {
-                System.out.println("Disconnecting from client " + i);
+                long truc = clientThreads.get(i).getId();
                 clientThreads.get(i).join();
+                System.out.println(truc + " is stopping... " + clientsConnected);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -111,13 +128,13 @@ public class Server {
      * Run method, where the server will lauch client threads for every new connection
      */
     public void run() {
-        while (true) {
-            // Trying to handle a connection
-            try {
+        try {
+            while (isRunning) {
+                // Trying to handle a connection
                 new ClientThread(listener.accept(), this);
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -129,7 +146,5 @@ public class Server {
     public static void main(String[] args) throws InterruptedException {
         Server server = new Server(4000);
         server.run();
-        Thread.sleep(5000);
-        server.end();
     }
 }
