@@ -1,7 +1,6 @@
 plugins {
     id 'java'
     id 'application'
-    id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -13,19 +12,11 @@ repositories {
     }
 }
 
-group 'org.PROJET_GL_2'
+group 'org.example'
 version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
-}
-
-sourceSets {
-    main {
-        resources {
-            srcDirs = ["src/main/resources"]
-        }
-    }
 }
 
 dependencies {
@@ -41,10 +32,4 @@ application {
 test {
     useJUnitPlatform()
     testLogging.showStandardStreams = true
-}
-
-
-javafx {
-    version = "19"
-    modules = ['javafx.controls', 'javafx.fxml', 'javafx.media']
 }
