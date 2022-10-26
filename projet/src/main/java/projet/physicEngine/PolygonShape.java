@@ -72,6 +72,51 @@ public class PolygonShape extends Shape{
   }
 
   /**
+  * Permet de créer une box rectangulaire aligné sur les axes directement avec
+    les deux hauteurs
+  * @param hX la hauteur en x
+  * @param hy la hauteur en y
+  * @param le point d'origine (coin supérieur gauche)
+  * @return la box associée
+  */
+  public static PolygonShape createRectShape(float hx, float hy, Point origin)
+  {
+    Point[] v = new Point[4];
+
+    v[0] = new Point(origin.getX(), origin.getY());
+    v[1] = new Point(origin.getX()+hx, origin.getY());
+    v[2] = new Point(origin.getX()+hx, origin.getY()+hy);
+    v[3] = new Point(origin.getX(), origin.getY()+hy);
+
+    return new PolygonShape(v, 4);
+  }
+
+  /**
+  * Permet de créer une box rectangulaire sur les axes directement avec
+    les deux hauteurs et l'angle de rotation
+  * @param hX la hauteur en x
+  * @param hy la hauteur en y
+  * @param a l'angle en radian
+  * @param le point d'origine (coin supérieur gauche)
+  * @return la box associée
+  */
+  public static PolygonShape createRectShape(float hx, float hy, float a, Point origin)
+  {
+    Point[] v = new Point[4];
+
+    v[0] = new Point(origin.getX(), origin.getY());
+    Transform.rotationOrigin(v[0], a);
+    v[1] = new Point(origin.getX()+hx, origin.getY());
+    Transform.rotationOrigin(v[1], a);
+    v[2] = new Point(origin.getX()+hx, origin.getY()+hy);
+    Transform.rotationOrigin(v[2], a);
+    v[3] = new Point(origin.getX(), origin.getY()+hy);
+    Transform.rotationOrigin(v[3], a);
+
+    return new PolygonShape(v, 4);
+  }
+
+  /**
   * @param le numéro du sommet que l'on souhaite
   * @return le sommet associé au numéro donné
   */
