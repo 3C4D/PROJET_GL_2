@@ -40,6 +40,7 @@ public class SoundPlayer implements LineListener{
 
       // Temps total en microsecondes (avec une marge)
       totalTime = sound.getMicrosecondLength() - 2_000;
+      ended = true;
     }
   }
 
@@ -110,7 +111,6 @@ public class SoundPlayer implements LineListener{
     }
     else{
       // On met à jour le temps actuel et on joue le son
-      System.out.println(micros);
       time = micros;
       sound.setMicrosecondPosition(micros);
     }
@@ -139,6 +139,7 @@ public class SoundPlayer implements LineListener{
     }
     else{
       sound.stop();
+      ended = true;
     }
   }
 
