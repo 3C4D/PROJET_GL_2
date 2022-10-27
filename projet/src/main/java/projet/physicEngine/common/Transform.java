@@ -1,5 +1,8 @@
 package projet.physicEngine.common;
 
+import projet.physicEngine.CircleShape;
+import projet.physicEngine.PolygonShape;
+
 /**
 * Permet de définir les transformation dans le plan 2D
 */
@@ -38,5 +41,51 @@ public class Transform{
   */
   public static void translation(Vector2D v, Point p){
     v.setStart(Point.copy(p));
+  }
+
+  /**
+  * Permet de translater un polygone par un certain vecteur
+  * @param le polygone à translater
+  * @param le vecteur de translation
+  */
+  public static void translationPolygon(PolygonShape ps, Vector2D trans){
+    int i;
+    int nbVertex = ps.getNbVertex();
+
+      for(i = 0; i < nbVertex; i++){
+        Point peak = ps.getVertex(i);
+        peak.setX(peak.getX() + trans.getCoordX());
+        peak.setY(peak.getY() + trans.getCoordY());
+      }
+  }
+
+  /**
+  * Permet de translater un cercle par un certain vecteur
+  * @param le polygone à translater
+  * @param le vecteur de translation
+  */
+  public static void translationCircle(CircleShape cs, Vector2D trans){
+    (cs.getCenter()).setX(cs.getCenter().getX() + trans.getCoordX());
+    (cs.getCenter()).setY(cs.getCenter().getY() + trans.getCoordY());
+  }
+
+  /**
+  * Permet de faire subir une rotation à un polygone
+  * @param le polygone
+  * @param le point parraport auquel on fait la rotation
+  * @param l'angle de la rotation en radian
+  */
+  public static void rotationPolygon(PolygonShape ps, Point origin, float a){
+
+  }
+
+  /**
+  * Permet de faire subir une rotation à un cercle
+  * @param le cercle
+  * @param le point parraport auquel on fait la rotation
+  * @param l'angle de la rotation en radian
+  */
+  public static void rotationCircle(CircleShape cs, Point origin, float a){
+
   }
 }
