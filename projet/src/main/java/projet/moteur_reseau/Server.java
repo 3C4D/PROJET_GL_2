@@ -1,14 +1,19 @@
 package projet.moteur_reseau;
 
-import java.io.IOException;
-
 /***** IMPORTS *****/
 
 // Input/Output
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.IOException;
+
 // Networking things
 import java.net.ServerSocket;
+
+// Threads
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 // Components
 import java.util.Vector;
 
@@ -21,13 +26,22 @@ public class Server {
 
     /***** PARAMETERS *****/
     
+    // Networking
     ServerSocket listener;
-    Vector<Thread> clientThreads;
+
+    // Threads
+    //Vector<Thread> clientThreads;
+    ExecutorService executor;
+
+    // Input/Output
     Vector<ObjectOutputStream> out;         // Output streams for every client
     Vector<ObjectInputStream> in;           // Input stream for every client
+ 
+    // Other
     boolean isRunning;
-    int clientsConnected;
-    int port;
+    int clientsConnected;                   // The current number of clients connected
+    int clientsNumber;                      // The maximum number of clients that should be connected
+    int port;                               // Port where the server is listenning
 
     /***** METHODS *****/
 
@@ -35,16 +49,18 @@ public class Server {
      * Constructor
      * @param _port Where the server will listen
      */
-    Server(int _port) {
+    Server(int _port, int _clientsNumber) {
         try {
             port = _port;
             listener = new ServerSocket(_port);
             //clients = new HashMap<>();
-            clientThreads = new Vector<>();
+            //clientThreads = new Vector<>();
             out = new Vector<>();
             in = new Vector<>();
             clientsConnected = 0;
+            clientsNumber = _clientsNumber;
             isRunning = true;
+            executor = Executors.newFixedThreadPool(_clientsNumber);
         } catch (IOException e) {
             System.out.println("Invalid port number");
         }
@@ -111,9 +127,8 @@ public class Server {
      * Wait for the end of client threads
      */
     synchronized public void end() {
-        System.out.println("Disconnecting...");
         isRunning = false;
-        for (int i=0; i<clientThreads.size(); i++) {
+        /*for (int i=0; i<clientThreads.size(); i++) {
             try {
                 long truc = clientThreads.get(i).getId();
                 clientThreads.get(i).join();
@@ -121,7 +136,12 @@ public class Server {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
+        executor.shutdown();  
+        while (!executor.isTerminated()) {
+            System.out.println("Disconnecting...");
+        }  
+        System.out.println("Finished all threads");  
     }
 
     /***
@@ -131,7 +151,8 @@ public class Server {
         try {
             while (isRunning) {
                 // Trying to handle a connection
-                new ClientThread(listener.accept(), this);
+                Runnable worker = new ClientThread(listener.accept(), this);
+                executor.execute(worker);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -144,7 +165,7 @@ public class Server {
      * @throws InterruptedException
      */        
     public static void main(String[] args) throws InterruptedException {
-        Server server = new Server(4000);
+        Server server = new Server(4000, 2);
         server.run();
     }
 }

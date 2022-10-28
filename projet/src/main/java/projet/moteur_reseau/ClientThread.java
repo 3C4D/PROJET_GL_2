@@ -52,8 +52,8 @@ public class ClientThread implements Runnable {
             e.printStackTrace();
         }
 
-        server.clientThreads.add(new Thread(this));
-        server.clientThreads.get(clientID).start();
+        //server.clientThreads.add(new Thread(this));
+        //server.clientThreads.get(clientID).start();
     }
 
     /***
