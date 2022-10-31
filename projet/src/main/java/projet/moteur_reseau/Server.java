@@ -22,7 +22,7 @@ import java.util.Vector;
 /***
  * Server class
  */
-public class Server {
+public class Server extends Thread {
 
     /***** PARAMETERS *****/
     
@@ -49,12 +49,10 @@ public class Server {
      * Constructor
      * @param _port Where the server will listen
      */
-    Server(int _port, int _clientsNumber) {
+    public Server(int _port, int _clientsNumber) {
         try {
             port = _port;
             listener = new ServerSocket(_port);
-            //clients = new HashMap<>();
-            //clientThreads = new Vector<>();
             out = new Vector<>();
             in = new Vector<>();
             clientsConnected = 0;
@@ -106,7 +104,7 @@ public class Server {
 
     /***
      * Send a message to a client
-     * @param _message  The message to diffuse
+     * @param _message  The message to send
      * @param _clientID The ID of the client
      */
     synchronized public void sendMessage(Data _message, int _clientID)
@@ -157,15 +155,5 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    /***
-     * Main method, in charge of running the run method
-     * @param args
-     * @throws InterruptedException
-     */        
-    public static void main(String[] args) throws InterruptedException {
-        Server server = new Server(4000, 2);
-        server.run();
     }
 }

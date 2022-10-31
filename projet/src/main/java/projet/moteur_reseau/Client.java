@@ -38,62 +38,43 @@ public class Client {
      * @param _address Server's IP address
      * @param _port Server's listenning port
      */
-    Client(InetAddress _address, int _port) {
+    public Client(InetAddress _address, int _port) {
         try {
             connection = new Socket(_address, _port);
-            System.out.println("Connected to " + _address.getHostName() + " on port " + _port);
+            out = new ObjectOutputStream(connection.getOutputStream());
+            in = new ObjectInputStream(connection.getInputStream());
         } catch (IOException e) {
             System.out.println("Invalid IP address or port number");
         }
     }
 
     /***
-     * Run method, where the server will be launched and accept connections
+     * Send a message to the server
+     * @param _message  The message to send
      */
-    public void run() {
+    public void sendMessage(Data _message)
+    {
         try {
-            // Getting input and output stream
-            out = new ObjectOutputStream(connection.getOutputStream());
-            in = new ObjectInputStream(connection.getInputStream());
-
-            // Sending messages
-            out.writeObject(new Data("Hello server !"));
+            out.writeObject(_message);
             out.flush();
-            out.writeObject(new Data("I am your best client"));
-            out.flush();
-            out.writeObject(null);
-            out.flush();
-
-            // Reading and displaying things
-            do {
-                try {
-                    serverMessage = (Data) in.readObject();
-                    if (serverMessage != null) {
-                        System.out.println("From server -> " + serverMessage);
-                    }
-                } catch (EOFException | ClassNotFoundException end) {
-                    break;
-                }
-            } while (serverMessage != null);
-
-            // Closing I/O streams and socket
-            in.close();
-            out.close();
-            connection.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     /***
-     * Main method, in charge of running the run method
-     * @param args No arguments needed here
-     * @throws InterruptedException
+     * Get a message to the server
      */
-    public static void main(String[] args) throws Exception {
-        byte addr[] = { 127, 0, 0, 1 };
-        Client client = new Client(InetAddress.getByAddress(addr), 4000);
-        client.run();
+    public void getMessage()
+    {
+        try {
+            serverMessage = (Data) in.readObject();
+            if (serverMessage != null) {
+                System.out.println("From server -> " + serverMessage);
+            }
+        } catch (EOFException | ClassNotFoundException end) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

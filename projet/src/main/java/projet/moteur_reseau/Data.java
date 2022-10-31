@@ -21,7 +21,7 @@ public class Data implements Serializable {
      * Constructor
      * @param _message
      */
-    Data(String _message) {
+    public Data(String _message) {
         message = _message;
     }
 
