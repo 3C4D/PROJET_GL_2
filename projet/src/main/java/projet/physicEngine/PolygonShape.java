@@ -201,4 +201,11 @@ public class PolygonShape extends Shape{
     return this.nbVertex;
   }
 
+  /**
+  *
+  */
+  public void setVertex(int i, Point p){
+    this.vertex[i] = p;
+  }
+
 }

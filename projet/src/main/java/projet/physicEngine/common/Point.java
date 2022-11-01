@@ -94,6 +94,19 @@ public class Point{
   }
 
   /**
+  *
+  */
+  @Override
+  public boolean equals(Object p){
+    if(p instanceof Point){
+      if(((Point)p).x == this. x && ((Point)p).y == this.y){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
   * @return l'abscisse x du point courant
   */
   public float getX(){

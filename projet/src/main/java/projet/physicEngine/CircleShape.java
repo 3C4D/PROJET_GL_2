@@ -58,4 +58,11 @@ public class CircleShape extends Shape{
     return this.ray;
   }
 
+  /**
+  *
+  */
+  public void setCenter(Point newCenter){
+    this.center = newCenter;
+  }
+
 }

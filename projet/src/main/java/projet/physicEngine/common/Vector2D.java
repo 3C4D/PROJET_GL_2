@@ -43,6 +43,12 @@ public class Vector2D{
     this.coordY = coordY;
   }
 
+
+  public Vector2D opposite(){
+    Point start = new Point(this.start.getX() + coordX, this.start.getY() + coordY);
+    Vector2D opp = new Vector2D(start, -coordX, -coordY);
+    return opp;
+  }
   /**
   * @return la norme du vecteur
   */
