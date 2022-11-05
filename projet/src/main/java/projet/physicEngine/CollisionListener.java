@@ -168,15 +168,15 @@ public class CollisionListener{
 
 
   /**
-  * Permet de savoir s'il y a une collision entre deux fixture, et de connaitre
+  * Permet de savoir s'il y a une collision entre deux Body, et de connaitre
     un des points d'intersections s'il en existe au moins un
-  * @param une première fixture
-  * @param une deuxième
+  * @param un premier Body
+  * @param un deuxième
   * @return un point d'intersection s'il en existe un, null sinon
   */
-  public static Point areInCollision(Fixture fa, Fixture fb){
-    Shape sa = fa.getShape();
-    Shape sb = fb.getShape();
+  public static Point areInCollision(Body ba, Body bb){
+    Shape sa = ba.getShape();
+    Shape sb = bb.getShape();
 
     if(sa.getType() == Shape.ShapeType.CIRCLE){
       if(sb.getType() == Shape.ShapeType.CIRCLE){

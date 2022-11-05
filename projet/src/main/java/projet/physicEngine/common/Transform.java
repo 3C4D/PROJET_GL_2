@@ -1,5 +1,6 @@
 package projet.physicEngine.common;
 
+import projet.physicEngine.Shape;
 import projet.physicEngine.CircleShape;
 import projet.physicEngine.PolygonShape;
 
@@ -51,6 +52,21 @@ public class Transform{
     (cs.getCenter()).setX(cs.getCenter().getX() + trans.getCoordX());
     (cs.getCenter()).setY(cs.getCenter().getY() + trans.getCoordY());
   }
+
+  /**
+  * Permet de translater un shape par un certain vecteur
+  * @param le shape à translater
+  * @param le vecteur de translation
+  */
+  public static void translateShape(Shape s, Vector2D trans){
+    if(s.getType() == Shape.ShapeType.POLYGON){
+      Transform.translationPolygon((PolygonShape)s, trans);
+    }
+    else if(s.getType() == Shape.ShapeType.CIRCLE){
+      Transform.translationCircle((CircleShape)s, trans);
+    }
+  }
+
 
   /**
   * Permet d'appliquer une rotation au vecteur v

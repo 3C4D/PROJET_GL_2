@@ -30,5 +30,12 @@ public class Shape{
     return this.type;
   }
 
+  public Point getIsobarycenter(){
+    return null;
+  }
+
+  public boolean isInside(Point p){
+    return false;
+  }
 
 }
