@@ -32,9 +32,9 @@ public class Vector2D{
   }
 
   /**
-  * Crée un vecteur de start à end
   * @param start est l'origine du vecteur
-  * @param end est la deuxième extrémité du vecteur
+  * @param l'abscisse du vecteur
+  * @param son ordonnée
   */
   public Vector2D(Point start, float coordX, float coordY){
     this.start = Point.copy(start);
@@ -43,6 +43,17 @@ public class Vector2D{
     this.coordY = coordY;
   }
 
+  /**
+  * L'origine par défaut est (0,0)
+  * @param l'abscisse du vecteur
+  * @param son ordonnée
+  */
+  public Vector2D(float coordX, float coordY){
+    this.start = new Point(0,0);
+
+    this.coordX = coordX;
+    this.coordY = coordY;
+  }
 
   public Vector2D opposite(){
     Point start = new Point(this.start.getX() + coordX, this.start.getY() + coordY);

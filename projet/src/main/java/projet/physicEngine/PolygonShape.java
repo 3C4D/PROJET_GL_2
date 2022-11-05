@@ -31,6 +31,7 @@ public class PolygonShape extends Shape{
   /**
   * Permet de créer une box rectangulaire aligné sur les axes directement avec
     les deux hauteurs
+  * Le centre du rectangle est le point (0,0)
   * @param hX la hauteur en x
   * @param hy la hauteur en y
   * @return la box associée
@@ -39,10 +40,10 @@ public class PolygonShape extends Shape{
   {
     Point[] v = new Point[4];
 
-    v[0] = new Point(0, 0);
-    v[1] = new Point(hx, 0);
-    v[2] = new Point(hx, hy);
-    v[3] = new Point(0, hy);
+    v[0] = new Point(-hx/2f, -hy/2f);
+    v[1] = new Point(hx/2f, -hy/2f);
+    v[2] = new Point(hx/2f, hy/2f);
+    v[3] = new Point(-hx/2f, hy/2f);
 
     return new PolygonShape(v, 4);
   }
@@ -50,6 +51,7 @@ public class PolygonShape extends Shape{
   /**
   * Permet de créer une box rectangulaire sur les axes directement avec
     les deux hauteurs et l'angle de rotation
+  * Le centre du rectangle est le point (0,0)
   * @param hX la hauteur en x
   * @param hy la hauteur en y
   * @param a l'angle en radian
@@ -59,13 +61,13 @@ public class PolygonShape extends Shape{
   {
     Point[] v = new Point[4];
 
-    v[0] = new Point(0, 0);
+    v[0] = new Point(-hx/2f, -hy/2f);
     Transform.rotationOrigin(v[0], a);
-    v[1] = new Point(hx, 0);
+    v[1] = new Point(hx/2f, -hy/2f);
     Transform.rotationOrigin(v[1], a);
-    v[2] = new Point(hx, hy);
+    v[2] = new Point(hx/2f, hy/2f);
     Transform.rotationOrigin(v[2], a);
-    v[3] = new Point(0, hy);
+    v[3] = new Point(-hx/2f, hy/2f);
     Transform.rotationOrigin(v[3], a);
 
     return new PolygonShape(v, 4);
@@ -76,17 +78,17 @@ public class PolygonShape extends Shape{
     les deux hauteurs
   * @param hX la hauteur en x
   * @param hy la hauteur en y
-  * @param le point d'origine (coin supérieur gauche)
+  * @param le point d'origine (point centrale --> Isobarycentre)
   * @return la box associée
   */
   public static PolygonShape createRectShape(float hx, float hy, Point origin)
   {
     Point[] v = new Point[4];
 
-    v[0] = new Point(origin.getX(), origin.getY());
-    v[1] = new Point(origin.getX()+hx, origin.getY());
-    v[2] = new Point(origin.getX()+hx, origin.getY()+hy);
-    v[3] = new Point(origin.getX(), origin.getY()+hy);
+    v[0] = new Point(origin.getX()-hx/2f, origin.getY()-hy/2f);
+    v[1] = new Point(origin.getX()+hx/2f, origin.getY()-hy/2f);
+    v[2] = new Point(origin.getX()+hx/2f, origin.getY()+hy/2f);
+    v[3] = new Point(origin.getX()-hx/2f, origin.getY()+hy/2f);
 
     return new PolygonShape(v, 4);
   }
@@ -97,24 +99,47 @@ public class PolygonShape extends Shape{
   * @param hX la hauteur en x
   * @param hy la hauteur en y
   * @param a l'angle en radian
-  * @param le point d'origine (coin supérieur gauche)
+  * @param le point d'origine (point centrale --> Isobarycentre)
   * @return la box associée
   */
   public static PolygonShape createRectShape(float hx, float hy, float a, Point origin)
   {
     Point[] v = new Point[4];
 
-    v[0] = new Point(origin.getX(), origin.getY());
+    v[0] = new Point(origin.getX()-hx/2f, origin.getY()-hy/2f);
     Transform.rotationOrigin(v[0], a);
-    v[1] = new Point(origin.getX()+hx, origin.getY());
+    v[1] = new Point(origin.getX()+hx/2f, origin.getY()-hy/2f);
     Transform.rotationOrigin(v[1], a);
-    v[2] = new Point(origin.getX()+hx, origin.getY()+hy);
+    v[2] = new Point(origin.getX()+hx/2f, origin.getY()+hy/2f);
     Transform.rotationOrigin(v[2], a);
-    v[3] = new Point(origin.getX(), origin.getY()+hy);
+    v[3] = new Point(origin.getX()-hx/2f, origin.getY()+hy/2f);
     Transform.rotationOrigin(v[3], a);
 
     return new PolygonShape(v, 4);
   }
+
+
+  /**
+  * Permet de trouver l'isobarycentre ("centre de gravité") des sommets d'un
+    polygone
+  * @return l'isobarycentre du polygone courant
+  */
+  public Point getIsobarycenter(){
+    Point isobarycenter = new Point(0,0);
+    int i;
+
+    for(i = 0; i < nbVertex; i++){
+      isobarycenter.setX(isobarycenter.getX() + getVertex(i).getX());
+      isobarycenter.setY(isobarycenter.getY() + getVertex(i).getY());
+    }
+
+    isobarycenter.setX(isobarycenter.getX()/nbVertex);
+    isobarycenter.setY(isobarycenter.getY()/nbVertex);
+
+    return isobarycenter;
+  }
+
+
 
   /**
   * @param le numéro du sommet que l'on souhaite
@@ -202,7 +227,9 @@ public class PolygonShape extends Shape{
   }
 
   /**
-  *
+  * Permet de modifier la valeur d'un sommet
+  * @param le numéro du sommet
+  * @param le nouveau sommet
   */
   public void setVertex(int i, Point p){
     this.vertex[i] = p;

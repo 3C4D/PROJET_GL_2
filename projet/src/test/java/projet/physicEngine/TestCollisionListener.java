@@ -23,11 +23,11 @@ public class TestCollisionListener{
     // cs5 et cs aucunes intersections
     CircleShape cs5 = new CircleShape(new Point(10,0), 1f);
 
-    Fixture f = new Fixture(cs);
-    Fixture f2 = new Fixture(cs2);
-    Fixture f3 = new Fixture(cs3);
-    Fixture f4 = new Fixture(cs4);
-    Fixture f5 = new Fixture(cs5);
+    Body f = new Body(cs);
+    Body f2 = new Body(cs2);
+    Body f3 = new Body(cs3);
+    Body f4 = new Body(cs4);
+    Body f5 = new Body(cs5);
 
     assertThat(CollisionListener.areInCollision(f, f2)).isNotNull();
     assertThat(CollisionListener.areInCollision(f, f3)).isNotNull();
@@ -67,12 +67,12 @@ public class TestCollisionListener{
     PolygonShape ps3 = PolygonShape.createRectShape(1f, 1f);
     PolygonShape ps4 = new PolygonShape(vertex3, 3);
 
-    Fixture fc = new Fixture(cs);
-    Fixture fc2 = new Fixture(cs2);
-    Fixture fp = new Fixture(ps);
-    Fixture fp2 = new Fixture(ps2);
-    Fixture fp3 = new Fixture(ps3);
-    Fixture fp4 = new Fixture(ps4);
+    Body fc = new Body(cs);
+    Body fc2 = new Body(cs2);
+    Body fp = new Body(ps);
+    Body fp2 = new Body(ps2);
+    Body fp3 = new Body(ps3);
+    Body fp4 = new Body(ps4);
 
     //Un sommet de ps dans cs
     assertThat(CollisionListener.areInCollision(fc, fp)).isNotNull();
@@ -119,10 +119,10 @@ public class TestCollisionListener{
     PolygonShape ps3 = new PolygonShape(vertex3, 4);
     PolygonShape ps4 = new PolygonShape(vertex4, 4);
 
-    Fixture fp = new Fixture(ps);
-    Fixture fp2 = new Fixture(ps2);
-    Fixture fp3 = new Fixture(ps3);
-    Fixture fp4 = new Fixture(ps4);
+    Body fp = new Body(ps);
+    Body fp2 = new Body(ps2);
+    Body fp3 = new Body(ps3);
+    Body fp4 = new Body(ps4);
 
     assertThat(CollisionListener.areInCollision(fp,fp3)).isNotNull();
     assertThat(CollisionListener.areInCollision(fp,fp2)).isNotNull();

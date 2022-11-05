@@ -47,6 +47,13 @@ public class CircleShape extends Shape{
   /**
   *
   */
+  public Point getIsobarycenter(){
+    return this.center;
+  }
+
+  /**
+  *
+  */
   public Point getCenter(){
     return this.center;
   }

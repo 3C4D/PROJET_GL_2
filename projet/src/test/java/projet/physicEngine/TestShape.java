@@ -89,4 +89,30 @@ public class TestShape{
 
   }
 
+
+  @Test
+  void testGetIsobarycenter(){
+    Shape cs = new CircleShape(new Point(10,78),5f);
+
+    Point[] vertex = new Point[4];
+    vertex[0] = new Point(1,2);
+    vertex[1] = new Point(3,2);
+    vertex[2] = new Point(3,4);
+    vertex[3] = new Point(1,4);
+
+    Point[] vertex2 = new Point[5];
+    vertex2[0] = new Point(2,2);
+    vertex2[1] = new Point(4,1);
+    vertex2[2] = new Point(7,4);
+    vertex2[3] = new Point(4,6);
+    vertex2[4] = new Point(1,4);
+
+    Shape ps = new PolygonShape(vertex, 4);
+    Shape ps2 = new PolygonShape(vertex2, 5);
+
+    assertEquals(cs.getIsobarycenter(), new Point(10,78));
+    assertEquals(ps.getIsobarycenter(), new Point(2,3));
+    assertEquals(ps2.getIsobarycenter(), new Point(3.6f, 3.4f));
+
+  }
 }
