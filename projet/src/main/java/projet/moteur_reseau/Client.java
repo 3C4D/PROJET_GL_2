@@ -22,24 +22,32 @@ public class Client {
     /***** PARAMETERS *****/
 
     // Networking
-    Socket connection;
+    private Socket connection;
 
     // Input/Output
-    ObjectOutputStream out;
-    ObjectInputStream in;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
 
     // Others
-    String username;
-    String message;
+    private String username;
+    private String message;
 
     /***** METHODS *****/
 
     /***
      * Constructor
-     * @param _address Server's IP address
-     * @param _port Server's listenning port
      */
-    public Client(InetAddress _address, int _port, String _username) {
+    public Client() {
+        // Nothing to do
+    }
+
+    /***
+     * Connect to the server
+     * @param ip IP address of the server
+     * @param port Port of the server
+     * @param username Username of the client
+     */
+    public void connect(InetAddress _address, int _port, String _username) {
         try {
             username = _username;
             connection = new Socket(_address, _port);
@@ -48,6 +56,20 @@ public class Client {
             sendMessage("USERNAME " + username);
         } catch (IOException e) {
             System.out.println("Invalid IP address or port number");
+        }
+    }
+
+    /***
+     * Disconnect from the server
+     */
+    public void disconnect() {
+        try {
+            sendMessage("DISCONNECT");
+            in.close();
+            out.close();
+            connection.close();
+        } catch (IOException e) {
+            System.out.println("Error while disconnecting");
         }
     }
 

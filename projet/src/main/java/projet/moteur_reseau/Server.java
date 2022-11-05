@@ -132,7 +132,7 @@ public class Server extends Thread {
      */
     synchronized public void end() {
         isRunning = false;
-        executor.shutdown();  
+        executor.shutdown(); 
         try {
             while (!executor.awaitTermination(1, TimeUnit.SECONDS)) {
                 System.out.println("Disconnecting...");

@@ -60,12 +60,12 @@ public class ClientThread implements Runnable {
         do {
             try {
                 message = (String) in.readObject();
-                if (message != null) {
+                if (message != "DISCONNECT") {
                     server.diffuseMessage(message);
                 }
             } catch (ClassNotFoundException | IOException e) {
                 e.printStackTrace();
             }
-        } while (server.isAlive());
+        } while (message != "DISCONNECT" || !Thread.currentThread().isInterrupted());
     }
 }
