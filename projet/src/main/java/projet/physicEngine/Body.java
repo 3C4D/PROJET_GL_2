@@ -1,13 +1,16 @@
+
 package projet.physicEngine;
 
 import projet.physicEngine.common.Transform;
 import projet.physicEngine.common.Vector2D;
 import projet.physicEngine.common.Point;
 
+
 public class Body{
-  private BodyType type;
+  private BodyType bodyType;
   private Shape shape;
   private Point center;
+  private float mass = 0;
 
 
   private Vector2D velocity;
@@ -25,7 +28,8 @@ public class Body{
   public Body(Shape shape){
     this.center = shape.getIsobarycenter();
     this.shape = shape;
-    this.type = BodyType.STATIC;
+    this.bodyType = BodyType.STATIC;
+    this.velocity = new Vector2D(center, 0,0);
   }
 
   /**
@@ -39,7 +43,8 @@ public class Body{
     }else{
       this.center = position;
     }
-    this.type = type;
+    this.bodyType = type;
+    this.velocity = new Vector2D(center, 0,0);
   }
 
   /**
@@ -57,7 +62,17 @@ public class Body{
   }
 
 
+  /**
+  * Permet de simuler une impulsion sur un corps
+  * @param le point d'application de l'impulsion
+  * @param le vecteur d'impulsion
+  */
+  public void applyImpulse(Vector2D impulseVector){
+    center.setX(center.getX() + impulseVector.getCoordX());
+    center.setY(center.getY() + impulseVector.getCoordY());
 
+    Transform.translateShape(shape, impulseVector);
+  }
 
   /**
   * @return la box de collision du corps
@@ -71,42 +86,56 @@ public class Body{
   */
   public Point getCenter(){
       return this.center;
-    }
+  }
 
+  /**
+  * @return le type du corps
+  */
+  public BodyType getBodyType(){
+    return this.bodyType;
+  }
 
-  // /**
-  // * @return lz densité du corps
-  // */
-  // public float getDensity(){
-  //   return density;
-  // }
-  //
-  // /**
-  // * @return la friction du corps
-  // */
-  // public float getFriction(){
-  //   return friction;
-  // }
-  //
-  // /**
-  // * @param la nouvelle position
-  // */
-  // public void setPosition(Point newP){
-  //   this.center = newP;
-  // }
-  //
-  // /**
-  // * @param la nouvelle densité
-  // */
-  // public void setDensity(float density){
-  //   this.density = density;
-  // }
-  //
-  // /**
-  // * @param la nouvelle friction
-  // */
-  // public void setFriction(float friction){
-  //   this.friction = friction;
-  // }
+  /**
+  * @return la norme du vecteur vitesse
+  */
+  public float getVelocityValue(){
+    return velocity.norme2();
+  }
+
+  /**
+  * @return le vecteur vitesse du corps
+  */
+  public Vector2D getVelocity(){
+    return velocity;
+  }
+
+  /**
+  * @param la nouvelle valeur de la masse
+  */
+  public void setMass(float mass){
+    this.mass = mass;
+  }
+
+  /**
+  * @param le nouveau vecteur vitesse
+  */
+  public void setVelocity(Vector2D velocity){
+    this.velocity = velocity;
+  }
+
+  /**
+  * @return la masse du corps
+  */
+  public float getMass(){
+    return this.mass;
+  }
+
+  @Override
+  public String toString(){
+    String str;
+    str = "Position :"+center.toString();
+    return str;
+  }
+
 
 }
