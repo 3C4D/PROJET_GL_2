@@ -24,13 +24,12 @@ public class ClientThread implements Runnable {
     private Server server;
 
     // Input/Output
-    private ObjectOutputStream out;
     private ObjectInputStream in;
+    private ObjectOutputStream out;
 
     // Others
-    private Data clientMessage;
-    private Data serverMessage;
-    private int clientID;
+    private String username;
+    private String message;
 
     /***** METHODS *****/
 
@@ -45,10 +44,11 @@ public class ClientThread implements Runnable {
 
         // Getting input and output stream
         try {
-            out = new ObjectOutputStream(connection.getOutputStream());
             in = new ObjectInputStream(connection.getInputStream());
-            clientID = server.connectClient(out, in);
-        } catch (IOException e) {
+            out = new ObjectOutputStream(connection.getOutputStream());
+            username = in.readObject().toString().split(" ")[1];
+            server.connectClient(username, out);
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -59,14 +59,13 @@ public class ClientThread implements Runnable {
     public void run() {
         do {
             try {
-                clientMessage = (Data) in.readObject();
-                if (clientMessage != null) {
-                    serverMessage = new Data("Client " + clientID + " says, " + clientMessage.toString());
-                    server.diffuseMessage(serverMessage);
+                message = (String) in.readObject();
+                if (message != null) {
+                    server.diffuseMessage(message);
                 }
             } catch (ClassNotFoundException | IOException e) {
                 e.printStackTrace();
             }
-        } while (true);
+        } while (server.isAlive());
     }
 }

@@ -29,7 +29,8 @@ public class Client {
     ObjectInputStream in;
 
     // Others
-    Data serverMessage;
+    String username;
+    String message;
 
     /***** METHODS *****/
 
@@ -38,11 +39,13 @@ public class Client {
      * @param _address Server's IP address
      * @param _port Server's listenning port
      */
-    public Client(InetAddress _address, int _port) {
+    public Client(InetAddress _address, int _port, String _username) {
         try {
+            username = _username;
             connection = new Socket(_address, _port);
             out = new ObjectOutputStream(connection.getOutputStream());
             in = new ObjectInputStream(connection.getInputStream());
+            sendMessage("USERNAME " + username);
         } catch (IOException e) {
             System.out.println("Invalid IP address or port number");
         }
@@ -50,12 +53,11 @@ public class Client {
 
     /***
      * Send a message to the server
-     * @param _message  The message to send
+     * @param message  The message to send
      */
-    public void sendMessage(Data _message)
-    {
+    public void sendMessage(String message) {
         try {
-            out.writeObject(_message);
+            out.writeObject(message);
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -65,16 +67,12 @@ public class Client {
     /***
      * Get a message to the server
      */
-    public void getMessage()
-    {
+    public String getMessage() throws EOFException {
         try {
-            serverMessage = (Data) in.readObject();
-            if (serverMessage != null) {
-                System.out.println("From server -> " + serverMessage);
-            }
-        } catch (EOFException | ClassNotFoundException end) {
-        } catch (IOException e) {
+            message = in.readObject().toString();
+        } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
+        return message;
     }
 }

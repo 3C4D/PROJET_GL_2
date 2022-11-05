@@ -3,7 +3,6 @@ package projet.moteur_reseau;
 /***** IMPORTS *****/
 
 // Input/Output
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
 
@@ -15,7 +14,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 // Components
-import java.util.Vector;
+import java.util.HashMap;
+
+// Others
+import java.util.concurrent.TimeUnit;
 
 /***** CLASS *****/
 
@@ -30,18 +32,16 @@ public class Server extends Thread {
     ServerSocket listener;
 
     // Threads
-    //Vector<Thread> clientThreads;
     ExecutorService executor;
 
-    // Input/Output
-    Vector<ObjectOutputStream> out;         // Output streams for every client
-    Vector<ObjectInputStream> in;           // Input stream for every client
- 
-    // Other
-    boolean isRunning;
-    int clientsConnected;                   // The current number of clients connected
-    int clientsNumber;                      // The maximum number of clients that should be connected
-    int port;                               // Port where the server is listenning
+    // Clients
+    HashMap<String, ObjectOutputStream> clients;    // Clients' names and output streams
+    int clientsConnected;                           // The current number of clients connected
+    int clientsNumber;                              // The maximum number of clients that should be connected
+
+    // Others
+    boolean isRunning = true;                       // Is the server running ?
+    int port;                                       // Port where the server is listenning
 
     /***** METHODS *****/
 
@@ -51,14 +51,13 @@ public class Server extends Thread {
      */
     public Server(int _port, int _clientsNumber) {
         try {
+            
             port = _port;
-            listener = new ServerSocket(_port);
-            out = new Vector<>();
-            in = new Vector<>();
-            clientsConnected = 0;
             clientsNumber = _clientsNumber;
-            isRunning = true;
-            executor = Executors.newFixedThreadPool(_clientsNumber);
+            listener = new ServerSocket(port);
+            executor = Executors.newFixedThreadPool(clientsNumber);
+            clientsConnected = 0;
+            clients = new HashMap<String, ObjectOutputStream>();
         } catch (IOException e) {
             System.out.println("Invalid port number");
         }
@@ -68,37 +67,32 @@ public class Server extends Thread {
      * Connect a client to the server
      * @param _out The output stream of this client
      * @param _in The input stream of this client
-     * @return The ID of the client just connected
      */
-    synchronized public int connectClient(ObjectOutputStream _out, ObjectInputStream _in) {
+    synchronized public void connectClient(String username, ObjectOutputStream out) {
         clientsConnected++;
-        out.addElement(_out);
-        in.addElement(_in);
-        return out.size()-1;
+        clients.put(username, out);
+        sendUserList();
     }
 
     /***
      * Disconnect a client from the server
      * @param _clientID The ID of the client who will be disconnected
      */
-    synchronized public void disconnectClient(int _clientID) {
+    synchronized public void disconnectClient(String username) {
         clientsConnected--;
-        if (out.elementAt(_clientID) != null) {
-            out.setElementAt(null,_clientID);
-        }
-        if (in.elementAt(_clientID) != null) {
-            in.setElementAt(null,_clientID);
-        }
+        clients.remove(username);
+        sendUserList();
     }
 
     /***
      * Diffuse a message to every connected client
      * @param _message  The message to diffuse
      */
-    synchronized public void diffuseMessage(Data _message)
+    synchronized public void diffuseMessage(String message)
     {
-        for (int i=0; i<out.size(); i++) {
-            sendMessage(_message, i);
+        Object[] users = clients.keySet().toArray();
+        for (int i=0; i<clients.size(); i++) {
+            sendMessage(message, users[i].toString());
         }
     }
 
@@ -107,13 +101,13 @@ public class Server extends Thread {
      * @param _message  The message to send
      * @param _clientID The ID of the client
      */
-    synchronized public void sendMessage(Data _message, int _clientID)
+    synchronized public void sendMessage(String message, String username)
     {
         ObjectOutputStream send;
-        send = out.elementAt(_clientID);
+        send = clients.get(username);
         if (send != null) {
             try {
-                send.writeObject(_message);
+                send.writeObject(message);
                 send.flush();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -122,24 +116,31 @@ public class Server extends Thread {
     }
 
     /***
+     * Send the list of connected clients to every connected client
+     */
+    synchronized public void sendUserList() {
+        Object[] users = clients.keySet().toArray();
+        String message = "USERLIST";
+        for (int i=0; i<clients.size(); i++) {
+            message += " " + users[i].toString();
+        }
+        diffuseMessage(message);
+    }
+
+    /***
      * Wait for the end of client threads
      */
     synchronized public void end() {
         isRunning = false;
-        /*for (int i=0; i<clientThreads.size(); i++) {
-            try {
-                long truc = clientThreads.get(i).getId();
-                clientThreads.get(i).join();
-                System.out.println(truc + " is stopping... " + clientsConnected);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }*/
         executor.shutdown();  
-        while (!executor.isTerminated()) {
-            System.out.println("Disconnecting...");
+        try {
+            while (!executor.awaitTermination(1, TimeUnit.SECONDS)) {
+                System.out.println("Disconnecting...");
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }  
-        System.out.println("Finished all threads");  
+        System.out.println("Server is closed"); 
     }
 
     /***

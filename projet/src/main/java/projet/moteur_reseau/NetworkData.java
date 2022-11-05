@@ -9,7 +9,7 @@ import java.io.Serializable;    // To allow network transmission
 /***
  * Data exchanged between Client and Server
  */
-public class Data implements Serializable {
+public class NetworkData implements Serializable {
 
     /***** PARAMETERS *****/
 
@@ -21,15 +21,24 @@ public class Data implements Serializable {
      * Constructor
      * @param _message
      */
-    public Data(String _message) {
+    public NetworkData(String _message) {
         message = _message;
     }
 
     /***
-     * Define a string from Data to allow casting or displaying
+     * Transform a NetworkData object into a String
+     * @return The String
      */
     @Override
-    public String toString() {
+    public String toString(){
         return message;
+    }
+
+    /***
+     * Transform a string into a NetworkData object
+     * @return The NetworkData object
+     */
+    public NetworkData toNetworkData(String message) {
+        return new NetworkData(message);
     }
 }
