@@ -13,6 +13,8 @@ public class TestCollisionListener{
 
   @Test
   void testAreInIntersectionForCircles(){
+    CollisionListener cl = new CollisionListener();
+
     CircleShape cs = new CircleShape(new Point(0,0), 1f);
     // cs2 dans cs
     CircleShape cs2 = new CircleShape(new Point(0,0), 3f);
@@ -29,15 +31,17 @@ public class TestCollisionListener{
     Body f4 = new Body(cs4);
     Body f5 = new Body(cs5);
 
-    assertThat(CollisionListener.areInCollision(f, f2)).isNotNull();
-    assertThat(CollisionListener.areInCollision(f, f3)).isNotNull();
-    assertThat(CollisionListener.areInCollision(f, f4)).isNotNull();
-    assertThat(CollisionListener.areInCollision(f, f5)).isNull();
+    assertThat(cl.areInCollision(f, f2)).isNotNull();
+    assertThat(cl.areInCollision(f, f3)).isNotNull();
+    assertThat(cl.areInCollision(f, f4)).isNotNull();
+    assertThat(cl.areInCollision(f, f5)).isNull();
 
   }
 
   @Test
   void testAreInIntersectionForCiclePolygon(){
+    CollisionListener cl = new CollisionListener();
+
     CircleShape cs = new CircleShape(new Point(0,0), 5f);
     CircleShape cs2 = new CircleShape(new Point(10,3), 1f);
 
@@ -75,21 +79,21 @@ public class TestCollisionListener{
     Body fp4 = new Body(ps4);
 
     //Un sommet de ps dans cs
-    assertThat(CollisionListener.areInCollision(fc, fp)).isNotNull();
+    assertThat(cl.areInCollision(fc, fp)).isNotNull();
     //Pas d'intersection
-    assertThat(CollisionListener.areInCollision(fc, fp2)).isNull();
+    assertThat(cl.areInCollision(fc, fp2)).isNull();
     //Polygone dans cercle
-    assertThat(CollisionListener.areInCollision(fc, fp3)).isNotNull();
+    assertThat(cl.areInCollision(fc, fp3)).isNotNull();
 
     //Pas de sommets dans le cercle, mais un segment traverse le cercle
-    assertThat(CollisionListener.areInCollision(fc2, fp4)).isNotNull();
-
-
+    assertThat(cl.areInCollision(fc2, fp4)).isNotNull();
 
   }
 
   @Test
   void testAreInIntersectionForPolygons(){
+    CollisionListener cl = new CollisionListener();
+
     Point[] vertex = new Point[4];
     vertex[0] = new Point(4,2);
     vertex[1] = new Point(6,2);
@@ -124,10 +128,10 @@ public class TestCollisionListener{
     Body fp3 = new Body(ps3);
     Body fp4 = new Body(ps4);
 
-    assertThat(CollisionListener.areInCollision(fp,fp3)).isNotNull();
-    assertThat(CollisionListener.areInCollision(fp,fp2)).isNotNull();
-    assertThat(CollisionListener.areInCollision(fp,fp4)).isNotNull();
-    assertThat(CollisionListener.areInCollision(fp3,fp2)).isNull();
+    assertThat(cl.areInCollision(fp,fp3)).isNotNull();
+    assertThat(cl.areInCollision(fp,fp2)).isNotNull();
+    assertThat(cl.areInCollision(fp,fp4)).isNotNull();
+    assertThat(cl.areInCollision(fp3,fp2)).isNull();
   }
 
 }

@@ -3,6 +3,12 @@ package projet.physicEngine;
 import projet.physicEngine.common.*;
 
 public class CollisionListener{
+
+
+  public CollisionListener(){
+
+  }
+  
   /**
   * Permet de déterminer si les cercles sont en intersection, puis prends le
     points se trouvant à équidistance des deux centres de cercles
@@ -10,7 +16,7 @@ public class CollisionListener{
   * @param le deuxième cercle
   * @return un point d'intersection entre les deux formes si il existe, null sinon
   */
-  private static Point circleIntersection(CircleShape ca, CircleShape cb){
+  private Point circleIntersection(CircleShape ca, CircleShape cb){
     float distance = ca.getCenter().distance(cb.getCenter());
     float max = ca.getRay() + cb.getRay();
 
@@ -31,7 +37,7 @@ public class CollisionListener{
   * @param le polygone
   * @return un point d'intersection entre les deux formes si il existe, null sinon
   */
-  private static Point circlePolygonIntersection(CircleShape ca, PolygonShape pb){
+  private Point circlePolygonIntersection(CircleShape ca, PolygonShape pb){
     int i;
     for(i = 0; i < pb.getNbVertex(); i++){
       Vector2D vAB; //Vecteur du segment
@@ -98,7 +104,7 @@ public class CollisionListener{
   * @param le deuxième polygone
   * @return un point d'intersection entre les deux formes si il existe, null sinon
   */
-  private static Point polygonsIntersection(PolygonShape pa, PolygonShape pb){
+  private Point polygonsIntersection(PolygonShape pa, PolygonShape pb){
     int i, j;
     Vector2D seg1, seg2;
     Point pA, pB, pC, pD;
@@ -174,7 +180,7 @@ public class CollisionListener{
   * @param un deuxième
   * @return un point d'intersection s'il en existe un, null sinon
   */
-  public static Point areInCollision(Body ba, Body bb){
+  public Point areInCollision(Body ba, Body bb){
     Shape sa = ba.getShape();
     Shape sb = bb.getShape();
 
@@ -200,5 +206,6 @@ public class CollisionListener{
 
     return null;
   }
+
 
 }
