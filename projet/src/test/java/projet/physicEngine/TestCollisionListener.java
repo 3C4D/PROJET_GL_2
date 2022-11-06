@@ -135,4 +135,59 @@ public class TestCollisionListener{
     assertThat(cl.areInCollision(fp3,fp2)).isNull();
   }
 
+  @Test
+  void testOutlineCollision(){
+    CollisionListener cl = new CollisionListener();
+    PolygonShape outline = PolygonShape.createRectShape(500, 500, new Point(500f/2f, 500f/2f));
+
+    //Intersection avec côté 1
+    Point[] vertex = new Point[3];
+    vertex[0] = new Point(200,0);
+    vertex[1] = new Point(250,50);
+    vertex[2] = new Point(150, 100);
+
+    PolygonShape ps1 = new PolygonShape(vertex, 3);
+
+
+    //Intersection avec côté 2
+    Point[] vertex2 = new Point[4];
+    vertex2[0] = new Point(400,100);
+    vertex2[1] = new Point(550,100);
+    vertex2[2] = new Point(550, 275);
+    vertex2[3] = new Point(400, 275);
+
+    PolygonShape ps2 = new PolygonShape(vertex2, 4);
+
+    //Intersection avec côté 3
+    CircleShape cs3 = new CircleShape(new Point(200,450), 50);
+
+    //Intersection avec côté 4
+    Point[] vertex3 = new Point[4];
+    vertex3[0] = new Point(0,50);
+    vertex3[1] = new Point(200,50);
+    vertex3[2] = new Point(200, 150);
+    vertex3[3] = new Point(0, 150);
+
+    PolygonShape ps4 = new PolygonShape(vertex3, 4);
+    CircleShape cs4 = new CircleShape(new Point(-10, 400), 50f);
+
+    //Pas d'intersection
+    Point[] vertex4 = new Point[4];
+    vertex4[0] = new Point(200,200);
+    vertex4[1] = new Point(250,200);
+    vertex4[2] = new Point(250, 250);
+    vertex4[3] = new Point(200, 250);
+
+    PolygonShape ps = new PolygonShape(vertex4, 4);
+    CircleShape cs = new CircleShape(new Point(200,200), 15f);
+
+
+    assertEquals(cl.outlineCollision(ps1, outline), 0);
+    assertEquals(cl.outlineCollision(ps2, outline), 1);
+    assertEquals(cl.outlineCollision(cs3, outline), 2);
+    assertEquals(cl.outlineCollision(ps4, outline), 3);
+    assertEquals(cl.outlineCollision(cs4, outline), 3);
+    assertEquals(cl.outlineCollision(ps, outline), -1);
+    assertEquals(cl.outlineCollision(cs, outline), -1);
+  }
 }
