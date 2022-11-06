@@ -2,6 +2,7 @@ package projet;
 
 import projet.kernel.PWorld;
 import projet.physicEngine.common.*;
+import projet.physicEngine.*;
 
 import projet.graphic_engine.*;
 import projet.graphic_engine.drawable.*;
@@ -45,11 +46,18 @@ public class MyWorld extends PWorld {
 
     Ball ball2 = new Ball(new Point(250,350), 50f);
     ball2.setDrawable(texture2);
-    ball2.getBody().setVelocity(new Vector2D(0.05f, -0.25f));
+    ball2.getBody().setVelocity(new Vector2D(0.05f, -0.15f));
+
+
+    Seed seed = new Seed(new Point(350,50));
+    seed.getBody().setVelocity(new Vector2D(((PolygonShape)seed.getBody().getShape()).getIsobarycenter(), ((PolygonShape)seed.getBody().getShape()).getVertex(0)));
+    seed.getBody().getVelocity().setCoordX(seed.getBody().getVelocity().getCoordX() * 0.001f);
+    seed.getBody().getVelocity().setCoordY(seed.getBody().getVelocity().getCoordY() * 0.001f);
 
     //On les ajoute a la liste d'entité
     this.addEntity(ball1);
     this.addEntity(ball2);
+    this.addEntity(seed);
   }
 
   @Override

@@ -4,6 +4,7 @@ import projet.physicEngine.CollisionListener;
 import projet.physicEngine.Body.BodyType;
 import projet.physicEngine.*;
 import projet.physicEngine.common.*;
+import projet.physicEngine.Shape.ShapeType;
 
 import projet.sound_engine.SoundPlayer;
 
@@ -33,9 +34,16 @@ public class MyCollisionListener extends CollisionListener{
     int interNum = outlineCollision(body.getShape(), outline);
 
     if(interNum >= 0){ //Il y a intersection avec un côté
-      //La balle rebondi
-      Vector2D oppositeRotation = body.getVelocity().opposite().vectorRotation((float)Math.PI/4);
-      body.setVelocity(oppositeRotation);
+      if(body.getShape().getType() == ShapeType.POLYGON){
+        Transform.rotationShape(body.getShape(),null, (float)Math.PI/4);
+        body.setVelocity(new Vector2D(((PolygonShape)body.getShape()).getIsobarycenter(), ((PolygonShape)body.getShape()).getVertex(0)));
+        body.getVelocity().setCoordX(body.getVelocity().getCoordX() * 0.001f);
+        body.getVelocity().setCoordY(body.getVelocity().getCoordY() * 0.001f);
+      }else{
+        //La balle rebondi
+        Vector2D oppositeRotation = body.getVelocity().opposite().vectorRotation((float)Math.PI/4);
+        body.setVelocity(oppositeRotation);
+      }
       // body.applyImpulse(oppositeRotation);
     }
   }
@@ -67,8 +75,24 @@ public class MyCollisionListener extends CollisionListener{
              catch(Exception e){
                 e.printStackTrace();
              }
-             ba.setVelocity(ba.getVelocity().vectorRotation((float)Math.PI/4));
-             bb.setVelocity(bb.getVelocity().vectorRotation((float)Math.PI/4));
+
+             if(ba.getShape().getType() == ShapeType.POLYGON){
+               Transform.rotationShape(ba.getShape(),null, (float)Math.PI/4);
+               ba.setVelocity(new Vector2D(((PolygonShape)ba.getShape()).getIsobarycenter(), ((PolygonShape)ba.getShape()).getVertex(0)));
+               ba.getVelocity().setCoordX(ba.getVelocity().getCoordX() * 0.001f);
+               ba.getVelocity().setCoordY(ba.getVelocity().getCoordY() * 0.001f);
+             }else{
+                ba.setVelocity(ba.getVelocity().vectorRotation((float)Math.PI/4));
+             }
+
+             if(bb.getShape().getType() == ShapeType.POLYGON){
+               Transform.rotationShape(bb.getShape(),null, (float)Math.PI/4);
+               bb.setVelocity(new Vector2D(((PolygonShape)bb.getShape()).getIsobarycenter(), ((PolygonShape)bb.getShape()).getVertex(0)));
+               bb.getVelocity().setCoordX(bb.getVelocity().getCoordX() * 0.001f);
+               bb.getVelocity().setCoordY(bb.getVelocity().getCoordY() * 0.001f);
+             }else{
+               bb.setVelocity(bb.getVelocity().vectorRotation((float)Math.PI/4));
+             }
           }
       }
     }
