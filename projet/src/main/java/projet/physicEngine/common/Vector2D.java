@@ -60,6 +60,19 @@ public class Vector2D{
     Vector2D opp = new Vector2D(start, -coordX, -coordY);
     return opp;
   }
+
+  /**
+  * @param l'angle de la rotation
+  * @return le vecteur résultant de la rotation d'angle angle du vecteur courant
+  */
+  public Vector2D vectorRotation(float angle){
+      return new Vector2D(
+                          this.start,
+                          (float)(coordX*Math.cos(angle) - coordY*Math.sin(angle)),
+                          (float)(coordX*Math.sin(angle) + coordY*Math.cos(angle))
+                          );
+  }
+
   /**
   * @return la norme du vecteur
   */

@@ -1,8 +1,19 @@
 package projet.physicEngine;
 
 import projet.physicEngine.common.*;
-
+import projet.physicEngine.Body.BodyType;
+import java.lang.Math;
+import java.util.ArrayList;
 public class CollisionListener{
+  private PhysicWorld physicW;
+
+  public CollisionListener(){
+    physicW = null;
+  }
+  public CollisionListener(PhysicWorld physicW){
+    this.physicW = physicW;
+  }
+
   /**
   * Permet de déterminer si les cercles sont en intersection, puis prends le
     points se trouvant à équidistance des deux centres de cercles
@@ -10,7 +21,7 @@ public class CollisionListener{
   * @param le deuxième cercle
   * @return un point d'intersection entre les deux formes si il existe, null sinon
   */
-  private static Point circleIntersection(CircleShape ca, CircleShape cb){
+  private Point circleIntersection(CircleShape ca, CircleShape cb){
     float distance = ca.getCenter().distance(cb.getCenter());
     float max = ca.getRay() + cb.getRay();
 
@@ -31,7 +42,7 @@ public class CollisionListener{
   * @param le polygone
   * @return un point d'intersection entre les deux formes si il existe, null sinon
   */
-  private static Point circlePolygonIntersection(CircleShape ca, PolygonShape pb){
+  private Point circlePolygonIntersection(CircleShape ca, PolygonShape pb){
     int i;
     for(i = 0; i < pb.getNbVertex(); i++){
       Vector2D vAB; //Vecteur du segment
@@ -98,7 +109,7 @@ public class CollisionListener{
   * @param le deuxième polygone
   * @return un point d'intersection entre les deux formes si il existe, null sinon
   */
-  private static Point polygonsIntersection(PolygonShape pa, PolygonShape pb){
+  private Point polygonsIntersection(PolygonShape pa, PolygonShape pb){
     int i, j;
     Vector2D seg1, seg2;
     Point pA, pB, pC, pD;
@@ -174,7 +185,7 @@ public class CollisionListener{
   * @param un deuxième
   * @return un point d'intersection s'il en existe un, null sinon
   */
-  public static Point areInCollision(Body ba, Body bb){
+  public Point areInCollision(Body ba, Body bb){
     Shape sa = ba.getShape();
     Shape sb = bb.getShape();
 
@@ -199,6 +210,67 @@ public class CollisionListener{
     }
 
     return null;
+  }
+
+  /**
+  * Ecoute de collision
+  * Cette fonction permet de calculer toutes les collisions possibles
+  */
+  public void listenTo(){
+    int i,j;
+    Body ba, bb;
+    Point inter;
+    Vector2D vectImpuls, invVectImpuls;
+    ArrayList<Body> bodyList = this.physicW.getBodyList();
+    float impulseCoeff = 0.5f;
+
+
+    //On regarde l'intersection des corps deux à deux
+    for(i = 0; i < bodyList.size(); i++){
+      ba = bodyList.get(i);
+      for(j = i+1; j < bodyList.size(); j++){
+          bb = bodyList.get(j);
+          inter = areInCollision(ba, bb); //On regarde s'il y a collision
+          if(inter != null){ //IL existe un point d'intersection
+            if(ba.getBodyType() == BodyType.STATIC){
+              if(bb.getBodyType() == BodyType.DYNAMIC){ //ba statique et bb dynamique
+                vectImpuls = new Vector2D(inter, impulseCoeff*bb.getVelocity().getCoordX(), impulseCoeff*bb.getVelocity().getCoordY());
+                invVectImpuls = vectImpuls.vectorRotation((float)Math.PI);
+
+                bb.applyImpulse(invVectImpuls);
+              }
+               // Les deux statics, il ne se passe rien.
+            }else{
+
+              if(bb.getBodyType() == BodyType.DYNAMIC){ //ba et bb dynamiques
+                //Le vecteur d'impulsion est proportionnelle au vecteur vitesse le plus grand des deux
+                if(bb.getVelocityValue() > ba.getVelocityValue()){
+                  vectImpuls = new Vector2D(inter, impulseCoeff*bb.getVelocity().getCoordX(), impulseCoeff*bb.getVelocity().getCoordY());
+                  invVectImpuls = vectImpuls.vectorRotation((float)Math.PI);
+
+                  ba.applyImpulse(vectImpuls);
+                  bb.applyImpulse(invVectImpuls);
+                }else{
+                  vectImpuls = new Vector2D(inter, impulseCoeff*ba.getVelocity().getCoordX(), impulseCoeff*ba.getVelocity().getCoordY());
+                  invVectImpuls = vectImpuls.vectorRotation((float)Math.PI);
+
+                  bb.applyImpulse(vectImpuls);
+                  ba.applyImpulse(invVectImpuls);
+                }
+
+
+              }else{//ba dynamique et bb static
+                vectImpuls = new Vector2D(inter, impulseCoeff*ba.getVelocity().getCoordX(), impulseCoeff*ba.getVelocity().getCoordY());
+                invVectImpuls = vectImpuls.vectorRotation((float)Math.PI);
+                ba.applyImpulse(invVectImpuls);
+              }
+            }
+
+            // System.out.println("INTERSECTION");
+          }
+
+      }
+    }
   }
 
 }
