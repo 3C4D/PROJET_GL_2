@@ -5,13 +5,24 @@ import projet.physicEngine.Body.BodyType;
 import projet.physicEngine.*;
 import projet.physicEngine.common.*;
 
+import projet.sound_engine.SoundPlayer;
+
 import java.util.ArrayList;
 import java.lang.Math;
 
 public class MyCollisionListener extends CollisionListener{
 
+  SoundPlayer sp;
+
   public MyCollisionListener(MyPhysicWorld pw){
     this.physicW = pw;
+
+    try{
+      sp = new SoundPlayer("sounds/oof.wav");
+    }
+    catch(Exception e){
+      e.printStackTrace();
+    }
   }
 
   @Override
@@ -50,6 +61,12 @@ public class MyCollisionListener extends CollisionListener{
           bb = bodyList.get(j);
           inter = areInCollision(ba, bb); //On regarde s'il y a collision
           if(inter != null){ //IL existe un point d'intersection
+             try{
+                sp.play(false, 0.7f); // On joue un son
+             }
+             catch(Exception e){
+                e.printStackTrace();
+             }
              ba.setVelocity(ba.getVelocity().vectorRotation((float)Math.PI/4));
              bb.setVelocity(bb.getVelocity().vectorRotation((float)Math.PI/4));
           }
