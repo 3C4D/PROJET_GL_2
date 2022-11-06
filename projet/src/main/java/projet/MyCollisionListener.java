@@ -6,8 +6,22 @@ import projet.physicEngine.*;
 import projet.physicEngine.common.*;
 
 import java.util.ArrayList;
+import java.lang.Math;
 
 public class MyCollisionListener extends CollisionListener{
+
+  @Override
+  public void insideGameOutline(Body body, PolygonShape outline){
+    int i;
+    float impulseCoeff = 0.5f;
+
+    int interNum = outlineCollision(body.getShape(), outline);
+
+    if(interNum >= 0){ //Il y a intersection avec un côté
+      //La balle rebondi
+      body.applyImpulse(body.getVelocity().vectorRotation((float)Math.PI/4));
+    }
+  }
 
   @Override
   public void listenTo(){
@@ -30,44 +44,11 @@ public class MyCollisionListener extends CollisionListener{
           bb = bodyList.get(j);
           inter = areInCollision(ba, bb); //On regarde s'il y a collision
           if(inter != null){ //IL existe un point d'intersection
-            if(ba.getBodyType() == BodyType.STATIC){
-              if(bb.getBodyType() == BodyType.DYNAMIC){ //ba statique et bb dynamique
-                vectImpuls = new Vector2D(inter, impulseCoeff*bb.getVelocity().getCoordX(), impulseCoeff*bb.getVelocity().getCoordY());
-                invVectImpuls = vectImpuls.vectorRotation((float)Math.PI);
-
-                bb.applyImpulse(invVectImpuls);
-              }
-               // Les deux statics, il ne se passe rien.
-            }else{
-
-              if(bb.getBodyType() == BodyType.DYNAMIC){ //ba et bb dynamiques
-                //Le vecteur d'impulsion est proportionnelle au vecteur vitesse le plus grand des deux
-                if(bb.getVelocityValue() > ba.getVelocityValue()){
-                  vectImpuls = new Vector2D(inter, impulseCoeff*bb.getVelocity().getCoordX(), impulseCoeff*bb.getVelocity().getCoordY());
-                  invVectImpuls = vectImpuls.vectorRotation((float)Math.PI);
-
-                  ba.applyImpulse(vectImpuls);
-                  bb.applyImpulse(invVectImpuls);
-                }else{
-                  vectImpuls = new Vector2D(inter, impulseCoeff*ba.getVelocity().getCoordX(), impulseCoeff*ba.getVelocity().getCoordY());
-                  invVectImpuls = vectImpuls.vectorRotation((float)Math.PI);
-
-                  bb.applyImpulse(vectImpuls);
-                  ba.applyImpulse(invVectImpuls);
-                }
-
-
-              }else{//ba dynamique et bb static
-                vectImpuls = new Vector2D(inter, impulseCoeff*ba.getVelocity().getCoordX(), impulseCoeff*ba.getVelocity().getCoordY());
-                invVectImpuls = vectImpuls.vectorRotation((float)Math.PI);
-                ba.applyImpulse(invVectImpuls);
-              }
-            }
-
-            // System.out.println("INTERSECTION");
+             ba.applyImpulse(ba.getVelocity().vectorRotation((float)Math.PI/4));
+             bb.applyImpulse(bb.getVelocity().vectorRotation((float)Math.PI/4));
           }
-
       }
     }
   }
+
 }
