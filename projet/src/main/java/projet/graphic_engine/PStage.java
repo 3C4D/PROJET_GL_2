@@ -53,6 +53,7 @@ public class PStage {
     public void add(PIDrawable drawable) {
         this.listToPaint.add(drawable);
     }
+    
 
 
     /*
