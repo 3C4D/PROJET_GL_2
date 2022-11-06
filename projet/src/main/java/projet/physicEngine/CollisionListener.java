@@ -2,6 +2,7 @@ package projet.physicEngine;
 
 import projet.physicEngine.common.*;
 import projet.physicEngine.Body.BodyType;
+import projet.physicEngine.Shape.ShapeType;
 import java.lang.Math;
 import java.util.ArrayList;
 public class CollisionListener{
@@ -212,6 +213,265 @@ public class CollisionListener{
     return null;
   }
 
+
+
+  /**
+  * Permet de savoir si une enveloppe touche un côté du contour
+  * @param l'enveloppe qu'on observe
+  * @param le contour de jeu (qui doit être rectangulaire)
+  * @return -1 si il n'y a pas d'intersection
+            0 si il y a interesection avec le côté du haut
+
+            0 si il y a intersection avec le côté gauche
+            2 si il y a interesection avec le côté de droite
+            3 si il y a interesection avec le côté du bas
+           -2 si le paramètre outline n'est pas un rectangle ou le shape n'a pas de type
+  */
+  public int outlineCollision(Shape shape, PolygonShape outline){
+    Point s1, s2, s3, s4;
+    Vector2D c1, c2, c3, c4;
+    int j;
+
+    if(outline.getNbVertex() != 4) return -2;
+
+    s1 = outline.getVertex(0);
+    s2 = outline.getVertex(1);
+    s3 = outline.getVertex(2);
+    s4 = outline.getVertex(3);
+
+    c1 = new Vector2D(s1,s2);
+    c2 = new Vector2D(s2,s3);
+    c3 = new Vector2D(s3,s4);
+    c4 = new Vector2D(s4,s1);
+
+    if(shape.getType() == ShapeType.CIRCLE){
+      CircleShape cs = (CircleShape)shape;
+      Point c = cs.getCenter();
+      Vector2D s1C, s2C, s3C, s4C;
+      float normCI, num, den;
+
+      s1C = new Vector2D(s1, c);
+      s2C = new Vector2D(s2, c);
+      s3C = new Vector2D(s3, c);
+      s4C = new Vector2D(s4, c);
+
+      //On regarde les intersections avec chaque côté
+
+      //////////////// Coté 1
+      //On cherche à déterminer la valeur de la norme du vecteur CI
+      //Ou I est le projecté orthogonale de C sur le coté
+
+      //CI = (||prod_vect(siC,ci)||) / ||ci||
+      num = Math.abs(s1C.getCoordY()*c1.getCoordX() - s1C.getCoordX()*c1.getCoordY());
+      den = c1.norme2();
+
+      normCI = num/den;
+      //Si cette norme est inférieur au rayon, on en déduit que I est dans le cercle
+      if(normCI <= cs.getRay()){ //I dans cercle ca et I sur droite (AB)
+          //Mais est-ce que I est sur le segment [AB] ?
+          //On calcul les produits scalaires
+          //prod1 = vAB.vAC
+          float prod1 = c1.scalarProduct(s1C);
+          //prod2 = vBA.vBC
+          float prod2 = (-c1.getCoordX())*s2C.getCoordX() + (-c1.getCoordY()*s2C.getCoordY());
+
+          //Si les deux positifs, alors C est entre A et B, donc I aussi
+          if(prod1 >= 0 && prod2 >= 0){
+            Point pI = cs.getCenter().orthoProjection(s1, s2);
+            return 0;
+          }
+      }
+
+      //////////////// Coté 2
+      //On cherche à déterminer la valeur de la norme du vecteur CI
+      //Ou I est le projecté orthogonale de C sur le coté
+
+      //CI = (||prod_vect(siC,ci)||) / ||ci||
+      num = Math.abs(s2C.getCoordY()*c2.getCoordX() - s2C.getCoordX()*c2.getCoordY());
+      den = c2.norme2();
+
+      normCI = num/den;
+      //Si cette norme est inférieur au rayon, on en déduit que I est dans le cercle
+      if(normCI <= cs.getRay()){ //I dans cercle ca et I sur droite (AB)
+          //Mais est-ce que I est sur le segment [AB] ?
+          //On calcul les produits scalaires
+          //prod1 = vAB.vAC
+          float prod1 = c2.scalarProduct(s2C);
+          //prod2 = vBA.vBC
+          float prod2 = (-c2.getCoordX())*s3C.getCoordX() + (-c2.getCoordY()*s3C.getCoordY());
+
+          //Si les deux positifs, alors C est entre A et B, donc I aussi
+          if(prod1 >= 0 && prod2 >= 0){
+            Point pI = cs.getCenter().orthoProjection(s2, s3);
+            return 1;
+          }
+      }
+
+
+      //////////////// Coté 3
+      //On cherche à déterminer la valeur de la norme du vecteur CI
+      //Ou I est le projecté orthogonale de C sur le coté
+
+      //CI = (||prod_vect(siC,ci)||) / ||ci||
+      num = Math.abs(s3C.getCoordY()*c3.getCoordX() - s3C.getCoordX()*c3.getCoordY());
+      den = c3.norme2();
+
+      normCI = num/den;
+      //Si cette norme est inférieur au rayon, on en déduit que I est dans le cercle
+      if(normCI <= cs.getRay()){ //I dans cercle ca et I sur droite (AB)
+          //Mais est-ce que I est sur le segment [AB] ?
+          //On calcul les produits scalaires
+          //prod1 = vAB.vAC
+          float prod1 = c3.scalarProduct(s3C);
+          //prod2 = vBA.vBC
+          float prod2 = (-c3.getCoordX())*s4C.getCoordX() + (-c3.getCoordY()*s4C.getCoordY());
+
+          //Si les deux positifs, alors C est entre A et B, donc I aussi
+          if(prod1 >= 0 && prod2 >= 0){
+            Point pI = cs.getCenter().orthoProjection(s3, s4);
+            return 2;
+          }
+      }
+
+
+      //////////////// Coté 4
+      //On cherche à déterminer la valeur de la norme du vecteur CI
+      //Ou I est le projecté orthogonale de C sur le coté
+
+      //CI = (||prod_vect(siC,ci)||) / ||ci||
+      num = Math.abs(s4C.getCoordY()*c4.getCoordX() - s4C.getCoordX()*c4.getCoordY());
+      den = c4.norme2();
+
+      normCI = num/den;
+      //Si cette norme est inférieur au rayon, on en déduit que I est dans le cercle
+      if(normCI <= cs.getRay()){ //I dans cercle ca et I sur droite (AB)
+          //Mais est-ce que I est sur le segment [AB] ?
+          //On calcul les produits scalaires
+          //prod1 = vAB.vAC
+          float prod1 = c4.scalarProduct(s4C);
+          //prod2 = vBA.vBC
+          float prod2 = (-c4.getCoordX())*s1C.getCoordX() + (-c4.getCoordY()*s1C.getCoordY());
+
+          //Si les deux positifs, alors C est entre A et B, donc I aussi
+          if(prod1 >= 0 && prod2 >= 0){
+            Point pI = cs.getCenter().orthoProjection(s4, s1);
+            return 3;
+          }
+      }
+
+      return -1; //Pas d'intersection
+
+    }
+
+    if(shape.getType() == ShapeType.POLYGON){
+      PolygonShape pb = (PolygonShape)shape;
+      Vector2D seg;
+      Point pA, pB;
+      float k;
+
+      for(j = 0; j < pb.getNbVertex(); j++){
+        //On défini le côté du polygone qu'on regarde
+        if(j == pb.getNbVertex() -1){
+          pA = pb.getVertex(j);
+          pB = pb.getVertex(0);
+          seg = new Vector2D(pb.getVertex(j), pb.getVertex(0));
+        }else{
+          pA = pb.getVertex(j);
+          pB = pb.getVertex(j+1);
+          seg = new Vector2D(pb.getVertex(j), pb.getVertex(j+1));
+        }
+
+        //Puis on regarde son intersection avec les 4 côtés du contour
+
+       // Avec le côté 1
+       k = (pA.getX()*seg.getCoordY() + s1.getY()*seg.getCoordX() - pA.getY()*seg.getCoordX() - s1.getX()*seg.getCoordY())/(seg.getCoordY()*c1.getCoordX() - seg.getCoordX()*c1.getCoordY());
+
+       //Pt d'intersection entre la droite défini par le vecteur côté c1 et seg
+        if(k >= 0f && k <= 1f){ //Sur le segment c1
+          // Est-ce que il est aussi sur seg?
+          float l = (s1.getX() + k*c1.getCoordX() - pA.getX())/(seg.getCoordX());
+          if(l >= 0f && l <= 1f){ //Oui
+            return 0;
+          }
+        }
+
+        // Avec le côté 2
+        k = (pA.getX()*seg.getCoordY() + s2.getY()*seg.getCoordX() - pA.getY()*seg.getCoordX() - s2.getX()*seg.getCoordY())/(seg.getCoordY()*c2.getCoordX() - seg.getCoordX()*c2.getCoordY());
+
+        //Pt d'intersection entre la droite défini par le vecteur côté c1 et seg
+         if(k >= 0f && k <= 1f){ //Sur le segment c1
+           // Est-ce que il est aussi sur seg?
+           float l = (s2.getX() + k*c2.getCoordX() - pA.getX())/(seg.getCoordX());
+           if(l >= 0f && l <= 1f){ //Oui
+             return 1;
+           }
+         }
+
+
+        // Avec le côté 3
+        k = (pA.getX()*seg.getCoordY() + s3.getY()*seg.getCoordX() - pA.getY()*seg.getCoordX() - s3.getX()*seg.getCoordY())/(seg.getCoordY()*c3.getCoordX() - seg.getCoordX()*c3.getCoordY());
+
+        //Pt d'intersection entre la droite défini par le vecteur côté c1 et seg
+         if(k >= 0f && k <= 1f){ //Sur le segment c1
+           // Est-ce que il est aussi sur seg?
+           float l = (s3.getX() + k*c3.getCoordX() - pA.getX())/(seg.getCoordX());
+           if(l >= 0f && l <= 1f){ //Oui
+             return 2;
+           }
+         }
+
+        // Avec le côté 4
+        k = (pA.getX()*seg.getCoordY() + s4.getY()*seg.getCoordX() - pA.getY()*seg.getCoordX() - s4.getX()*seg.getCoordY())/(seg.getCoordY()*c4.getCoordX() - seg.getCoordX()*c4.getCoordY());
+
+        //Pt d'intersection entre la droite défini par le vecteur côté c1 et seg
+         if(k >= 0f && k <= 1f){ //Sur le segment c1
+           // Est-ce que il est aussi sur seg?
+           float l = (s4.getX() + k*c4.getCoordX() - pA.getX())/(seg.getCoordX());
+           if(l >= 0f && l <= 1f){ //Oui
+             return 3;
+           }
+         }
+
+    }
+
+
+      return -1; // Pas d'intersection
+    }
+
+    return -2;
+  }
+
+  /**
+  * Permet de garder un corps dans une certaine box
+  * @param le corps à observer
+  * @param le contour limite où doit être le corps, il doit être rectangulaire
+  */
+  public void insideGameOutline(Body body, PolygonShape outline){
+    int i;
+    float impulseCoeff = 0.5f;
+
+    int interNum = outlineCollision(body.getShape(), outline);
+
+    switch (interNum) {
+      case 0: //Côté haut
+        body.applyImpulse(new Vector2D(0, impulseCoeff));
+      break;
+      case 1: //Côté droite
+        body.applyImpulse(new Vector2D(-impulseCoeff, 0));
+      break;
+      case 2: //Côté bas
+        body.applyImpulse(new Vector2D(0, -impulseCoeff));
+      break;
+      case 3: //Côté gauche
+        body.applyImpulse(new Vector2D(impulseCoeff, 0));
+      break;
+      default: //Pas d'intersection ou erreur
+      break;
+    }
+
+  }
+
+
   /**
   * Ecoute de collision
   * Cette fonction permet de calculer toutes les collisions possibles
@@ -222,12 +482,16 @@ public class CollisionListener{
     Point inter;
     Vector2D vectImpuls, invVectImpuls;
     ArrayList<Body> bodyList = this.physicW.getBodyList();
+    PolygonShape gameOutline = physicW.getGameOutline();
     float impulseCoeff = 0.5f;
 
 
     //On regarde l'intersection des corps deux à deux
     for(i = 0; i < bodyList.size(); i++){
       ba = bodyList.get(i);
+      //On vérifie que le corps soit toujours dans la fenetre de jeu
+      insideGameOutline(ba, gameOutline);
+      
       for(j = i+1; j < bodyList.size(); j++){
           bb = bodyList.get(j);
           inter = areInCollision(ba, bb); //On regarde s'il y a collision
