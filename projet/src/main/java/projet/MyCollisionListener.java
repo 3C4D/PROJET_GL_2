@@ -10,6 +10,10 @@ import java.lang.Math;
 
 public class MyCollisionListener extends CollisionListener{
 
+  public MyCollisionListener(MyPhysicWorld pw){
+    this.physicW = pw;
+  }
+
   @Override
   public void insideGameOutline(Body body, PolygonShape outline){
     int i;
@@ -19,7 +23,9 @@ public class MyCollisionListener extends CollisionListener{
 
     if(interNum >= 0){ //Il y a intersection avec un côté
       //La balle rebondi
-      body.applyImpulse(body.getVelocity().vectorRotation((float)Math.PI/4));
+      Vector2D oppositeRotation = body.getVelocity().opposite().vectorRotation((float)Math.PI/4);
+      body.setVelocity(oppositeRotation);
+      // body.applyImpulse(oppositeRotation);
     }
   }
 
@@ -44,8 +50,8 @@ public class MyCollisionListener extends CollisionListener{
           bb = bodyList.get(j);
           inter = areInCollision(ba, bb); //On regarde s'il y a collision
           if(inter != null){ //IL existe un point d'intersection
-             ba.applyImpulse(ba.getVelocity().vectorRotation((float)Math.PI/4));
-             bb.applyImpulse(bb.getVelocity().vectorRotation((float)Math.PI/4));
+             ba.setVelocity(ba.getVelocity().vectorRotation((float)Math.PI/4));
+             bb.setVelocity(bb.getVelocity().vectorRotation((float)Math.PI/4));
           }
       }
     }

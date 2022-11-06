@@ -7,9 +7,9 @@ import projet.physicEngine.common.Point;
 import java.util.ArrayList;
 
 public class PhysicWorld{
-  private ArrayList<Body> bodyList;
-  private CollisionListener collisionL;
-  private PolygonShape gameOutline;
+  protected ArrayList<Body> bodyList;
+  protected CollisionListener collisionL;
+  protected PolygonShape gameOutline;
 
   /**
   * @param La largeur du monde de jeu

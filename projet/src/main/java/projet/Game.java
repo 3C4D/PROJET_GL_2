@@ -1,7 +1,7 @@
 package projet;
 
-import projet.graphic_engine.*;
 import projet.physicEngine.*;
+import projet.physicEngine.common.*;
 
 import projet.graphic_engine.*;
 
@@ -10,7 +10,7 @@ public class Game {
    private int WIDTH = 500;
    private int HEIGHT = 500;
 
-   private float DELTA_T = 1000f/60f;
+   private float DELTA_T = 1000f/600f;
 
    private MyWorld world;
 
@@ -20,12 +20,12 @@ public class Game {
 
    public Game(){
      this.window = new PWindow("Exemple", WIDTH, HEIGHT);
+     this.window.setResizable(false);
 
      this.context = new PContext(WIDTH, HEIGHT);
      this.window.addContext(this.context);
 
-     world = new MyWorld(WIDTH, HEIGHT);
-     this.world = world;
+     this.world = new MyWorld(WIDTH, HEIGHT);
 
      this.context.changeStage(this.world.getStage());
    }

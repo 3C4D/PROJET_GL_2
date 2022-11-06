@@ -32,7 +32,6 @@ public class PStage {
 
     public void paint(Graphics g) {
         while(this.listToPaint.size() != 0) {
-            System.out.println("Painting");
             this.listToPaint.poll().paint(g);
         }
     }
@@ -53,7 +52,7 @@ public class PStage {
     public void add(PIDrawable drawable) {
         this.listToPaint.add(drawable);
     }
-    
+
 
 
     /*
