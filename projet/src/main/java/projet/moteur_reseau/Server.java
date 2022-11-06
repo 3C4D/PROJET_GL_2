@@ -61,6 +61,14 @@ public class Server extends Thread {
     }
 
     /***
+     * Return the number of clients connected
+     * @return The number of clients connected
+     */
+    public int getClientsConnected() {
+        return clientsConnected;
+    }
+
+    /***
      * Connect a client to the server
      * @param _out The output stream of this client
      * @param _in The input stream of this client
