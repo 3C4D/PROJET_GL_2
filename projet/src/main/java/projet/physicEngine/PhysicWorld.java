@@ -9,10 +9,16 @@ import java.util.ArrayList;
 public class PhysicWorld{
   private ArrayList<Body> bodyList;
   private CollisionListener collisionL;
+  private PolygonShape gameOutline;
 
-  public PhysicWorld(){
+  /**
+  * @param La largeur du monde de jeu
+  * @param La hauteur du monde du jeu
+  */
+  public PhysicWorld(float width, float height){
     bodyList = new ArrayList<Body>();
     collisionL = new CollisionListener(this);
+    gameOutline = PolygonShape.createRectShape(width, height, new Point(width/2f, height/2f));
   }
 
   public void launchCollisionListener(){
@@ -40,6 +46,13 @@ public class PhysicWorld{
   */
   public CollisionListener getCollisionListener(){
     return collisionL;
+  }
+
+  /**
+  * @return le contour du jeu
+  */
+  public PolygonShape getGameOutline(){
+    return this.gameOutline;
   }
 
   @Override

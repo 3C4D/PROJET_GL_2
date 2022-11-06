@@ -14,7 +14,7 @@ public class TestPhysicWorld{
 
   @Test
   void testListenTo(){
-    PhysicWorld pw = new PhysicWorld();
+    PhysicWorld pw = new PhysicWorld(1000,1000);
 
     CircleShape cs = new CircleShape(new Point(0,0), 5f);
 
