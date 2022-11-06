@@ -35,6 +35,14 @@ public class PhysicWorld{
   }
 
   /**
+  * Permet de supprimer un corps au monde
+  * @param le corps à ajouter
+  */
+  public void removeBody(Body body){
+    bodyList.remove(body);
+  }
+
+  /**
   * @return la liste des corps présent dans le monde
   */
   public ArrayList<Body> getBodyList(){
