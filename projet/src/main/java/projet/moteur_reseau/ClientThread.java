@@ -59,13 +59,20 @@ public class ClientThread implements Runnable {
     public void run() {
         do {
             try {
-                message = (String) in.readObject();
-                if (message != "DISCONNECT") {
-                    server.diffuseMessage(message);
+                message = in.readObject().toString();
+                if (!message.split(" ")[0].equals("DISCONNECT")) {
+                    server.diffuseMessage(message, username);
                 }
             } catch (ClassNotFoundException | IOException e) {
-                e.printStackTrace();
+                break;
             }
-        } while (message != "DISCONNECT" || !Thread.currentThread().isInterrupted());
+        } while (!message.split(" ")[0].equals("DISCONNECT"));
+        System.out.println(message.split(" ")[1] + " disconnected");
+        server.disconnectClient(message.split(" ")[1]);
+        try {
+            in.close();
+            out.close();
+        } catch (IOException e) {
+        }
     }
 }

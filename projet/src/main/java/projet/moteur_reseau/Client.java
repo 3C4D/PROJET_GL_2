@@ -42,7 +42,7 @@ public class Client {
     }
 
     /***
-     * Connect to the server
+     * Connect to a server
      * @param ip IP address of the server
      * @param port Port of the server
      * @param username Username of the client
@@ -64,7 +64,7 @@ public class Client {
      */
     public void disconnect() {
         try {
-            sendMessage("DISCONNECT");
+            sendMessage("DISCONNECT " + username);
             in.close();
             out.close();
             connection.close();
@@ -87,13 +87,12 @@ public class Client {
     }
 
     /***
-     * Get a message to the server
+     * Get a message from the server
      */
     public String getMessage() throws EOFException {
         try {
             message = in.readObject().toString();
         } catch (ClassNotFoundException | IOException e) {
-            e.printStackTrace();
         }
         return message;
     }

@@ -16,9 +16,6 @@ import java.util.concurrent.Executors;
 // Components
 import java.util.HashMap;
 
-// Others
-import java.util.concurrent.TimeUnit;
-
 /***** CLASS *****/
 
 /***
@@ -40,7 +37,7 @@ public class Server extends Thread {
     int clientsNumber;                              // The maximum number of clients that should be connected
 
     // Others
-    boolean isRunning = true;                       // Is the server running ?
+    boolean complete = false;                               // Is the server complete ?
     int port;                                       // Port where the server is listenning
 
     /***** METHODS *****/
@@ -72,6 +69,9 @@ public class Server extends Thread {
         clientsConnected++;
         clients.put(username, out);
         sendUserList();
+        if (clientsConnected == clientsNumber) {
+            complete = true;
+        }
     }
 
     /***
@@ -81,18 +81,26 @@ public class Server extends Thread {
     synchronized public void disconnectClient(String username) {
         clientsConnected--;
         clients.remove(username);
-        sendUserList();
+        if (clientsConnected > 0) {
+            sendUserList();
+        }
     }
 
     /***
      * Diffuse a message to every connected client
      * @param _message  The message to diffuse
      */
-    synchronized public void diffuseMessage(String message)
-    {
-        Object[] users = clients.keySet().toArray();
-        for (int i=0; i<clients.size(); i++) {
-            sendMessage(message, users[i].toString());
+    synchronized public void diffuseMessage(String message, String username) {
+        if (clientsConnected > 0) {
+            for (String client : clients.keySet()) {
+                if (!client.equals(username)) {
+                    try {
+                        clients.get(client).writeObject(message);
+                    } catch (IOException e) {
+                        System.out.println("Error while sending message to " + client);
+                    }
+                }
+            }
         }
     }
 
@@ -124,23 +132,16 @@ public class Server extends Thread {
         for (int i=0; i<clients.size(); i++) {
             message += " " + users[i].toString();
         }
-        diffuseMessage(message);
+        diffuseMessage(message, "");
     }
 
     /***
      * Wait for the end of client threads
+     * @throws InterruptedException
      */
-    synchronized public void end() {
-        isRunning = false;
+    synchronized public void end() throws InterruptedException {
+        diffuseMessage("STOP", "");
         executor.shutdown(); 
-        try {
-            while (!executor.awaitTermination(1, TimeUnit.SECONDS)) {
-                System.out.println("Disconnecting...");
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }  
-        System.out.println("Server is closed"); 
     }
 
     /***
@@ -148,13 +149,12 @@ public class Server extends Thread {
      */
     public void run() {
         try {
-            while (isRunning) {
+            while (true) {
                 // Trying to handle a connection
                 Runnable worker = new ClientThread(listener.accept(), this);
                 executor.execute(worker);
             }
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
