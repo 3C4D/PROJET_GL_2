@@ -1,6 +1,7 @@
 package projet.kernel;
 
 import java.awt.*;
+import java.util.Vector;
 
 import projet.graphic_engine.PStage;
 import projet.physicEngine.PhysicWorld;
@@ -10,9 +11,12 @@ public abstract class PWorld {
     private PStage stage;
     private PhysicWorld physicWorld;
 
+    private Vector<PEntity> entities;
+
     public PWorld(PStage stage, PhysicWorld physicWorld){
         this.stage = stage;
         this.physicWorld = physicWorld;
+        this.entities = new Vector<PEntity>();
     }
 
     public PStage getStage(){
@@ -28,12 +32,30 @@ public abstract class PWorld {
         // TODO
     }
 
+    public void processGraphic(float dt) {
+        for(PEntity entity : this.entities) {
+            if(entity.getAnimatedDrawable() != null) {
+                entity.getAnimatedDrawable().next(dt);
+            }
+        }
+    }
+
+    
+
     private void paint(Graphics g) {
         this.stage.paint(g);
     }
 
-    public void process(Graphics g, float dt) {
+    public void process(float dt) {
         this.processPhysic(dt);
-        this.paint(g);
-    }   
+    }  
+    
+    
+    public void addEntity(PEntity entity) {
+        this.entities.add(entity);
+    }
+
+    public void removeEntity(PEntity entity) {
+        this.entities.remove(entity);
+    }
 }
