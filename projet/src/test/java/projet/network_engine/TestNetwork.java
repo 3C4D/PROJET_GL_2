@@ -8,9 +8,6 @@ import java.net.UnknownHostException;
 
 import org.junit.jupiter.api.Test;
 
-import projet.moteur_reseau.Client;
-import projet.moteur_reseau.Server;
-
 public class TestNetwork {
     @Test
     public void testConnection() throws UnknownHostException, InterruptedException {

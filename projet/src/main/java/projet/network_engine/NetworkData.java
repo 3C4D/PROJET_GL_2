@@ -1,4 +1,4 @@
-package projet.moteur_reseau;
+package projet.network_engine;
 
 /***** IMPORTS *****/
 
