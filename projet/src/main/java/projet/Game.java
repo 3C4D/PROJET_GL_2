@@ -19,10 +19,10 @@ public class Game {
 
 
    public Game(){
-     this.window = new PWindow("Exemple", WIDTH, HEIGHT);
+     this.window = new PWindow("Exemple", WIDTH,HEIGHT+20);
      this.window.setResizable(false);
 
-     this.context = new PContext(WIDTH, HEIGHT);
+     this.context = new PContext(WIDTH+50, HEIGHT+50);
      this.window.addContext(this.context);
 
      this.world = new MyWorld(WIDTH, HEIGHT);
