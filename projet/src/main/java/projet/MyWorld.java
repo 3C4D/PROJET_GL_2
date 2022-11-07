@@ -40,6 +40,15 @@ public class MyWorld extends PWorld {
     };;
     texture2.loadTexture("src/main/resources/textures/ball2.png");
 
+    PFixedTexturedDrawable texture3 = new PFixedTexturedDrawable(50, 50, 50, 50) {
+      @Override
+      public void paint(Graphics g) {
+        g.setColor(Color.RED);
+        g.fillOval(this.x-25, this.y-25, 25*2, 25*2);
+      }
+    };
+    texture1.loadTexture("src/test/java/projet/graphic_engine/texture.png");
+
     Ball ball1 = new Ball(new Point(50,50), 25f);
     ball1.setDrawable(texture1);
     ball1.getBody().setVelocity(new Vector2D(0.01f, 0.10f));
@@ -47,6 +56,10 @@ public class MyWorld extends PWorld {
     Ball ball2 = new Ball(new Point(250,350), 50f);
     ball2.setDrawable(texture2);
     ball2.getBody().setVelocity(new Vector2D(0.05f, -0.15f));
+
+    Ball ball3 = new Ball(new Point(100,100), 25f);
+    ball3.setDrawable(texture3);
+    ball3.getBody().setVelocity(new Vector2D(0.01f, 0.10f));
 
 
     Seed seed = new Seed(new Point(350,50));
@@ -57,6 +70,7 @@ public class MyWorld extends PWorld {
     //On les ajoute a la liste d'entité
     this.addEntity(ball1);
     this.addEntity(ball2);
+    // this.addEntity(ball3);
     this.addEntity(seed);
   }
 
