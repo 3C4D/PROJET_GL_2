@@ -13,13 +13,16 @@ import java.lang.Math;
 
 public class MyCollisionListener extends CollisionListener{
 
-  SoundPlayer sp;
+  public SoundPlayer[] sp = new SoundPlayer[20];
+  public int count = 0;
 
   public MyCollisionListener(MyPhysicWorld pw){
     this.physicW = pw;
 
     try{
-      sp = new SoundPlayer("sounds/oof.wav");
+      for(int i = 0; i < 20; i++){
+        sp[i] = new SoundPlayer("sounds/oof.wav");
+      }
     }
     catch(Exception e){
       e.printStackTrace();
@@ -153,7 +156,12 @@ public class MyCollisionListener extends CollisionListener{
           if(inter != null){ //IL existe un point d'intersection
              try{
                System.out.println("collision");
-                sp.play(false, 0.7f); // On joue un son
+                synchronized(sp){
+                  sp[i].play(false, 0.7f); // On joue un son
+                  System.out.println("collision");
+                  count = (count+1)%20;
+                  System.out.println("collision");
+                }
              }
              catch(Exception e){
                 e.printStackTrace();
