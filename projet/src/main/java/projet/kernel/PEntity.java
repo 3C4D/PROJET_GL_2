@@ -8,10 +8,14 @@ import java.awt.*;
 
 public class PEntity {
 
-    private PIDrawable drawable;
-    private PIAnimatedDrawable animatedDrawable;
-    private Body body;
+    protected PIDrawable drawable;
+    protected PIAnimatedDrawable animatedDrawable;
+    protected Body body;
 
+    public PEntity(){
+
+    }
+    
     public PEntity(Body body, PIDrawable drawable) {
         this.body = body;
         this.drawable = drawable;
@@ -67,12 +71,4 @@ public class PEntity {
         // TODO
     }
 
-
-
-
-    
-    
-
-
-    
 }

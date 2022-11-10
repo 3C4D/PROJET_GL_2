@@ -7,9 +7,9 @@ import projet.physicEngine.common.Point;
 import java.util.ArrayList;
 
 public class PhysicWorld{
-  private ArrayList<Body> bodyList;
-  private CollisionListener collisionL;
-  private PolygonShape gameOutline;
+  protected ArrayList<Body> bodyList;
+  protected CollisionListener collisionL;
+  protected PolygonShape gameOutline;
 
   /**
   * @param La largeur du monde de jeu
@@ -32,6 +32,14 @@ public class PhysicWorld{
   */
   public void addBody(Body body){
     bodyList.add(body);
+  }
+
+  /**
+  * Permet de supprimer un corps au monde
+  * @param le corps à ajouter
+  */
+  public void removeBody(Body body){
+    bodyList.remove(body);
   }
 
   /**

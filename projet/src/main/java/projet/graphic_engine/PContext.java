@@ -11,7 +11,7 @@ import java.awt.event.ComponentEvent;
 
 
 public class PContext extends JPanel{
-    
+
     private PStage currentStage;
 
     public PContext(int width, int height) {
@@ -33,7 +33,9 @@ public class PContext extends JPanel{
 
     public void paint(Graphics g) {
         super.paint(g);
-        this.currentStage.paint(g);
+        if(this.currentStage != null) {
+          this.currentStage.paint(g);          
+        }
     }
 
     public void changeStage(PStage stage) {
@@ -48,8 +50,8 @@ public class PContext extends JPanel{
     }
 
 
-    
-    
+
+
 
 
 }

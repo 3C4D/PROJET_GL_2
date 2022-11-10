@@ -2,12 +2,10 @@ package projet.graphic_engine.drawable;
 
 import java.awt.*;
 
-
-
 public class PFixedTexturedDrawable implements PIDrawable {
-    
-    private int x;
-    private int y;
+
+    protected int x;
+    protected int y;
     private int width;
     private int height;
 

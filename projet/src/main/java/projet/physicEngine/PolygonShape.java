@@ -17,7 +17,7 @@ public class PolygonShape extends Shape{
   * @param liste des sommets qui définissent le contour de la box
   * @param le nombre de sommets
   */
-  PolygonShape(Point vertex[], int nbVertex){
+  public PolygonShape(Point vertex[], int nbVertex){
     super(Shape.ShapeType.POLYGON);
     if(PolygonShape.isConvex(vertex, nbVertex) && nbVertex >= 3){
       this.nbVertex = nbVertex;

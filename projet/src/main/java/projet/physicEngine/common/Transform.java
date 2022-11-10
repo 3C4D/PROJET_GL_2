@@ -3,6 +3,7 @@ package projet.physicEngine.common;
 import projet.physicEngine.Shape;
 import projet.physicEngine.CircleShape;
 import projet.physicEngine.PolygonShape;
+import projet.physicEngine.Shape.ShapeType;
 
 /**
 * Permet de définir les transformation dans le plan 2D
@@ -113,6 +114,9 @@ public class Transform{
   */
   public static void rotationPolygon(PolygonShape ps, Point origin, float a){
     int i;
+    if(origin == null){
+      origin = ps.getIsobarycenter();
+    }
     for(i = 0; i < ps.getNbVertex(); i++){
       ps.setVertex(i, rotation(ps.getVertex(i), origin, a));
     }
@@ -129,5 +133,14 @@ public class Transform{
       cs.setCenter(rotation(cs.getCenter(), origin, a));
     }
     //Sinon, le cercle reste identique
+  }
+
+  public static void rotationShape(Shape s, Point origin, float a){
+    if(s.getType() == ShapeType.CIRCLE){
+      rotationCircle((CircleShape)s, origin, a);
+    }
+    if(s.getType() == ShapeType.POLYGON){
+      rotationPolygon((PolygonShape)s, origin, a);
+    }
   }
 }

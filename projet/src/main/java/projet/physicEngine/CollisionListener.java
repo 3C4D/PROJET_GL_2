@@ -6,7 +6,7 @@ import projet.physicEngine.Shape.ShapeType;
 import java.lang.Math;
 import java.util.ArrayList;
 public class CollisionListener{
-  private PhysicWorld physicW;
+  protected PhysicWorld physicW;
 
   public CollisionListener(){
     physicW = null;
@@ -491,7 +491,7 @@ public class CollisionListener{
       ba = bodyList.get(i);
       //On vérifie que le corps soit toujours dans la fenetre de jeu
       insideGameOutline(ba, gameOutline);
-      
+
       for(j = i+1; j < bodyList.size(); j++){
           bb = bodyList.get(j);
           inter = areInCollision(ba, bb); //On regarde s'il y a collision
