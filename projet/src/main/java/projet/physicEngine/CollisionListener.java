@@ -190,6 +190,10 @@ public class CollisionListener{
     Shape sa = ba.getShape();
     Shape sb = bb.getShape();
 
+    if(!CollisionFilter.shouldCollide(ba, bb)){
+      return null;
+    }
+
     if(sa.getType() == Shape.ShapeType.CIRCLE){
       if(sb.getType() == Shape.ShapeType.CIRCLE){
          return circleIntersection((CircleShape)sa, (CircleShape)sb);
