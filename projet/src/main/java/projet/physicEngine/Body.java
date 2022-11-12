@@ -5,13 +5,15 @@ import projet.physicEngine.common.Transform;
 import projet.physicEngine.common.Vector2D;
 import projet.physicEngine.common.Point;
 
+import java.util.Vector;
+
 
 public class Body{
   private BodyType bodyType;
   private Shape shape;
   private Point center;
   private float mass = 0;
-
+  private Filter filter;
 
   private Vector2D velocity;
 
@@ -19,11 +21,11 @@ public class Body{
     STATIC, DYNAMIC
   }
 
-
   /**
-  * Permet de créer un corps une box de collision.
-  * Sa position initial correspond au centre (0,0)
+  * Permet de créer un corps avec :
   * Son type est par défaut STATIC
+  * Sa position initial correspond au centre (0,0)
+  * @param une box de collision
   */
   public Body(Shape shape){
     this.center = shape.getIsobarycenter();
@@ -33,7 +35,10 @@ public class Body{
   }
 
   /**
-  * Permet de créer un corps avec une position, une box de collision, et son type
+  * Permet de créer un corps avec :
+  * @param une position
+  * @param une box de collision
+  * @param son type
   */
   public Body(Point position, Shape shape, BodyType type){
     this.shape = shape;
@@ -45,6 +50,28 @@ public class Body{
     }
     this.bodyType = type;
     this.velocity = new Vector2D(center, 0,0);
+    this.filter = new Filter();
+  }
+
+
+  /**
+  * Permet de créer un corps avec :
+  * @param une position
+  * @param une box de collision
+  * @param son type
+  * @param son filtre (utile pour la gestion des collision)
+  */
+  public Body(Point position, Shape shape, BodyType type, Filter f){
+    this.shape = shape;
+    //On vérifie que le centre de gravité soit dans l'enveloppe
+    if(!shape.isInside(position)){
+      this.center = shape.getIsobarycenter();
+    }else{
+      this.center = position;
+    }
+    this.bodyType = type;
+    this.velocity = new Vector2D(center, 0,0);
+    this.filter = f;
   }
 
   /**
@@ -129,6 +156,21 @@ public class Body{
   public float getMass(){
     return this.mass;
   }
+
+  /**
+  * @return le filtre de collision
+  */
+  public Filter getFilter(){
+    return this.filter;
+  }
+
+  /**
+  * @param le nouveau filtre
+  */
+  public void setFilter(Filter f){
+    this.filter = f;
+  }
+
 
   @Override
   public String toString(){
