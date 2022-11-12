@@ -1,4 +1,4 @@
-package projet;
+package projet.game;
 
 import projet.physicEngine.common.Transform;
 import projet.physicEngine.common.*;

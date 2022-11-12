@@ -1,4 +1,4 @@
-package projet;
+package projet.game;
 
 import projet.kernel.PWorld;
 import projet.physicEngine.common.*;

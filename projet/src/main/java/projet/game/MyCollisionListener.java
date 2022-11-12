@@ -1,4 +1,4 @@
-package projet;
+package projet.game;
 
 import projet.physicEngine.CollisionListener;
 import projet.physicEngine.Body.BodyType;

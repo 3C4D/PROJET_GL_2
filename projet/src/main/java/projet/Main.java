@@ -1,5 +1,7 @@
 package projet;
 
+import projet.game.Game;
+
 /** Classe principale du projet */
 
 public class Main{
