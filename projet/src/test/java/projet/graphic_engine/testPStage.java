@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 public class testPStage {
-    
+
     @Test
     public void testConstructor() throws Exception {
         PStage stage = new PStage(50, 100);
@@ -30,18 +30,22 @@ public class testPStage {
     public void testAdd() throws Exception {
         PStage stage = new PStage(50, 100);
 
-        
+
         stage.add(new PIDrawable() {
             @Override
             public void paint(Graphics g) {
                 // TODO Auto-generated method stub
-                
+
+            }
+            @Override
+            public void setPosition(int x, int y){
+              // nothing to do
             }
         });
 
         assertEquals(1, stage.getListToPaint().size());
     }
 
-    
+
 
 }

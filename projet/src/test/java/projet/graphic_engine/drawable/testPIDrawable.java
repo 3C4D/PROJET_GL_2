@@ -14,7 +14,12 @@ public class testPIDrawable {
             @Override
             public void paint(java.awt.Graphics g) {
                 // nothing to do
-                
+
+            }
+
+            @Override
+            public void setPosition(int x, int y){
+              // nothing to do
             }
         };
 
@@ -34,7 +39,12 @@ public class testPIDrawable {
             public void paint(java.awt.Graphics g) {
                 g.setColor(Color.RED);
                 g.fillRect(0, 0, 100, 100);
-                
+
+            }
+
+            @Override
+            public void setPosition(int x, int y){
+              // nothing to do
             }
         };
 

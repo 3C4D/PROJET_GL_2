@@ -14,13 +14,18 @@ public class testPIAnimatedDrawable {
             @Override
             public void paint(java.awt.Graphics g) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
             public void next(float dt) {
                 // TODO Auto-generated method stub
-                
+
+            }
+
+            @Override
+            public void setPosition(int x, int y){
+              // nothing to do
             }
         };
 
@@ -44,7 +49,7 @@ public class testPIAnimatedDrawable {
             public void paint(java.awt.Graphics g) {
                 g.setColor(Color.RED);
                 g.fillRect(i, i, 100, 100);
-                
+
             }
 
             @Override
@@ -53,7 +58,12 @@ public class testPIAnimatedDrawable {
                 if (current_dt >= this.dt) {
                     current_dt = current_dt%this.dt;
                     i++;
-                }           
+                }
+            }
+
+            @Override
+            public void setPosition(int x, int y){
+              // nothing to do
             }
         };
 
@@ -70,5 +80,5 @@ public class testPIAnimatedDrawable {
         }
     }
 
-    
+
 }
