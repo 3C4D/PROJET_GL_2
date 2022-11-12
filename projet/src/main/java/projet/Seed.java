@@ -2,6 +2,7 @@ package projet;
 
 import projet.physicEngine.common.Transform;
 import projet.physicEngine.common.*;
+import projet.physicEngine.Body;
 import projet.physicEngine.*;
 import projet.physicEngine.Body.BodyType;
 
@@ -66,6 +67,8 @@ public class Seed extends MyEntity{
 
     //On crée son body
     this.body = new Body(position, seedShape, BodyType.DYNAMIC);
+    this.body.getFilter().setCategoryBits(MyFilter.SEED_CATEGORY);
+    this.body.getFilter().setMaskBits(MyFilter.SEED_MASK);
 
     // On ajoute une fixture
     SeedTexture texture = new SeedTexture((int)position.getX(), (int)position.getY(), 100,100);

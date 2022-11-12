@@ -13,6 +13,9 @@ public class Ball extends MyEntity{
     CircleShape ballShape = new CircleShape(center, ray);
     //On crée son body
     this.body = new Body(center, ballShape, BodyType.DYNAMIC);
+
+    this.body.getFilter().setCategoryBits(MyFilter.BALL_CATEGORY);
+    this.body.getFilter().setMaskBits(MyFilter.BALL_MASK);
   }
 
 }
