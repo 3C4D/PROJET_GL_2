@@ -163,51 +163,51 @@ public class MyCollisionListener extends CollisionListener{
 
     if(body.getShape().getType() == ShapeType.CIRCLE){
       System.out.println("COLL "+interNum);
-      switch(interNum){
-        case 0: //Tentative de sortie par le haut
-        if(velocity.getCoordX() > 0){ //arrive de la gauche
-        normal = new Vector2D(velocity.getStart(),1,0);
-        prodS = velocity.scalarProduct(normal);
-        alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
-        alpha = (float)(Math.PI*2 - alpha);
-        theta = (float)(Math.PI - Math.PI/2 - alpha);
 
-      }else{ //arrive de la droite
-        normal = new Vector2D(velocity.getStart(),-1,0);
-        prodS = velocity.scalarProduct(normal);
-        alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
+      switch (interNum) {
+     case 0:
+       if(velocity.getCoordX() > 0){ //arrive de la gauche
+         normal = new Vector2D(velocity.getStart(),1,0);
+         prodS = velocity.scalarProduct(normal);
+         alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
+         alpha = (float)(Math.PI*2 - alpha);
+         theta = (float)(Math.PI - Math.PI/2 - alpha);
 
-        theta = (float)(Math.PI - Math.PI/2 - alpha);
-      }
-      //La balle rebondi
-      oppositeRotation = body.getVelocity().opposite().vectorRotation(2*theta);
-      body.setVelocity(oppositeRotation);
-        break;
+       }else{ //arrive de la droite
+         normal = new Vector2D(velocity.getStart(),-1,0);
+         prodS = velocity.scalarProduct(normal);
+         alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
 
-        case 2: // Tentative de sortir par le bas
-        if(velocity.getCoordY() > 0){ //arrive du haut
-        normal = new Vector2D(velocity.getStart(),0,1);
-        prodS = velocity.scalarProduct(normal);
-        alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
+         theta = (float)(Math.PI - Math.PI/2 - alpha);
+       }
+       oppositeRotation = body.getVelocity().opposite().vectorRotation(2*theta);
+       body.setVelocity(oppositeRotation);
+     break;
 
-        theta = (float)(Math.PI - Math.PI/2 - alpha);
+     case 2:
+       if(velocity.getCoordX() > 0){ //arrive de la gauche
+         normal = new Vector2D(velocity.getStart(),1,0);
+         prodS = velocity.scalarProduct(normal);
+         alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
+
+         theta = (float)(Math.PI - Math.PI/2 - alpha);
+
+       }else{ //arrive de la droite
+         normal = new Vector2D(velocity.getStart(),-1,0);
+         prodS = velocity.scalarProduct(normal);
+         alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
+         alpha = (float)(Math.PI*2 - alpha);
+
+         theta = (float)(Math.PI - Math.PI/2 - alpha);
+       }
+       oppositeRotation = body.getVelocity().opposite().vectorRotation(2*theta);
+       body.setVelocity(oppositeRotation);
+     break;
 
 
-      }else{ //arrive du bas
-        normal = new Vector2D(velocity.getStart(),0,-1);
-        prodS = velocity.scalarProduct(normal);
-        alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
-        alpha = (float)(Math.PI*2 - alpha);
-
-        theta = (float)(Math.PI - Math.PI/2 - alpha);
-      }
-      //La balle rebondi
-      oppositeRotation = body.getVelocity().opposite().vectorRotation(2*theta);
-      body.setVelocity(oppositeRotation);
-        break;
-        default:
-        break;
-      }
+     default:
+     break;
+   }
 
     }
 
