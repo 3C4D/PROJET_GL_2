@@ -33,8 +33,8 @@ public class MyWorld extends PWorld {
 
     //On les ajoute a la liste d'entité
     this.addEntity(ball);
-    // this.addEntity(racket1);
-    // this.addEntity(racket2);
+    this.addEntity(racket1);
+    this.addEntity(racket2);
 
   }
 

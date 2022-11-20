@@ -87,52 +87,44 @@ public class MyCollisionListener extends CollisionListener{
     System.out.println("COLLISION"+interNum);
     Vector2D newVel;
     switch (interNum) {
-      case 1:
-        normal = new Vector2D(1,0);
-        if(velocity.getCoordY() > 0){ //arrive du bas
-          newVel = ball.getVelocity().opposite();
-          prodS = newVel.scalarProduct(normal);
+      case 3:
+      if(velocity.getCoordY() > 0){ //arrive du bas
+        normal = new Vector2D(velocity.getStart(),0,1);
+        prodS = velocity.scalarProduct(normal);
+        alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
+        alpha = (float)(Math.PI*2 - alpha);
 
-          //On calcul la valeur de l'angle
-          alpha = (float)Math.acos( (double)(prodS / newVel.norme2()));
+        theta = (float)(Math.PI - Math.PI/2 - alpha);
 
-          //On oriente l'angle
-          alpha = - alpha;
-        }else{ //arrive du haut
-          newVel = ball.getVelocity().opposite();
-          prodS = newVel.scalarProduct(normal);
+      }else{ //arrive du haut
+        normal = new Vector2D(velocity.getStart(),0,-1);
+        prodS = velocity.scalarProduct(normal);
+        alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
 
-          //On calcul la valeur de l'angle
-          alpha = (float)Math.acos( (double)(prodS / newVel.norme2()));
-
-        }
-        oppositeRotation = newVel.vectorRotation(2*alpha);
-        ball.setVelocity(oppositeRotation);
-
+        theta = (float)(Math.PI - Math.PI/2 - alpha);
+      }
+      oppositeRotation = ball.getVelocity().opposite().vectorRotation(2*theta);
+      ball.setVelocity(oppositeRotation);
       break;
 
-      case 3:
-        normal = new Vector2D(-1,0);
-        if(velocity.getCoordY() > 0){ //arrive du bas
-          newVel = ball.getVelocity().opposite();
-          prodS = newVel.scalarProduct(normal);
+      case 1:
+      if(velocity.getCoordY() > 0){ //arrive du haut
+        normal = new Vector2D(velocity.getStart(),0,1);
+        prodS = velocity.scalarProduct(normal);
+        alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
 
-          //On calcul la valeur de l'angle
-          alpha = (float)Math.acos( (double)(prodS / newVel.norme2()));
+        theta = (float)(Math.PI - Math.PI/2 - alpha);
 
-          //On oriente l'angle
-          alpha = - alpha;
-        }else{ //arrive du haut
-          newVel = ball.getVelocity().opposite();
-          prodS = newVel.scalarProduct(normal);
+      }else{ //arrive du bas
+        normal = new Vector2D(velocity.getStart(),0,-1);
+        prodS = velocity.scalarProduct(normal);
+        alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
+        alpha = (float)(Math.PI*2 - alpha);
 
-          //On calcul la valeur de l'angle
-          alpha = (float)Math.acos( (double)(prodS / newVel.norme2()));
-
-        }
-        oppositeRotation = newVel.vectorRotation(2*alpha);
-        ball.setVelocity(oppositeRotation);
-
+        theta = (float)(Math.PI - Math.PI/2 - alpha);
+      }
+      oppositeRotation = ball.getVelocity().opposite().vectorRotation(2*theta);
+      ball.setVelocity(oppositeRotation);
       break;
 
       default:
