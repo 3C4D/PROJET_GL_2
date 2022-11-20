@@ -22,7 +22,7 @@ public class MyWorld extends PWorld {
 
     //Création de la balle
     Ball ball = new Ball(new Point(150,150), 20f);
-    ball.getBody().setVelocity(new Vector2D(0.15f, -0.010f));
+    ball.getBody().setVelocity(new Vector2D(0.15f, -0.10f));
 
 
     Racket racket1 = new Racket(new Point(25,200), MyEntity.RACKET_A);
