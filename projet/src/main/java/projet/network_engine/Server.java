@@ -5,7 +5,7 @@ package projet.network_engine;
 // Input/Output
 import java.io.ObjectOutputStream;
 import java.io.IOException;
-
+import java.io.ObjectInputStream;
 // Networking things
 import java.net.ServerSocket;
 
@@ -21,7 +21,7 @@ import java.util.HashMap;
 /***
  * Server class
  */
-public class Server extends Thread {
+public abstract class Server extends Thread {
 
     /***** PARAMETERS *****/
     
@@ -32,12 +32,11 @@ public class Server extends Thread {
     ExecutorService executor;
 
     // Clients
-    HashMap<String, ObjectOutputStream> clients;    // Clients' names and output streams
+    HashMap<String, ObjectOutputStream> clients;    // Client's names and output streams
     int clientsConnected;                           // The current number of clients connected
     int clientsNumber;                              // The maximum number of clients that should be connected
 
     // Others
-    boolean complete = false;                               // Is the server complete ?
     int port;                                       // Port where the server is listenning
 
     /***** METHODS *****/
@@ -77,9 +76,6 @@ public class Server extends Thread {
         clientsConnected++;
         clients.put(username, out);
         sendUserList();
-        if (clientsConnected == clientsNumber) {
-            complete = true;
-        }
     }
 
     /***
@@ -98,7 +94,7 @@ public class Server extends Thread {
      * Diffuse a message to every connected client
      * @param _message  The message to diffuse
      */
-    synchronized public void diffuseMessage(String message, String username) {
+    synchronized public void diffuseMessage(Object message, String username) {
         if (clientsConnected > 0) {
             for (String client : clients.keySet()) {
                 if (!client.equals(username)) {
@@ -117,7 +113,7 @@ public class Server extends Thread {
      * @param _message  The message to send
      * @param _clientID The ID of the client
      */
-    synchronized public void sendMessage(String message, String username)
+    synchronized public void sendMessage(Object message, String username)
     {
         ObjectOutputStream send;
         send = clients.get(username);
@@ -130,6 +126,24 @@ public class Server extends Thread {
             }
         }
     }
+
+    /***
+     * Get a message from a client
+     * @return The object read by the server
+     */
+    synchronized public Object getMessage(ObjectInputStream in) {
+        try {
+            return in.readObject();
+        } catch (ClassNotFoundException | IOException e) {
+            return null;
+        }
+    }
+
+    /***
+     * Tasks the server will run with each client during execution
+     * @param in
+     */
+    public abstract void runningRoutine(ObjectInputStream in, String username);
 
     /***
      * Send the list of connected clients to every connected client

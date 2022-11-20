@@ -3,15 +3,40 @@ package projet.network_engine;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.EOFException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.junit.jupiter.api.Test;
 
 public class TestNetwork {
+    class TestServer extends Server {
+        public TestServer(int _port, int _clientsNumber) {
+            super(_port, _clientsNumber);
+        }
+
+        @Override 
+        public void runningRoutine(ObjectInputStream in, String username) {
+            String message = "";
+            do {
+                try {
+                    message = in.readObject().toString();
+                } catch (ClassNotFoundException | IOException e) {
+                    break;
+                }
+                if (!message.split(" ")[0].equals("DISCONNECT")) {
+                    diffuseMessage(message, username);
+                }
+            } while (!message.split(" ")[0].equals("DISCONNECT"));
+            System.out.println(message.split(" ")[1] + " disconnected");
+            disconnectClient(message.split(" ")[1]);
+        }
+    }
+
     @Test
     public void testConnection() throws UnknownHostException, InterruptedException {
-        Server server = new Server(4000, 2);
+        TestServer server = new TestServer(4000, 2);
         server.start();
         Client client1 = new Client();
         Client client2 = new Client();
@@ -25,7 +50,7 @@ public class TestNetwork {
 
     @Test
     public void testMessage() throws UnknownHostException, InterruptedException, EOFException {
-        Server server = new Server(4001, 2);
+        TestServer server = new TestServer(4001, 2);
         server.start();
         Client client1 = new Client();
         Client client2 = new Client();
@@ -39,7 +64,7 @@ public class TestNetwork {
 
     @Test
     public void testUserList() throws UnknownHostException, InterruptedException, EOFException {
-        Server server = new Server(4002, 2);
+        TestServer server = new TestServer(4002, 2);
         server.start();
         Client client1 = new Client();
         Client client2 = new Client();
@@ -53,7 +78,7 @@ public class TestNetwork {
 
     @Test
     public void testDisconnection() throws UnknownHostException, InterruptedException, EOFException {
-        Server server = new Server(4003, 2);
+        TestServer server = new TestServer(4003, 2);
         server.start();
         Client client1 = new Client();
         Client client2 = new Client();
