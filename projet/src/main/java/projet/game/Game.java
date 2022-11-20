@@ -5,21 +5,18 @@ import projet.physicEngine.common.*;
 
 import projet.graphic_engine.*;
 
-public class Game {
-
-   private int WIDTH = 500;
-   private int HEIGHT = 500;
-
-   private float DELTA_T = 1000f/600f;
+public class Game implements IConfig{
 
    private MyWorld world;
 
    private PWindow window;
    private PContext context;
+   private MyKeyboard keyboard;
+
 
 
    public Game(){
-     this.window = new PWindow("Exemple", WIDTH,HEIGHT+20);
+     this.window = new PWindow("Pong classique", WIDTH,HEIGHT+20);
      this.window.setResizable(false);
 
      this.context = new PContext(WIDTH+50, HEIGHT+50);
@@ -28,6 +25,9 @@ public class Game {
      this.world = new MyWorld(WIDTH, HEIGHT);
 
      this.context.changeStage(this.world.getStage());
+
+     keyboard = new MyKeyboard(world);
+     this.window.addKeyListener(keyboard);
    }
 
 

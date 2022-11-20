@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.lang.Math;
 
 public class MyCollisionListener extends CollisionListener{
-
   public SoundPlayer[] sp = new SoundPlayer[20];
   public int count = 0;
 
@@ -29,106 +28,133 @@ public class MyCollisionListener extends CollisionListener{
     }
   }
 
-  @Override
-  public void insideGameOutline(Body body, PolygonShape outline){
+
+  /**
+  * @return le numéro du côté par lequel la boule touche la raquette
+  * 0 pour le coté haut
+  * 1 pour le côté droit
+  * 2 pour le côté gauche
+  * 3 pour le côté bas
+  * -1 si il n'y a pas d'intersection
+  */
+  public int racketCollision(CircleShape ball, PolygonShape racket){
+    Point s1, s2, s3, s4;
+    Point p;
+
+    s1 = racket.getVertex(0);
+    s2 = racket.getVertex(1);
+    s3 = racket.getVertex(2);
+    s4 = racket.getVertex(3);
+    if(ball.getType() == ShapeType.CIRCLE){
+
+      p = new Point(s1.getX(), ball.getCenter().getY());
+      if(p.distance(ball.getCenter()) <= ball.getRay()){
+        return 3;
+      }
+
+      p = new Point(s3.getX(), ball.getCenter().getY());
+      if(p.distance(ball.getCenter()) <= ball.getRay()){
+        return 1;
+      }
+
+
+      p = new Point(ball.getCenter().getX(), s2.getY());
+      if(p.distance(ball.getCenter()) <= ball.getRay()){
+        return 0;
+      }
+
+      p = new Point(ball.getCenter().getX(), s4.getY());
+      if(p.distance(ball.getCenter()) <= ball.getRay()){
+        return 2;
+      }
+
+
+    }
+    return -1; //Pas d'intersection
+  }
+
+
+
+  public void touchRacket(Body ball, PolygonShape racket){
     int i;
     float impulseCoeff = 0.5f;
-    Vector2D velocity = body.getVelocity();
+    Vector2D velocity = ball.getVelocity();
     Vector2D normal;
+    Vector2D oppositeRotation;
     float alpha, theta=0, prodS;
 
-    int interNum = outlineCollision(body.getShape(), outline);
-
-
+    int interNum = racketCollision((CircleShape)ball.getShape(), racket);
+    System.out.println("COLLISION"+interNum);
+    Vector2D newVel;
     switch (interNum) {
-      case 0:
-        if(velocity.getCoordX() > 0){ //arrive de la gauche
-          normal = new Vector2D(velocity.getStart(),1,0);
-          prodS = velocity.scalarProduct(normal);
-          alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
-          alpha = (float)(Math.PI*2 - alpha);
-          theta = (float)(Math.PI - Math.PI/2 - alpha);
-
-        }else{ //arrive de la droite
-          normal = new Vector2D(velocity.getStart(),-1,0);
-          prodS = velocity.scalarProduct(normal);
-          alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
-
-          theta = (float)(Math.PI - Math.PI/2 - alpha);
-        }
-      break;
-
       case 1:
+        normal = new Vector2D(1,0);
         if(velocity.getCoordY() > 0){ //arrive du bas
-          normal = new Vector2D(velocity.getStart(),0,1);
-          prodS = velocity.scalarProduct(normal);
-          alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
-          alpha = (float)(Math.PI*2 - alpha);
+          newVel = ball.getVelocity().opposite();
+          prodS = newVel.scalarProduct(normal);
 
-          theta = (float)(Math.PI - Math.PI/2 - alpha);
+          //On calcul la valeur de l'angle
+          alpha = (float)Math.acos( (double)(prodS / newVel.norme2()));
 
+          //On oriente l'angle
+          alpha = - alpha;
         }else{ //arrive du haut
-          normal = new Vector2D(velocity.getStart(),0,-1);
-          prodS = velocity.scalarProduct(normal);
-          alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
+          newVel = ball.getVelocity().opposite();
+          prodS = newVel.scalarProduct(normal);
 
-          theta = (float)(Math.PI - Math.PI/2 - alpha);
+          //On calcul la valeur de l'angle
+          alpha = (float)Math.acos( (double)(prodS / newVel.norme2()));
+
         }
-      break;
+        oppositeRotation = newVel.vectorRotation(2*alpha);
+        ball.setVelocity(oppositeRotation);
 
-      case 2:
-        if(velocity.getCoordX() > 0){ //arrive de la gauche
-          normal = new Vector2D(velocity.getStart(),1,0);
-          prodS = velocity.scalarProduct(normal);
-          alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
-
-          theta = (float)(Math.PI - Math.PI/2 - alpha);
-
-        }else{ //arrive de la droite
-          normal = new Vector2D(velocity.getStart(),-1,0);
-          prodS = velocity.scalarProduct(normal);
-          alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
-          alpha = (float)(Math.PI*2 - alpha);
-
-          theta = (float)(Math.PI - Math.PI/2 - alpha);
-        }
       break;
 
       case 3:
-        if(velocity.getCoordY() > 0){ //arrive du haut
-          normal = new Vector2D(velocity.getStart(),0,1);
-          prodS = velocity.scalarProduct(normal);
-          alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
+        normal = new Vector2D(-1,0);
+        if(velocity.getCoordY() > 0){ //arrive du bas
+          newVel = ball.getVelocity().opposite();
+          prodS = newVel.scalarProduct(normal);
 
-          theta = (float)(Math.PI - Math.PI/2 - alpha);
+          //On calcul la valeur de l'angle
+          alpha = (float)Math.acos( (double)(prodS / newVel.norme2()));
 
-        }else{ //arrive du bas
-          normal = new Vector2D(velocity.getStart(),0,-1);
-          prodS = velocity.scalarProduct(normal);
-          alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
-          alpha = (float)(Math.PI*2 - alpha);
+          //On oriente l'angle
+          alpha = - alpha;
+        }else{ //arrive du haut
+          newVel = ball.getVelocity().opposite();
+          prodS = newVel.scalarProduct(normal);
 
-          theta = (float)(Math.PI - Math.PI/2 - alpha);
+          //On calcul la valeur de l'angle
+          alpha = (float)Math.acos( (double)(prodS / newVel.norme2()));
+
         }
+        oppositeRotation = newVel.vectorRotation(2*alpha);
+        ball.setVelocity(oppositeRotation);
+
       break;
 
       default:
       break;
     }
 
-    // body.applyImpulse(oppositeRotation);
-    if(interNum >= 0){ //Il y a intersection avec un côté
-      if(body.getShape().getType() == ShapeType.POLYGON){
-        Transform.rotationShape(body.getShape(),null, 2*theta);
-        body.setVelocity(new Vector2D(((PolygonShape)body.getShape()).getIsobarycenter(), ((PolygonShape)body.getShape()).getVertex(0)));
-        body.getVelocity().setCoordX(body.getVelocity().getCoordX() * 0.001f);
-        body.getVelocity().setCoordY(body.getVelocity().getCoordY() * 0.001f);
-      }else{
-        //La balle rebondi
+    }
 
-        Vector2D oppositeRotation = body.getVelocity().opposite().vectorRotation(2*theta);
-        body.setVelocity(oppositeRotation);
-      }
+  @Override
+  public void insideGameOutline(Body body, PolygonShape outline){
+    int interNum = outlineCollision(body.getShape(), outline);
+
+    switch(interNum){
+      case 0: //Tentative de sortie par le haut
+      body.setVelocity(new Vector2D(0,0));
+      body.applyImpulse(new Vector2D(0, 10));
+      break;
+
+      case 3: // Tentative de sortir par le bas
+      body.setVelocity(new Vector2D(0,0));
+      body.applyImpulse(new Vector2D(0, -10));
+      break;
     }
   }
 
@@ -137,64 +163,45 @@ public class MyCollisionListener extends CollisionListener{
     int i,j;
     Body ba, bb;
     Point inter;
-    Vector2D vectImpuls, invVectImpuls;
     ArrayList<Body> bodyList = this.physicW.getBodyList();
-    PolygonShape gameOutline = physicW.getGameOutline();
-    float impulseCoeff = 0.5f;
-    float alpha,theta, prodS;
+    PolygonShape gameOutline = this.physicW.getGameOutline();
 
+    Vector2D vectImpuls, invVectImpuls;
 
     //On regarde l'intersection de nos corps deux à deux
     for(i = 0; i < bodyList.size(); i++){
       ba = bodyList.get(i);
+
       //On vérifie que le corps soit toujours dans la fenetre de jeu
-      insideGameOutline(ba, gameOutline);
+      if(ba.getFilter().getCategoryBits() == MyFilter.RACKET_CATEGORY){
+        // System.out.println("COLLISION RACKET");
+        insideGameOutline(ba, gameOutline);
+      }
 
       for(j = i+1; j < bodyList.size(); j++){
           bb = bodyList.get(j);
-          inter = areInCollision(ba, bb); //On regarde s'il y a collision
-          if(inter != null){ //IL existe un point d'intersection
-             try{
-               System.out.println("collision");
-                synchronized(sp){
-                  sp[i].play(false, 0.7f); // On joue un son
-                  System.out.println("collision");
-                  count = (count+1)%20;
-                  System.out.println("collision");
-                }
-             }
-             catch(Exception e){
-                e.printStackTrace();
-             }
 
-             Vector2D velocityA = ba.getVelocity();
-             Vector2D velocityB = bb.getVelocity();
-
-             prodS = velocityA.scalarProduct(velocityB);
-             alpha = (float)Math.acos((double) (prodS) / (velocityA.norme2()*velocityB.norme2() ));
-             // alpha = (float)(Math.PI*2 - alpha);
-             theta = (float)(Math.PI - Math.PI/2 - alpha);
-
-             if(ba.getShape().getType() == ShapeType.POLYGON){
-               Transform.rotationShape(ba.getShape(),null, (float)Math.PI/4);
-               ba.setVelocity(new Vector2D(((PolygonShape)ba.getShape()).getIsobarycenter(), ((PolygonShape)ba.getShape()).getVertex(0)));
-               ba.getVelocity().setCoordX(ba.getVelocity().getCoordX() * 0.001f);
-               ba.getVelocity().setCoordY(ba.getVelocity().getCoordY() * 0.001f);
-               // ba.applyImpulse(new Vector2D(1000f*ba.getVelocity().getCoordX(), 1000f*ba.getVelocity().getCoordY()));
-             }else{
-                ba.setVelocity(ba.getVelocity().vectorRotation((float)Math.PI/4));
-             }
-
-             if(bb.getShape().getType() == ShapeType.POLYGON){
-               Transform.rotationShape(bb.getShape(),null, (float)Math.PI/4);
-               bb.setVelocity(new Vector2D(((PolygonShape)bb.getShape()).getIsobarycenter(), ((PolygonShape)bb.getShape()).getVertex(0)));
-               bb.getVelocity().setCoordX(bb.getVelocity().getCoordX() * 0.001f);
-               bb.getVelocity().setCoordY(bb.getVelocity().getCoordY() * 0.001f);
-               bb.applyImpulse(ba.getVelocity().opposite());
-             }else{
-               bb.setVelocity(bb.getVelocity().vectorRotation((float)Math.PI/4));
-             }
+          //On vérifie que le corps soit toujours dans la fenetre de jeu
+          if(bb.getFilter().getCategoryBits() == MyFilter.RACKET_CATEGORY){
+            // System.out.println("COLLISION RACKET-CONTOUR");
+            insideGameOutline(bb, gameOutline);
           }
+          inter = areInCollision(ba, bb); //On regarde s'il y a collision
+
+          if(inter != null && ba != bb){ //IL existe un point d'intersection
+          System.out.println("COLLISION? "+inter);
+          System.out.println("BA "+ba.getShape());
+          System.out.println("BB "+bb.getShape());
+
+             if(ba.getFilter().getCategoryBits() == MyFilter.RACKET_CATEGORY){
+               //Alors la deuxième enité est forcément une balle
+               touchRacket(bb, (PolygonShape)ba.getShape());
+             }
+            else if(bb.getFilter().getCategoryBits() == MyFilter.RACKET_CATEGORY){
+              //Alors la première entité est forcément une balle
+              touchRacket(ba, (PolygonShape)bb.getShape());
+            }
+        }
       }
     }
   }

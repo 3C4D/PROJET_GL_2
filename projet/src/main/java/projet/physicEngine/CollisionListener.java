@@ -66,15 +66,36 @@ public class CollisionListener{
         vBC = new Vector2D(pb.getVertex(i+1), ca.getCenter());
       }
 
-      //On cherche à déterminer la valeur de la norme du vecteur CI
-      //Ou I est le projecté orthogonale de C sur (AB)
-      //CI = (||prod_vect(AC,AB)||) / ||AB||
-      float num = Math.abs(vAC.getCoordY()*vAB.getCoordX() - vAC.getCoordX()*vAB.getCoordY());
-      float den = vAB.norme2();
+      if(Math.abs(pA.getY() - pB.getY()) <= 0.001){
+        Point p = new Point(ca.getCenter().getX(), pA.getY());
+        if((p.getX() <= pB.getX() && p.getX() >= pA.getX())
+        || (p.getX() <= pA.getX() && p.getX() >= pB.getX())){
+          if(p.distance(ca.getCenter()) <= ca.getRay()){
+            return p;
+          }
+        }
+      }
+      else if(Math.abs(pA.getX() - pB.getX()) <= 0.001 ){
+        Point p = new Point(pA.getX(), ca.getCenter().getY());
+        if((p.getY() <= pB.getY() && p.getY() >= pA.getY())
+        || (p.getY() >= pB.getY() && p.getY() <= pA.getY())){
+          if(p.distance(ca.getCenter()) <= ca.getRay()){
+            return p;
+          }
+        }
+      }
 
-      float normCI = num/den;
-      //Si cette norme est inférieur au rayon, on en déduit que I est dans le cercle
-      if(normCI <= ca.getRay()){ //I dans cercle ca et I sur droite (AB)
+
+      else{
+        //On cherche à déterminer la valeur de la norme du vecteur CI
+        //Ou I est le projecté orthogonale de C sur (AB)
+        //CI = (||prod_vect(AC,AB)||) / ||AB||
+        float num = Math.abs(vAC.getCoordY()*vAB.getCoordX() - vAC.getCoordX()*vAB.getCoordY());
+        float den = vAB.norme2();
+
+        float normCI = num/den;
+        //Si cette norme est inférieur au rayon, on en déduit que I est dans le cercle
+        if(normCI <= ca.getRay()){ //I dans cercle ca et I sur droite (AB)
           //Mais est-ce que I est sur le segment [AB] ?
           //On calcul les produits scalaires
           //prod1 = vAB.vAC
@@ -95,6 +116,7 @@ public class CollisionListener{
           if(ca.isInside(pB)){
             return pB;
           }
+      }
       }
     }
 
@@ -148,6 +170,8 @@ public class CollisionListener{
         pB = pa.getVertex(i+1);
         seg1 = new Vector2D(pa.getVertex(i), pa.getVertex(i+1));
       }
+
+
       for(j = 0; j < pb.getNbVertex(); j++){
         //Pui le deuxième
         if(j == pb.getNbVertex() -1){
@@ -173,6 +197,7 @@ public class CollisionListener{
           }
         }
       }
+
     }
 
     return null; //Pas d'intersection
@@ -200,7 +225,8 @@ public class CollisionListener{
       }
 
       if(sb.getType() == Shape.ShapeType.POLYGON){
-        return circlePolygonIntersection((CircleShape)sa, (PolygonShape)sb);
+        Point p = circlePolygonIntersection((CircleShape)sa, (PolygonShape)sb);
+        return p;
       }
     }
 
@@ -226,7 +252,7 @@ public class CollisionListener{
   * @return -1 si il n'y a pas d'intersection
             0 si il y a interesection avec le côté du haut
 
-            0 si il y a intersection avec le côté gauche
+            1 si il y a intersection avec le côté gauche
             2 si il y a interesection avec le côté de droite
             3 si il y a interesection avec le côté du bas
            -2 si le paramètre outline n'est pas un rectangle ou le shape n'a pas de type
@@ -385,57 +411,75 @@ public class CollisionListener{
           seg = new Vector2D(pb.getVertex(j), pb.getVertex(j+1));
         }
 
-        //Puis on regarde son intersection avec les 4 côtés du contour
-
-       // Avec le côté 1
-       k = (pA.getX()*seg.getCoordY() + s1.getY()*seg.getCoordX() - pA.getY()*seg.getCoordX() - s1.getX()*seg.getCoordY())/(seg.getCoordY()*c1.getCoordX() - seg.getCoordX()*c1.getCoordY());
-
-       //Pt d'intersection entre la droite défini par le vecteur côté c1 et seg
-        if(k >= 0f && k <= 1f){ //Sur le segment c1
-          // Est-ce que il est aussi sur seg?
-          float l = (s1.getX() + k*c1.getCoordX() - pA.getX())/(seg.getCoordX());
-          if(l >= 0f && l <= 1f){ //Oui
+        if(Math.abs(pA.getY() - pB.getY()) <= 0.001){
+          if(Math.abs(s1.getY() - pA.getY()) <= 0.001){
             return 0;
+          }
+          if(Math.abs(s4.getY() - pA.getY()) <= 0.001){
+            return 3;
+          }
+        }
+        else if(Math.abs(pA.getX() - pB.getX()) <= 0.001 ){
+          if(Math.abs(s2.getX() - pA.getX()) <= 0.001){
+            return 1;
+          }
+          if(Math.abs(s3.getX() - pA.getX()) <= 0.001){
+            return 2;
           }
         }
 
-        // Avec le côté 2
-        k = (pA.getX()*seg.getCoordY() + s2.getY()*seg.getCoordX() - pA.getY()*seg.getCoordX() - s2.getX()*seg.getCoordY())/(seg.getCoordY()*c2.getCoordX() - seg.getCoordX()*c2.getCoordY());
+        else{
+          //Puis on regarde son intersection avec les 4 côtés du contour
 
-        //Pt d'intersection entre la droite défini par le vecteur côté c1 et seg
-         if(k >= 0f && k <= 1f){ //Sur le segment c1
-           // Est-ce que il est aussi sur seg?
-           float l = (s2.getX() + k*c2.getCoordX() - pA.getX())/(seg.getCoordX());
-           if(l >= 0f && l <= 1f){ //Oui
-             return 1;
-           }
-         }
+          // Avec le côté 1
+          k = (pA.getX()*seg.getCoordY() + s1.getY()*seg.getCoordX() - pA.getY()*seg.getCoordX() - s1.getX()*seg.getCoordY())/(seg.getCoordY()*c1.getCoordX() - seg.getCoordX()*c1.getCoordY());
+
+          //Pt d'intersection entre la droite défini par le vecteur côté c1 et seg
+          if(k >= 0f && k <= 1f){ //Sur le segment c1
+            // Est-ce que il est aussi sur seg?
+            float l = (s1.getX() + k*c1.getCoordX() - pA.getX())/(seg.getCoordX());
+            if(l >= 0f && l <= 1f){ //Oui
+              return 0;
+            }
+          }
+
+          // Avec le côté 2
+          k = (pA.getX()*seg.getCoordY() + s2.getY()*seg.getCoordX() - pA.getY()*seg.getCoordX() - s2.getX()*seg.getCoordY())/(seg.getCoordY()*c2.getCoordX() - seg.getCoordX()*c2.getCoordY());
+
+          //Pt d'intersection entre la droite défini par le vecteur côté c1 et seg
+          if(k >= 0f && k <= 1f){ //Sur le segment c1
+            // Est-ce que il est aussi sur seg?
+            float l = (s2.getX() + k*c2.getCoordX() - pA.getX())/(seg.getCoordX());
+            if(l >= 0f && l <= 1f){ //Oui
+              return 1;
+            }
+          }
 
 
-        // Avec le côté 3
-        k = (pA.getX()*seg.getCoordY() + s3.getY()*seg.getCoordX() - pA.getY()*seg.getCoordX() - s3.getX()*seg.getCoordY())/(seg.getCoordY()*c3.getCoordX() - seg.getCoordX()*c3.getCoordY());
+          // Avec le côté 3
+          k = (pA.getX()*seg.getCoordY() + s3.getY()*seg.getCoordX() - pA.getY()*seg.getCoordX() - s3.getX()*seg.getCoordY())/(seg.getCoordY()*c3.getCoordX() - seg.getCoordX()*c3.getCoordY());
 
-        //Pt d'intersection entre la droite défini par le vecteur côté c1 et seg
-         if(k >= 0f && k <= 1f){ //Sur le segment c1
-           // Est-ce que il est aussi sur seg?
-           float l = (s3.getX() + k*c3.getCoordX() - pA.getX())/(seg.getCoordX());
-           if(l >= 0f && l <= 1f){ //Oui
-             return 2;
-           }
-         }
+          //Pt d'intersection entre la droite défini par le vecteur côté c1 et seg
+          if(k >= 0f && k <= 1f){ //Sur le segment c1
+            // Est-ce que il est aussi sur seg?
+            float l = (s3.getX() + k*c3.getCoordX() - pA.getX())/(seg.getCoordX());
+            if(l >= 0f && l <= 1f){ //Oui
+              return 2;
+            }
+          }
 
-        // Avec le côté 4
-        k = (pA.getX()*seg.getCoordY() + s4.getY()*seg.getCoordX() - pA.getY()*seg.getCoordX() - s4.getX()*seg.getCoordY())/(seg.getCoordY()*c4.getCoordX() - seg.getCoordX()*c4.getCoordY());
+          // Avec le côté 4
+          k = (pA.getX()*seg.getCoordY() + s4.getY()*seg.getCoordX() - pA.getY()*seg.getCoordX() - s4.getX()*seg.getCoordY())/(seg.getCoordY()*c4.getCoordX() - seg.getCoordX()*c4.getCoordY());
 
-        //Pt d'intersection entre la droite défini par le vecteur côté c1 et seg
-         if(k >= 0f && k <= 1f){ //Sur le segment c1
-           // Est-ce que il est aussi sur seg?
-           float l = (s4.getX() + k*c4.getCoordX() - pA.getX())/(seg.getCoordX());
-           if(l >= 0f && l <= 1f){ //Oui
-             return 3;
-           }
-         }
-
+          //Pt d'intersection entre la droite défini par le vecteur côté c1 et seg
+          if(k >= 0f && k <= 1f){ //Sur le segment c1
+            // Est-ce que il est aussi sur seg?
+            float l = (s4.getX() + k*c4.getCoordX() - pA.getX())/(seg.getCoordX());
+            if(l >= 0f && l <= 1f){ //Oui
+              return 3;
+            }
+          }
+        }
     }
 
 

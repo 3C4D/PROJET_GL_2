@@ -175,7 +175,7 @@ public class Body{
   @Override
   public String toString(){
     String str;
-    str = "Position :"+center.toString();
+    str = "Position :"+center.toString()+ "type : "+shape.getType();
     return str;
   }
 

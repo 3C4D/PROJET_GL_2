@@ -11,11 +11,20 @@ public class PEntity {
     protected PIDrawable drawable;
     protected PIAnimatedDrawable animatedDrawable;
     protected Body body;
+    protected int type;
+
+    public PEntity(int type){
+      this.type = type;
+    }
 
     public PEntity(){
-
+      this.type = 0;
     }
-    
+
+    public int getType(){
+      return this.type;
+    }
+
     public PEntity(Body body, PIDrawable drawable) {
         this.body = body;
         this.drawable = drawable;

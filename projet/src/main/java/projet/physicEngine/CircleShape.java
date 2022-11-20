@@ -72,4 +72,8 @@ public class CircleShape extends Shape{
     this.center = newCenter;
   }
 
+  public String toString(){
+    return " Centre "+this.center+" rayon : "+this.ray;
+  }
+
 }
