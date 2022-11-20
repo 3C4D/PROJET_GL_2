@@ -145,18 +145,17 @@ public class MyCollisionListener extends CollisionListener{
   public void insideGameOutline(Body body, PolygonShape outline){
     int interNum = outlineCollision(body.getShape(), outline);
 
-    //
-    // switch(interNum){
-    //   case 0: //Tentative de sortie par le haut
-    //   body.setVelocity(new Vector2D(0,0));
-    //   body.applyImpulse(new Vector2D(0, 10));
-    //   break;
-    //
-    //   case 2: // Tentative de sortir par le bas
-    //   body.setVelocity(new Vector2D(0,0));
-    //   body.applyImpulse(new Vector2D(0, -10));
-    //   break;
-    // }
+    switch(interNum){
+      case 0: //Tentative de sortie par le haut
+      body.setVelocity(new Vector2D(0,0));
+      body.applyImpulse(new Vector2D(0, 10));
+      break;
+
+      case 3: // Tentative de sortir par le bas
+      body.setVelocity(new Vector2D(0,0));
+      body.applyImpulse(new Vector2D(0, -10));
+      break;
+    }
   }
 
   @Override
