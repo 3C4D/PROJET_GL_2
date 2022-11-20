@@ -9,8 +9,14 @@ import projet.graphic_engine.drawable.*;
 import java.awt.Graphics;
 import java.awt.Color;
 
+/**
+* Classe représentant l'entité balle
+*/
 public class Ball extends MyEntity{
 
+  /**
+  * Classe représentant l'aspect graphique d'une balle
+  */
   public class BallTexture extends PFixedTexturedDrawable{
 
     public BallTexture(int x, int y, int width, int height){
@@ -24,6 +30,9 @@ public class Ball extends MyEntity{
     }
   }
 
+  /**
+  * Permet de créer une balle à partir de son centre et de son rayon (taille)
+  */
   public Ball(Point center, float ray){
     super(MyEntity.BALL);
     //On créer son enveloppe

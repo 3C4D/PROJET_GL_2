@@ -10,10 +10,17 @@ import projet.graphic_engine.drawable.*;
 import java.awt.Graphics;
 import java.awt.Color;
 
+/**
+* Classe définissant le monde de jeu
+*/
 public class MyWorld extends PWorld {
   private final int WIDTH = 500; // Largeur du monde
   private final int HEIGHT = 500; // Hauteur du mond
 
+  /**
+  * @param largeur du jeu
+  * @param hauteur du jeu
+  */
   public MyWorld(float width, float height){
     super(width, height);
 
@@ -22,14 +29,13 @@ public class MyWorld extends PWorld {
 
     //Création de la balle
     Ball ball = new Ball(new Point(150,150), 20f);
-    ball.getBody().setVelocity(new Vector2D(0.15f, -0.010f));
+    ball.getBody().setVelocity(new Vector2D(0.15f, -0.10f));
 
-
+    // Création de la première raqutte
     Racket racket1 = new Racket(new Point(25,200), MyEntity.RACKET_A);
-    // racket1.getBody().setVelocity(new Vector2D(0f, 0.1f));
 
+    // Création de la deuxième raquette
     Racket racket2 = new Racket(new Point(475,200), MyEntity.RACKET_B);
-    // racket2.getBody().setVelocity(new Vector2D(0f, 0.1f));
 
     //On les ajoute a la liste d'entité
     this.addEntity(ball);
@@ -61,7 +67,9 @@ public class MyWorld extends PWorld {
 
 }
 
-
+  /**
+  * @return la racketA du jeu
+  */
   public Racket getRacketA(){
     int i;
     for(i = 0; i < this.entities.size(); i++){
@@ -72,6 +80,9 @@ public class MyWorld extends PWorld {
     return null;
   }
 
+  /**
+  * @return la racketB du jeu 
+  */
   public Racket getRacketB(){
     int i;
     for(i = 0; i < this.entities.size(); i++){
