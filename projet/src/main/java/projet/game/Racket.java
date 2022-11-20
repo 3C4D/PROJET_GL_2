@@ -12,8 +12,14 @@ import java.lang.Math;
 import java.awt.Graphics;
 import java.awt.Color;
 
+/**
+* Classe définissant une raquette
+*/
 public class Racket extends MyEntity implements IConfig{
 
+  /**
+  * Classe définissant l'aspect graphique d'une raquette
+  */
   public class RacketTexture extends PFixedTexturedDrawable{
 
     public RacketTexture(int x, int y, int width, int height){
@@ -27,6 +33,11 @@ public class Racket extends MyEntity implements IConfig{
     }
   }
 
+  /**
+  *
+  * @param sa position initiale
+  * @param son type pour savoir si c'est la raquette A ou B
+  */
   public Racket(Point position, int type){
     super(type);
 
@@ -34,8 +45,6 @@ public class Racket extends MyEntity implements IConfig{
     float height = 150f;
 
     //On créer son enveloppe
-    // PolygonShape racketShape = PolygonShape.createRectShape(25,50, position);
-    // Transform.rotationPolygon(racketShape, position, (float)Math.PI/3);
 
     Point[] vertex = new Point[4];
     vertex[0] = new Point(0, 0);
@@ -45,32 +54,44 @@ public class Racket extends MyEntity implements IConfig{
 
     PolygonShape racketShape = new PolygonShape(vertex, 4);
     Vector2D trans = new Vector2D(new Point(width/2f,height/2f), position);
+    // On translate à la position initale souhaité
     Transform.translationPolygon(racketShape, trans);
-    // PolygonShape seedShape = PolygonShape.createRectShape(25,50,position);
-    // Transform.rotationShape(racketShape, position, (float)(2*Math.PI));
 
     //On crée son body
     this.body = new Body(position, racketShape, BodyType.DYNAMIC);
+    //On donne la valeur de son filtre
     this.body.getFilter().setCategoryBits(MyFilter.RACKET_CATEGORY);
     this.body.getFilter().setMaskBits(MyFilter.RACKET_MASK);
 
-    // On ajoute une fixture
+    // On ajoute son aspect graphique
     RacketTexture texture = new RacketTexture((int)trans.getCoordX(), (int)trans.getCoordY(), (int)width,(int)height);
     this.setDrawable(texture);
   }
 
+  /**
+  * Permet de commencé un mouvement
+  */
   public void start(){
     this.body.setVelocity(new Vector2D(0,RACKET_VELOCITY));
   }
 
+  /**
+  * Permet de faire monter la raquette
+  */
   public void moveUp(){
     this.body.setVelocity(new Vector2D(0,-RACKET_VELOCITY));
   }
 
+  /**
+  * Permet de faire descendre la raquette
+  */
   public void moveDown(){
     this.body.setVelocity(new Vector2D(0,RACKET_VELOCITY));
   }
 
+  /**
+  * Permet d'arrêter la raquette 
+  */
   public void stop(){
     this.body.setVelocity(new Vector2D(0,0));
   }

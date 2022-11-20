@@ -11,58 +11,68 @@ import projet.sound_engine.SoundPlayer;
 import java.util.ArrayList;
 import java.lang.Math;
 
+/**
+* Classe définissant les comportenants des entités suite à une collision
+*/
 public class MyCollisionListener extends CollisionListener{
   public SoundPlayer[] sp = new SoundPlayer[20];
   public int count = 0;
 
+  /**
+  * Son constructeur
+  */
   public MyCollisionListener(MyPhysicWorld pw){
     this.physicW = pw;
-
-    try{
-      for(int i = 0; i < 20; i++){
-        sp[i] = new SoundPlayer("sounds/oof.wav");
-      }
-    }
-    catch(Exception e){
-      e.printStackTrace();
-    }
   }
 
 
   /**
+  * Permet de calculer sur quel côté la balle touche la raquette
+  * @param une enveloppe de raquette
+  * @param une enveloppe de balle
   * @return le numéro du côté par lequel la boule touche la raquette
   * 0 pour le coté haut
   * 1 pour le côté droit
-  * 2 pour le côté gauche
-  * 3 pour le côté bas
+  * 2 pour le côté bas
+  * 3 pour le côté gauche
   * -1 si il n'y a pas d'intersection
   */
   public int racketCollision(CircleShape ball, PolygonShape racket){
     Point s1, s2, s3, s4;
     Point p;
 
+    //On prends les 4 sommets de la rackette
     s1 = racket.getVertex(0);
     s2 = racket.getVertex(1);
     s3 = racket.getVertex(2);
     s4 = racket.getVertex(3);
+
+    // Si il y a collision avec une balle
     if(ball.getType() == ShapeType.CIRCLE){
 
+      /* On regarde si le projeté orthogonal sur la droite (s1s4) du centre du
+         du cercle est compris entre les deux sommets*/
       p = new Point(s1.getX(), ball.getCenter().getY());
       if(p.distance(ball.getCenter()) <= ball.getRay()){
         return 3;
       }
 
+      /* On regarde si le projeté orthogonal sur la droite (s2s3) du centre du
+         du cercle est compris entre les deux sommets*/
       p = new Point(s3.getX(), ball.getCenter().getY());
       if(p.distance(ball.getCenter()) <= ball.getRay()){
         return 1;
       }
 
-
+      /* On regarde si le projeté orthogonal sur la droite (s1s2) du centre du
+         du cercle est compris entre les deux sommets*/
       p = new Point(ball.getCenter().getX(), s2.getY());
       if(p.distance(ball.getCenter()) <= ball.getRay()){
         return 0;
       }
 
+      /* On regarde si le projeté orthogonal sur la droite (s3s4) du centre du
+         du cercle est compris entre les deux sommets*/
       p = new Point(ball.getCenter().getX(), s4.getY());
       if(p.distance(ball.getCenter()) <= ball.getRay()){
         return 2;
@@ -75,45 +85,49 @@ public class MyCollisionListener extends CollisionListener{
 
 
 
+  /**
+  * Définit le comportement d'une balle lors de sa collision avec une raquettz
+  * @param une balle
+  * @param l'enveloppe d'une raquette
+  */
   public void touchRacket(Body ball, PolygonShape racket){
     int i;
-    float impulseCoeff = 0.5f;
     Vector2D velocity = ball.getVelocity();
     Vector2D normal;
+    Vector2D newVel;
     Vector2D oppositeRotation;
     float alpha, theta=0, prodS;
 
+    //On cherche le numéro du côté de la raquette que la balle touche
     int interNum = racketCollision((CircleShape)ball.getShape(), racket);
-    System.out.println("COLLISION"+interNum);
-    Vector2D newVel;
     switch (interNum) {
-      case 3:
+      case 3: //Côté droit
       if(velocity.getCoordY() > 0){ //arrive du bas
         normal = new Vector2D(velocity.getStart(),0,1);
         prodS = velocity.scalarProduct(normal);
         alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
         alpha = (float)(Math.PI*2 - alpha);
 
-        theta = (float)(Math.PI - Math.PI/2 - alpha);
+        theta = (float)(Math.PI - Math.PI/2 - alpha); //Angle de rotation
 
       }else{ //arrive du haut
         normal = new Vector2D(velocity.getStart(),0,-1);
         prodS = velocity.scalarProduct(normal);
         alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
 
-        theta = (float)(Math.PI - Math.PI/2 - alpha);
+        theta = (float)(Math.PI - Math.PI/2 - alpha); //Angle de rotation
       }
       oppositeRotation = ball.getVelocity().opposite().vectorRotation(2*theta);
-      ball.setVelocity(oppositeRotation);
+      ball.setVelocity(oppositeRotation); // MAJ de la vitesse
       break;
 
-      case 1:
+      case 1: // Côté gauche
       if(velocity.getCoordY() > 0){ //arrive du haut
         normal = new Vector2D(velocity.getStart(),0,1);
         prodS = velocity.scalarProduct(normal);
         alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
 
-        theta = (float)(Math.PI - Math.PI/2 - alpha);
+        theta = (float)(Math.PI - Math.PI/2 - alpha); //Angle de rotation
 
       }else{ //arrive du bas
         normal = new Vector2D(velocity.getStart(),0,-1);
@@ -121,10 +135,10 @@ public class MyCollisionListener extends CollisionListener{
         alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
         alpha = (float)(Math.PI*2 - alpha);
 
-        theta = (float)(Math.PI - Math.PI/2 - alpha);
+        theta = (float)(Math.PI - Math.PI/2 - alpha); //Angle de rotation
       }
       oppositeRotation = ball.getVelocity().opposite().vectorRotation(2*theta);
-      ball.setVelocity(oppositeRotation);
+      ball.setVelocity(oppositeRotation); //MAJ de la vitesse
       break;
 
       default:
@@ -139,6 +153,7 @@ public class MyCollisionListener extends CollisionListener{
     Vector2D normal, velocity = body.getVelocity(), oppositeRotation;
     float alpha, prodS, theta = 0;
 
+    //Si c'est une raquette
     if(body.getShape().getType() == ShapeType.POLYGON){
       switch(interNum){
         case 0: //Tentative de sortie par le haut
@@ -153,56 +168,54 @@ public class MyCollisionListener extends CollisionListener{
       }
     }
 
+    //Si c'est une ball
     if(body.getShape().getType() == ShapeType.CIRCLE){
-      System.out.println("COLL "+interNum);
 
       switch (interNum) {
-     case 0:
-       if(velocity.getCoordX() > 0){ //arrive de la gauche
-         normal = new Vector2D(velocity.getStart(),1,0);
-         prodS = velocity.scalarProduct(normal);
-         alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
-         alpha = (float)(Math.PI*2 - alpha);
-         theta = (float)(Math.PI - Math.PI/2 - alpha);
+       case 0: // Côté haut
+         if(velocity.getCoordX() > 0){ //arrive de la gauche
+           normal = new Vector2D(velocity.getStart(),1,0);
+           prodS = velocity.scalarProduct(normal);
+           alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
+           alpha = (float)(Math.PI*2 - alpha);
+           theta = (float)(Math.PI - Math.PI/2 - alpha);
 
-       }else{ //arrive de la droite
-         normal = new Vector2D(velocity.getStart(),-1,0);
-         prodS = velocity.scalarProduct(normal);
-         alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
+         }else{ //arrive de la droite
+           normal = new Vector2D(velocity.getStart(),-1,0);
+           prodS = velocity.scalarProduct(normal);
+           alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
 
-         theta = (float)(Math.PI - Math.PI/2 - alpha);
-       }
-       oppositeRotation = body.getVelocity().opposite().vectorRotation(2*theta);
-       body.setVelocity(oppositeRotation);
-     break;
+           theta = (float)(Math.PI - Math.PI/2 - alpha);
+         }
+         oppositeRotation = body.getVelocity().opposite().vectorRotation(2*theta);
+         body.setVelocity(oppositeRotation);
+       break;
 
-     case 2:
-       if(velocity.getCoordX() > 0){ //arrive de la gauche
-         normal = new Vector2D(velocity.getStart(),1,0);
-         prodS = velocity.scalarProduct(normal);
-         alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
+       case 2: //Côté bas
+         if(velocity.getCoordX() > 0){ //arrive de la gauche
+           normal = new Vector2D(velocity.getStart(),1,0);
+           prodS = velocity.scalarProduct(normal);
+           alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
 
-         theta = (float)(Math.PI - Math.PI/2 - alpha);
+           theta = (float)(Math.PI - Math.PI/2 - alpha);
 
-       }else{ //arrive de la droite
-         normal = new Vector2D(velocity.getStart(),-1,0);
-         prodS = velocity.scalarProduct(normal);
-         alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
-         alpha = (float)(Math.PI*2 - alpha);
+         }else{ //arrive de la droite
+           normal = new Vector2D(velocity.getStart(),-1,0);
+           prodS = velocity.scalarProduct(normal);
+           alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
+           alpha = (float)(Math.PI*2 - alpha);
 
-         theta = (float)(Math.PI - Math.PI/2 - alpha);
-       }
-       oppositeRotation = body.getVelocity().opposite().vectorRotation(2*theta);
-       body.setVelocity(oppositeRotation);
-     break;
+           theta = (float)(Math.PI - Math.PI/2 - alpha);
+         }
+         oppositeRotation = body.getVelocity().opposite().vectorRotation(2*theta);
+         body.setVelocity(oppositeRotation);
+       break;
 
 
-     default:
-     break;
-   }
-
+       default:
+       break;
+     }
     }
-
 
   }
 
@@ -232,9 +245,6 @@ public class MyCollisionListener extends CollisionListener{
           inter = areInCollision(ba, bb); //On regarde s'il y a collision
 
           if(inter != null && ba != bb){ //IL existe un point d'intersection
-          System.out.println("COLLISION? "+inter);
-          System.out.println("BA "+ba.getShape());
-          System.out.println("BB "+bb.getShape());
 
              if(ba.getFilter().getCategoryBits() == MyFilter.RACKET_CATEGORY){
                //Alors la deuxième enité est forcément une balle
