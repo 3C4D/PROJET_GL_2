@@ -66,15 +66,36 @@ public class CollisionListener{
         vBC = new Vector2D(pb.getVertex(i+1), ca.getCenter());
       }
 
-      //On cherche à déterminer la valeur de la norme du vecteur CI
-      //Ou I est le projecté orthogonale de C sur (AB)
-      //CI = (||prod_vect(AC,AB)||) / ||AB||
-      float num = Math.abs(vAC.getCoordY()*vAB.getCoordX() - vAC.getCoordX()*vAB.getCoordY());
-      float den = vAB.norme2();
+      if(Math.abs(pA.getY() - pB.getY()) <= 0.001){
+        Point p = new Point(ca.getCenter().getX(), pA.getY());
+        if((p.getX() <= pB.getX() && p.getX() >= pA.getX())
+        || (p.getX() <= pA.getX() && p.getX() >= pB.getX())){
+          if(p.distance(ca.getCenter()) <= ca.getRay()){
+            return p;
+          }
+        }
+      }
+      else if(Math.abs(pA.getX() - pB.getX()) <= 0.001 ){
+        Point p = new Point(pA.getX(), ca.getCenter().getY());
+        if((p.getY() <= pB.getY() && p.getY() >= pA.getY())
+        || (p.getY() >= pB.getY() && p.getY() <= pA.getY())){
+          if(p.distance(ca.getCenter()) <= ca.getRay()){
+            return p;
+          }
+        }
+      }
 
-      float normCI = num/den;
-      //Si cette norme est inférieur au rayon, on en déduit que I est dans le cercle
-      if(normCI <= ca.getRay()){ //I dans cercle ca et I sur droite (AB)
+
+      else{
+        //On cherche à déterminer la valeur de la norme du vecteur CI
+        //Ou I est le projecté orthogonale de C sur (AB)
+        //CI = (||prod_vect(AC,AB)||) / ||AB||
+        float num = Math.abs(vAC.getCoordY()*vAB.getCoordX() - vAC.getCoordX()*vAB.getCoordY());
+        float den = vAB.norme2();
+
+        float normCI = num/den;
+        //Si cette norme est inférieur au rayon, on en déduit que I est dans le cercle
+        if(normCI <= ca.getRay()){ //I dans cercle ca et I sur droite (AB)
           //Mais est-ce que I est sur le segment [AB] ?
           //On calcul les produits scalaires
           //prod1 = vAB.vAC
@@ -95,6 +116,7 @@ public class CollisionListener{
           if(ca.isInside(pB)){
             return pB;
           }
+      }
       }
     }
 
@@ -200,7 +222,8 @@ public class CollisionListener{
       }
 
       if(sb.getType() == Shape.ShapeType.POLYGON){
-        return circlePolygonIntersection((CircleShape)sa, (PolygonShape)sb);
+        Point p = circlePolygonIntersection((CircleShape)sa, (PolygonShape)sb);
+        return p;
       }
     }
 

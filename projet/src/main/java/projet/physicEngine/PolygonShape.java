@@ -235,4 +235,14 @@ public class PolygonShape extends Shape{
     this.vertex[i] = p;
   }
 
+  @Override
+  public String toString(){
+    int i;
+    String s="";
+    for(i = 0; i<this.nbVertex; i++){
+      s += " "+this.vertex[i]+" ";
+    }
+    return s;
+  }
+
 }
