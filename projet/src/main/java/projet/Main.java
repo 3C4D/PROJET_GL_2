@@ -1,9 +1,9 @@
 package projet;
 
-public class Main {
-	
-	static public void main(String args[]) {
-		System.out.println("");
+public class Main{
+	/** Fonction principale du programme */
+	public static void main(String[] args) {
+	  Game game = new Game();
+	  game.launch();
 	}
-
 }
