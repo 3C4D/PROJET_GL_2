@@ -1,4 +1,4 @@
-package projet.moteur_ia;
+package projet.ai_engine;
 import java.util.*;
 import java.lang.Math;
 /**
@@ -53,10 +53,13 @@ public class Graph {
 
    
     
-    /** Method which create a graph according to a matrix 
+    /** Method which create a graph according to a matrix according to this definition : 
+    *For every vertices (x,y) the cost from x to y is 0 if matrix[x][y]==0 (there is no node) else he is equal to matrix[x][y] ; 
+    * 
      * @param [][]matrix (This matrix can take value i=0 to n where i is the weight, if i=0 then the node wont be connected to others)
      * @param n
-     * @param diagonal (True if the node is connected to his diagonal)
+     * @param diagonal (True if the node is connected to his diagonal's node)
+     * @param symetrical (True if the cost is the same between two nodes in both directions)
      */
     public void matrixToGraph(int [][]matrix,int n,boolean diagonal){
         this.list = new ArrayList<LinkedList<Node>>();
@@ -70,12 +73,13 @@ public class Graph {
 
 
         // Creation of list nodes
-        for(int i=0;i<n;i++){
-            for(int j=0;j<n;j++){
-                this.listNodes.add(new Node(i,j,i+""+"j",indice,matrix[i][j]));
-                indice+=1;
+            for(int i=0;i<n;i++){
+                for(int j=0;j<n;j++){
+                    this.listNodes.add(new Node(i,j,i+""+j,indice,matrix[i][j]));
+                    indice+=1;
+                }
             }
-        }
+        
 
         indice=0;
         for(int i=0;i<n;i++){
@@ -92,9 +96,9 @@ public class Graph {
 
                     //case down left
                     if(diagonal && i+1<n && j-1>=0 && matrix[i+1][j-1]!=0) this.addEdge(this.listNodes.get(indice),this.listNodes.get(indice+n-1));
-
+            
+                
                 }
-
                 indice+=1;
             }
         }

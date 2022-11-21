@@ -1,13 +1,9 @@
 package projet;
 
-import projet.game.Game;
+public class Main {
+	
+	static public void main(String args[]) {
+		System.out.println("");
+	}
 
-/** Classe principale du projet */
-
-public class Main{
-  /** Fonction principale du programme */
-  public static void main(String[] args) {
-    Game game = new Game();
-    game.launch();
-  }
 }
