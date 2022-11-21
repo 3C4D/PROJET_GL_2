@@ -40,7 +40,6 @@ public class Pathfinding {
 
     }
 
-        
     /** Method which update the graph with a new 2d grid
      * @param [][]matrix
      * @param n
