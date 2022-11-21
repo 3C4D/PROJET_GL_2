@@ -1,6 +1,6 @@
-package moteur_ia;
+package projet;
 
-public class MainMoteurIa {
+public class Main {
 	
 	static public void main(String args[]) {
 		System.out.println("");
