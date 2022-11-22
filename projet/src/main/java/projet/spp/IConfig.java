@@ -19,5 +19,5 @@ public interface IConfig{
   public static float RACKET_WIDTH = 50;
   public static float RACKET_HEIGHT = 25;
 
-  public static int PLAYERS_NB = 4;
+  public static int PLAYERS_NB = 15;
 }

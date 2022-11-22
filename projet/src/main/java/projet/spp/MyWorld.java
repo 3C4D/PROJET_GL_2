@@ -26,8 +26,9 @@ public class MyWorld extends PWorld implements IConfig {
     this.physicWorld = new MyPhysicWorld(width, height);
 
     // Création de la table
-    Table table = new Table(new Point(TABLE_SIZE/2f,TABLE_SIZE/2f), (float)(TABLE_SIZE/2f-25.0f));
+    Table table = new Table(new Point(TABLE_SIZE/2f,TABLE_SIZE/2f), (float)(TABLE_SIZE/2f - 12f));
     this.addEntity(table);
+
 
 
     //Pour chaque joueur on créer une rackette et on l'ajoute au monde
@@ -39,7 +40,7 @@ public class MyWorld extends PWorld implements IConfig {
       position = new Point((float)((TABLE_SIZE/2f)*Math.cos(angle) + RACKET_WIDTH/2f), (float)((TABLE_SIZE/2f)*Math.sin(angle) + RACKET_HEIGHT/2f));
       this.addEntity(new PastisRacket(position,
                      MyEntity.RACKET,
-                     Color.YELLOW,
+                     Color.BLUE,
                      new Point(TABLE_SIZE/2f,TABLE_SIZE/2f),
                      new Zone((float)Math.PI*2*(i+1)/PLAYERS_NB, (float)Math.PI*2*i/PLAYERS_NB, angle )));
       System.out.println("cc");

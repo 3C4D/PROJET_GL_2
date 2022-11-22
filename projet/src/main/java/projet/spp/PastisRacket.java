@@ -84,6 +84,9 @@ public class PastisRacket extends MyEntity implements IConfig{
     Transform.rotationShape(racketShape, null, (float)Math.PI/2f);
 
     Transform.rotationShape(racketShape, tableOrigin, zone.getAngle());
+
+    Vector2D trans = new Vector2D(position, tableOrigin);
+
     //On crée son body
     this.body = new Body(position, racketShape, BodyType.DYNAMIC);
     //On donne la valeur de son filtre
