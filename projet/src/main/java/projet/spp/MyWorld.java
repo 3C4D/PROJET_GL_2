@@ -16,6 +16,9 @@ import java.util.Vector;
 */
 public class MyWorld extends PWorld implements IConfig {
   public static float TABLE_SIZE = 800;
+  public static float RACKET_WIDTH = 50;
+  public static float RACKET_HEIGHT = 25;
+
   /**
   * @param largeur du jeu
   * @param hauteur du jeu
@@ -30,14 +33,16 @@ public class MyWorld extends PWorld implements IConfig {
     Table table;
     if(HEIGHT > WIDTH){
       table = new Table(new Point(WIDTH/2f,HEIGHT/2f), (float)(WIDTH/2f - 12f));
-      TABLE_SIZE = WIDTH;
+      TABLE_SIZE = WIDTH-24;
     }else{
       table = new Table(new Point(WIDTH/2f,HEIGHT/2f), (float)(HEIGHT/2f - 12f));
-      TABLE_SIZE = HEIGHT;
+      TABLE_SIZE = HEIGHT-24;
     }
     this.addEntity(table);
 
-
+    float size_zone = (float)(2 * Math.sin(Math.PI/PLAYERS_NB) * TABLE_SIZE/2);
+    RACKET_WIDTH = size_zone/3;
+    RACKET_HEIGHT = TABLE_SIZE/10;
 
     //Pour chaque joueur on créer une rackette et on l'ajoute au monde
     float angle;

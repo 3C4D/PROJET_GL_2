@@ -70,18 +70,18 @@ public class PastisRacket extends MyEntity implements IConfig{
 
     Point[] vertex = new Point[6];
     Transform.rotation(position, tableOrigin, zone.getAngle());
-    vertex[0] = new Point(tableOrigin.getX() - RACKET_WIDTH/4f, tableOrigin.getY()-RACKET_HEIGHT/2f);
-    vertex[1] = new Point(tableOrigin.getX() + RACKET_WIDTH/4f, tableOrigin.getY()-RACKET_HEIGHT/2f);
-    vertex[2] = new Point(tableOrigin.getX() + RACKET_WIDTH/2f, tableOrigin.getY());
-    vertex[3] = new Point(tableOrigin.getX() + RACKET_WIDTH/2f, tableOrigin.getY() + RACKET_HEIGHT/2f);
-    vertex[4] = new Point(tableOrigin.getX() - RACKET_WIDTH/2f, tableOrigin.getY() + RACKET_HEIGHT/2f);
-    vertex[5] = new Point(tableOrigin.getX() - RACKET_WIDTH/2f, tableOrigin.getY());
+    vertex[0] = new Point(tableOrigin.getX() - MyWorld.RACKET_WIDTH/4f, tableOrigin.getY()-MyWorld.RACKET_HEIGHT/2f);
+    vertex[1] = new Point(tableOrigin.getX() + MyWorld.RACKET_WIDTH/4f, tableOrigin.getY()-MyWorld.RACKET_HEIGHT/2f);
+    vertex[2] = new Point(tableOrigin.getX() + MyWorld.RACKET_WIDTH/2f, tableOrigin.getY());
+    vertex[3] = new Point(tableOrigin.getX() + MyWorld.RACKET_WIDTH/2f, tableOrigin.getY() + MyWorld.RACKET_HEIGHT/2f);
+    vertex[4] = new Point(tableOrigin.getX() - MyWorld.RACKET_WIDTH/2f, tableOrigin.getY() + MyWorld.RACKET_HEIGHT/2f);
+    vertex[5] = new Point(tableOrigin.getX() - MyWorld.RACKET_WIDTH/2f, tableOrigin.getY());
 
     PolygonShape racketShape = new PolygonShape(vertex, 6);
     System.out.println("ANGLE "+zone.getAngle());
-
-    Transform.translateShape(racketShape, new Vector2D(tableOrigin, new Point(tableOrigin.getX()+MyWorld.TABLE_SIZE/2f-25, tableOrigin.getY())));
+    System.out.println("RW et RH"+MyWorld.RACKET_WIDTH+" "+MyWorld.RACKET_HEIGHT);
     Transform.rotationShape(racketShape, null, (float)Math.PI/2f);
+    Transform.translateShape(racketShape, new Vector2D(tableOrigin, new Point(tableOrigin.getX()+MyWorld.TABLE_SIZE/2f-MyWorld.RACKET_HEIGHT/2, tableOrigin.getY())));
 
     Transform.rotationShape(racketShape, tableOrigin, zone.getAngle());
 
@@ -95,7 +95,7 @@ public class PastisRacket extends MyEntity implements IConfig{
 
 
     // On ajoute son aspect graphique
-    PastisRacketTexture texture = new PastisRacketTexture((int)position.getX(), (int)position.getY(), (int)RACKET_WIDTH,(int)RACKET_HEIGHT);
+    PastisRacketTexture texture = new PastisRacketTexture((int)position.getX(), (int)position.getY(), (int)MyWorld.RACKET_WIDTH,(int)MyWorld.RACKET_HEIGHT);
     this.setDrawable(texture);
   }
 
