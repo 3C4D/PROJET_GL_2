@@ -1,6 +1,6 @@
 package projet;
 
-import projet.game.Game;
+import projet.spp.Game;
 
 /** Classe principale du projet */
 
