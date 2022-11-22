@@ -15,6 +15,7 @@ import java.util.Vector;
 * Classe définissant le monde de jeu
 */
 public class MyWorld extends PWorld implements IConfig {
+  public static float TABLE_SIZE = 800;
   /**
   * @param largeur du jeu
   * @param hauteur du jeu
@@ -26,7 +27,14 @@ public class MyWorld extends PWorld implements IConfig {
     this.physicWorld = new MyPhysicWorld(width, height);
 
     // Création de la table
-    Table table = new Table(new Point(TABLE_SIZE/2f,TABLE_SIZE/2f), (float)(TABLE_SIZE/2f - 12f));
+    Table table;
+    if(HEIGHT > WIDTH){
+      table = new Table(new Point(WIDTH/2f,HEIGHT/2f), (float)(WIDTH/2f - 12f));
+      TABLE_SIZE = WIDTH;
+    }else{
+      table = new Table(new Point(WIDTH/2f,HEIGHT/2f), (float)(HEIGHT/2f - 12f));
+      TABLE_SIZE = HEIGHT;
+    }
     this.addEntity(table);
 
 
@@ -41,7 +49,7 @@ public class MyWorld extends PWorld implements IConfig {
       this.addEntity(new PastisRacket(position,
                      MyEntity.RACKET,
                      Color.BLUE,
-                     new Point(TABLE_SIZE/2f,TABLE_SIZE/2f),
+                     new Point(WIDTH/2f,HEIGHT/2f),
                      new Zone((float)Math.PI*2*(i+1)/PLAYERS_NB, (float)Math.PI*2*i/PLAYERS_NB, angle )));
       System.out.println("cc");
     }

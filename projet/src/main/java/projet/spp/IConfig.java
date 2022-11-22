@@ -8,9 +8,7 @@ import java.lang.Math;
 public interface IConfig{
 
   public static int WIDTH = 800; // Largeur de la fenetre
-  public static int HEIGHT = 800; // Hauteur de la fenetre
-
-  public static float TABLE_SIZE = 800;
+  public static int HEIGHT = 400; // Hauteur de la fenetre
 
   public static float DELTA_T = 1000f/600f; // Fréquence de rafraichissement des frames
 
@@ -19,5 +17,5 @@ public interface IConfig{
   public static float RACKET_WIDTH = 50;
   public static float RACKET_HEIGHT = 25;
 
-  public static int PLAYERS_NB = 15;
+  public static int PLAYERS_NB = 8;
 }
