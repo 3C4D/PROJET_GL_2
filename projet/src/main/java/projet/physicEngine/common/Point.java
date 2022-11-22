@@ -35,6 +35,26 @@ public class Point{
   }
 
   /**
+  * Permet de savoir si le point courant se trouve sur un segment
+  * @param la première extrémité du segment
+  * @param la deuxième
+  * @return true si c'est le cas, false sinon
+  */
+  public boolean between(Point p1, Point p2){
+    Vector2D v = new Vector2D(p1,p2);
+    Vector2D v2 = new Vector2D(p1,this);
+
+    float prod1 = v.scalarProduct(v2);
+    float prod2 = v.scalarProduct(v);
+
+    if(prod1 < 0 || prod1 > prod2){
+      return false;
+    }else{
+      return true;
+    }
+  }
+
+  /**
   *
   */
   public Point orthoProjection(Point pA, Point pB){

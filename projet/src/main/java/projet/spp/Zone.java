@@ -40,4 +40,12 @@ public class Zone extends MyEntity{
     this.angle = newAngle;
   }
 
+  public Point getMaxPoint(){
+    return new Point(MyWorld.TABLE_SIZE/2f * (float)Math.cos(this.maxAngle),MyWorld.TABLE_SIZE/2f * (float)Math.sin(this.maxAngle));
+  }
+
+  public Point getMinPoint(){
+    return new Point(MyWorld.TABLE_SIZE/2f * (float)Math.cos(this.minAngle),MyWorld.TABLE_SIZE/2f * (float)Math.sin(this.minAngle));
+  }
+
 }
