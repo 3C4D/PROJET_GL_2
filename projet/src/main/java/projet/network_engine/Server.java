@@ -3,6 +3,7 @@ package projet.network_engine;
 /***** IMPORTS *****/
 
 // Input/Output
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
 
@@ -21,10 +22,10 @@ import java.util.HashMap;
 /***
  * Server class
  */
-public class Server extends Thread {
+public abstract class Server extends Thread {
 
     /***** PARAMETERS *****/
-    
+
     // Networking
     ServerSocket listener;
 
@@ -32,23 +33,23 @@ public class Server extends Thread {
     ExecutorService executor;
 
     // Clients
-    HashMap<String, ObjectOutputStream> clients;    // Clients' names and output streams
-    int clientsConnected;                           // The current number of clients connected
-    int clientsNumber;                              // The maximum number of clients that should be connected
+    HashMap<String, ObjectOutputStream> clients; // Client's names and output streams
+    int clientsConnected; // The current number of clients connected
+    int clientsNumber; // The maximum number of clients that should be connected
 
     // Others
-    boolean complete = false;                               // Is the server complete ?
-    int port;                                       // Port where the server is listenning
+    int port; // Port where the server is listenning
 
     /***** METHODS *****/
 
     /***
      * Constructor
+     * 
      * @param _port Where the server will listen
      */
     public Server(int _port, int _clientsNumber) {
         try {
-            
+
             port = _port;
             clientsNumber = _clientsNumber;
             listener = new ServerSocket(port);
@@ -62,6 +63,7 @@ public class Server extends Thread {
 
     /***
      * Return the number of clients connected
+     * 
      * @return The number of clients connected
      */
     public int getClientsConnected() {
@@ -70,20 +72,19 @@ public class Server extends Thread {
 
     /***
      * Connect a client to the server
+     * 
      * @param _out The output stream of this client
-     * @param _in The input stream of this client
+     * @param _in  The input stream of this client
      */
     synchronized public void connectClient(String username, ObjectOutputStream out) {
         clientsConnected++;
         clients.put(username, out);
         sendUserList();
-        if (clientsConnected == clientsNumber) {
-            complete = true;
-        }
     }
 
     /***
      * Disconnect a client from the server
+     * 
      * @param _clientID The ID of the client who will be disconnected
      */
     synchronized public void disconnectClient(String username) {
@@ -96,9 +97,10 @@ public class Server extends Thread {
 
     /***
      * Diffuse a message to every connected client
-     * @param _message  The message to diffuse
+     * 
+     * @param _message The message to diffuse
      */
-    synchronized public void diffuseMessage(String message, String username) {
+    synchronized public void diffuseMessage(Object message, String username) {
         if (clientsConnected > 0) {
             for (String client : clients.keySet()) {
                 if (!client.equals(username)) {
@@ -114,11 +116,11 @@ public class Server extends Thread {
 
     /***
      * Send a message to a client
+     * 
      * @param _message  The message to send
      * @param _clientID The ID of the client
      */
-    synchronized public void sendMessage(String message, String username)
-    {
+    synchronized public void sendMessage(String message, String username) {
         ObjectOutputStream send;
         send = clients.get(username);
         if (send != null) {
@@ -132,12 +134,32 @@ public class Server extends Thread {
     }
 
     /***
+     * Get a message from a client
+     * 
+     * @return The object read by the server
+     */
+    synchronized public Object getMessage(ObjectInputStream in) {
+        try {
+            return in.readObject();
+        } catch (ClassNotFoundException | IOException e) {
+            return null;
+        }
+    }
+
+    /***
+     * Tasks the server will run with each client during execution
+     * 
+     * @param in
+     */
+    public abstract void runningRoutine(ObjectInputStream in, String username);
+
+    /***
      * Send the list of connected clients to every connected client
      */
     synchronized public void sendUserList() {
         Object[] users = clients.keySet().toArray();
         String message = "USERLIST";
-        for (int i=0; i<clients.size(); i++) {
+        for (int i = 0; i < clients.size(); i++) {
             message += " " + users[i].toString();
         }
         diffuseMessage(message, "");
@@ -145,15 +167,17 @@ public class Server extends Thread {
 
     /***
      * Wait for the end of client threads
+     * 
      * @throws InterruptedException
      */
     synchronized public void end() throws InterruptedException {
         diffuseMessage("STOP", "");
-        executor.shutdown(); 
+        executor.shutdown();
     }
 
     /***
-     * Run method, where the server will lauch client threads for every new connection
+     * Run method, where the server will lauch client threads for every new
+     * connection
      */
     public void run() {
         try {

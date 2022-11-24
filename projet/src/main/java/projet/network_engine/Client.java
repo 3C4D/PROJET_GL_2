@@ -30,7 +30,6 @@ public class Client {
 
     // Others
     private String username;
-    private String message;
 
     /***** METHODS *****/
 
@@ -77,7 +76,7 @@ public class Client {
      * Send a message to the server
      * @param message  The message to send
      */
-    public void sendMessage(String message) {
+    public void sendMessage(Object message) {
         try {
             out.writeObject(message);
             out.flush();
@@ -89,11 +88,11 @@ public class Client {
     /***
      * Get a message from the server
      */
-    public String getMessage() throws EOFException {
+    public Object getMessage() throws EOFException {
         try {
-            message = in.readObject().toString();
+            return in.readObject();
         } catch (ClassNotFoundException | IOException e) {
         }
-        return message;
+        return null;
     }
 }
