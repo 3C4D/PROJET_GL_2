@@ -78,8 +78,6 @@ public class PastisRacket extends MyEntity implements IConfig{
     vertex[5] = new Point(tableOrigin.getX() - MyWorld.RACKET_WIDTH/2f, tableOrigin.getY());
 
     PolygonShape racketShape = new PolygonShape(vertex, 6);
-    System.out.println("ANGLE "+zone.getAngle());
-    System.out.println("RW et RH"+MyWorld.RACKET_WIDTH+" "+MyWorld.RACKET_HEIGHT);
     Transform.rotationShape(racketShape, null, (float)Math.PI/2f);
     Transform.translateShape(racketShape, new Vector2D(tableOrigin, new Point(tableOrigin.getX()+MyWorld.TABLE_SIZE/2f-MyWorld.RACKET_HEIGHT/2, tableOrigin.getY())));
 

@@ -44,19 +44,23 @@ public class MyWorld extends PWorld implements IConfig {
     RACKET_WIDTH = size_zone/3;
     RACKET_HEIGHT = TABLE_SIZE/10;
 
+    //Création de la balle
+    Ball ball = new Ball(new Point(WIDTH/2f,HEIGHT/2f), 20f);
+    ball.getBody().setVelocity(new Vector2D(0.15f, -0.10f));
+
+    this.addEntity(ball);
+
     //Pour chaque joueur on créer une rackette et on l'ajoute au monde
     float angle;
     Point position;
     for(int i = 0; i < PLAYERS_NB; i++){
       angle = (float)(2*(i)*Math.PI/PLAYERS_NB);
-      System.out.println("ANGLE "+i+" est "+angle);
       position = new Point((float)((TABLE_SIZE/2f)*Math.cos(angle) + RACKET_WIDTH/2f), (float)((TABLE_SIZE/2f)*Math.sin(angle) + RACKET_HEIGHT/2f));
       this.addEntity(new PastisRacket(position,
                      MyEntity.RACKET,
                      Color.BLUE,
                      new Point(WIDTH/2f,HEIGHT/2f),
                      new Zone((float)Math.PI*2*(i+1)/PLAYERS_NB, (float)Math.PI*2*i/PLAYERS_NB, angle )));
-      System.out.println("cc");
     }
 
 

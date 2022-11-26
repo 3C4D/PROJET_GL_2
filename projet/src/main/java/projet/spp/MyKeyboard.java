@@ -26,12 +26,12 @@ public class MyKeyboard extends KeyboardHandler{
   @Override
   public void actionKeyboardPressed(char letter, int code){
     switch (code) {
-      case IKeyCode.KEY_UP:
-        this.world.getRackets().get(0).moveUp(); //La raquette monte
+      case IKeyCode.KEY_RIGHT:
+        this.world.getRackets().get(0).moveDown();  //La raquette descend
       break;
 
-      case IKeyCode.KEY_DOWN:
-        this.world.getRackets().get(0).moveDown();  //La raquette descend
+      case IKeyCode.KEY_LEFT:
+        this.world.getRackets().get(0).moveUp(); //La raquette monte
       break;
 
       case IKeyCode.KEY_Z:
