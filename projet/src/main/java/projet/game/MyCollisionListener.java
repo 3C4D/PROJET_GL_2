@@ -143,45 +143,6 @@ public class MyCollisionListener extends CollisionListener{
       ball.setVelocity(oppositeRotation); //MAJ de la vitesse
       break;
 
-      case 2:
-      if(velocity.getCoordX() > 0){ //arrive de la gauche
-          normal = new Vector2D(velocity.getStart(),1,0);
-          prodS = velocity.scalarProduct(normal);
-          alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
-          alpha = (float)(Math.PI*2 - alpha);
-          theta = (float)(Math.PI - Math.PI/2 - alpha);
-
-        }else{ //arrive de la droite
-          normal = new Vector2D(velocity.getStart(),-1,0);
-          prodS = velocity.scalarProduct(normal);
-          alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
-
-          theta = (float)(Math.PI - Math.PI/2 - alpha);
-        }
-      oppositeRotation = ball.getVelocity().opposite().vectorRotation(2*theta);
-      ball.setVelocity(oppositeRotation); //MAJ de la vitesse
-      break;
-
-      case 0:
-      if(velocity.getCoordX() > 0){ //arrive de la gauche
-          normal = new Vector2D(velocity.getStart(),1,0);
-          prodS = velocity.scalarProduct(normal);
-          alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
-
-          theta = (float)(Math.PI - Math.PI/2 - alpha);
-
-        }else{ //arrive de la droite
-          normal = new Vector2D(velocity.getStart(),-1,0);
-          prodS = velocity.scalarProduct(normal);
-          alpha = (float)Math.acos((double) (prodS) / (velocity.norme2()));
-          alpha = (float)(Math.PI*2 - alpha);
-
-          theta = (float)(Math.PI - Math.PI/2 - alpha);
-        }
-        oppositeRotation = ball.getVelocity().opposite().vectorRotation(2*theta);
-        ball.setVelocity(oppositeRotation); //MAJ de la vitesse
-      break;
-
       default:
       break;
     }
@@ -199,12 +160,12 @@ public class MyCollisionListener extends CollisionListener{
       switch(interNum){
         case 0: //Tentative de sortie par le haut
         body.setVelocity(new Vector2D(0,0));
-        body.applyImpulse(new Vector2D(0, 10));
+        body.applyImpulse(new Vector2D(0, 1f));
         break;
 
         case 3: // Tentative de sortir par le bas
         body.setVelocity(new Vector2D(0,0));
-        body.applyImpulse(new Vector2D(0, -10));
+        body.applyImpulse(new Vector2D(0, -1f));
         break;
       }
     }

@@ -17,6 +17,7 @@ public class MyWorld extends PWorld {
   private final int WIDTH = 500; // Largeur du monde
   private final int HEIGHT = 500; // Hauteur du mond
   private static float BALL_SIZE = 20f;
+  private static float RACKET_WIDTH = 20f , RACKET_HEIGHT = 150f;
   private int pointA;
   private int pointB;
   private float x, y;
@@ -48,10 +49,10 @@ public class MyWorld extends PWorld {
     ball.getBody().setVelocity(new Vector2D(x,y));
 
     // Création de la première raqutte
-    Racket racket1 = new Racket(new Point(25,200), MyEntity.RACKET_A);
+    Racket racket1 = new Racket(new Point(RACKET_WIDTH/2f, HEIGHT/2f), MyEntity.RACKET_A, RACKET_WIDTH, RACKET_HEIGHT);
 
     // Création de la deuxième raquette
-    Racket racket2 = new Racket(new Point(475,200), MyEntity.RACKET_B);
+    Racket racket2 = new Racket(new Point(WIDTH - RACKET_WIDTH/2f, HEIGHT/2f), MyEntity.RACKET_B, RACKET_WIDTH, RACKET_HEIGHT);
 
     //On les ajoute a la liste d'entité
     this.addEntity(ball);
