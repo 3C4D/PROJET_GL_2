@@ -6,6 +6,7 @@ import projet.physicEngine.common.*;
 import projet.graphic_engine.*;
 
 import java.awt.Color;
+import javax.swing.text.JTextComponent;
 
 /**
 * Classe pour la création et le lancement du jeu

@@ -21,6 +21,7 @@ public class MyWorld extends PWorld {
   private static float RACKET_WIDTH = 20f , RACKET_HEIGHT = 150f;
   private int pointA;
   private int pointB;
+  private int count = 0, pow = 0;
   private float x, y;
   private float maxX, maxY, minX, minY;
 
@@ -36,10 +37,10 @@ public class MyWorld extends PWorld {
     this.physicWorld = new MyPhysicWorld(width, height, this);
 
     //Création de la balle
-    maxX = 0.3f;
-    maxY = 0.3f;
-    minX = -0.3f;
-    minY = - 0.3f;
+    maxX = 0.27f;
+    maxY = 0.27f;
+    minX = -0.27f;
+    minY = - 0.27f;
     float x = (float)(Math.random() * (3 - 2)+1)/10f;
     float y = (float)(Math.random() * (3 - 2)+1)/10f;
     double sx = (Math.random());
@@ -173,15 +174,25 @@ public class MyWorld extends PWorld {
     Ball ball = new Ball(new Point(WIDTH/2f,HEIGHT/2f), BALL_SIZE);
     double sx = (Math.random());
     double sy = (Math.random());
+    count++;
     if(sx > 0.5){
       x *= -1;
     }
     if(sy > 0.5){
       y *= -1;
     }
-    if(pointA + pointB > 4 && x < maxX && y < maxY && x > minX && y > minY){
+    System.out.println("PIUTEEEEEEE "+count);
+    if(count > 4 && x < maxX && y < maxY && x > minX && y > minY){
       x *= 1.3f;
       y *= 1.3f;
+      pow ++;
+      System.out.println("pow   "+pow);
+    }
+    if(count == 10){
+      count = 0;
+      x /= (float)(Math.pow(1.3f, pow));
+      y /= (float)(Math.pow(1.3f, pow));
+      pow = 0;
     }
     System.out.println("VITE "+x+" "+y);
     ball.getBody().setVelocity(new Vector2D(x, y));
