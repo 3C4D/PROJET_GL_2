@@ -28,7 +28,7 @@ public class Racket extends MyEntity implements IConfig{
 
     @Override
     public void paint(Graphics g){
-      g.setColor(Color.BLACK);
+      g.setColor(Color.WHITE);
       g.fillRect(this.x - this.width/2 , this.y - this.height/2, this.width, this.height);
     }
   }
@@ -37,12 +37,12 @@ public class Racket extends MyEntity implements IConfig{
   *
   * @param sa position initiale
   * @param son type pour savoir si c'est la raquette A ou B
+  * @param la largeur de la raquette
+  * @param la hauteur de la raquette
   */
-  public Racket(Point position, int type){
+  public Racket(Point position, int type, float width, float height){
     super(type);
 
-    float width = 20f;
-    float height = 150f;
 
     //On créer son enveloppe
 
@@ -90,7 +90,7 @@ public class Racket extends MyEntity implements IConfig{
   }
 
   /**
-  * Permet d'arrêter la raquette 
+  * Permet d'arrêter la raquette
   */
   public void stop(){
     this.body.setVelocity(new Vector2D(0,0));

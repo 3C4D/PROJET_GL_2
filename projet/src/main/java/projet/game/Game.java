@@ -5,6 +5,9 @@ import projet.physicEngine.common.*;
 
 import projet.graphic_engine.*;
 
+import java.awt.Color;
+import javax.swing.text.JTextComponent;
+
 /**
 * Classe pour la création et le lancement du jeu
 */
@@ -15,7 +18,6 @@ public class Game implements IConfig{
    private PWindow window;
    private PContext context;
    private MyKeyboard keyboard;
-
 
    /**
    * Créateur d'un jeu
@@ -36,6 +38,8 @@ public class Game implements IConfig{
      //Initialisation du contrôle clavier
      keyboard = new MyKeyboard(world);
      this.window.addKeyListener(keyboard);
+     this.context.setBackground(Color.BLACK);
+
    }
 
 
