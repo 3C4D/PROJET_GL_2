@@ -7,6 +7,7 @@ import projet.physicEngine.*;
 import projet.graphic_engine.*;
 import projet.graphic_engine.drawable.*;
 
+
 import java.awt.Graphics;
 import java.awt.Color;
 
@@ -22,6 +23,7 @@ public class MyWorld extends PWorld {
   private int pointB;
   private float x, y;
   private float maxX, maxY, minX, minY;
+
 
   /**
   * @param largeur du jeu
@@ -65,7 +67,6 @@ public class MyWorld extends PWorld {
     this.addEntity(racket2);
     pointA = 0;
     pointB = 0;
-
   }
 
   @Override
@@ -82,7 +83,6 @@ public class MyWorld extends PWorld {
 
   @Override
   public void processGraphic(float dt) {
-
   for(int i = 0; i < this.entities.size(); i++){
     entities.get(i).getDrawable().setPosition((int)entities.get(i).getBody().getCenter().getX(), (int)entities.get(i).getBody().getCenter().getY());
     this.getStage().add(entities.get(i).getDrawable());

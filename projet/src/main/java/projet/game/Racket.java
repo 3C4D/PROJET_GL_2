@@ -28,7 +28,7 @@ public class Racket extends MyEntity implements IConfig{
 
     @Override
     public void paint(Graphics g){
-      g.setColor(Color.BLACK);
+      g.setColor(Color.WHITE);
       g.fillRect(this.x - this.width/2 , this.y - this.height/2, this.width, this.height);
     }
   }

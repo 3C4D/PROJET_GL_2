@@ -163,6 +163,11 @@ public class MyCollisionListener extends CollisionListener{
         body.applyImpulse(new Vector2D(0, 1f));
         break;
 
+        case 1: // Tentative de sortir par le bas
+        body.setVelocity(new Vector2D(0,0));
+        body.applyImpulse(new Vector2D(-1,0));
+        break;
+
         case 3: // Tentative de sortir par le bas
         body.setVelocity(new Vector2D(0,0));
         body.applyImpulse(new Vector2D(0, -1f));
