@@ -21,6 +21,7 @@ public class MyWorld extends PWorld {
   private int pointA;
   private int pointB;
   private float x, y;
+  private float maxX, maxY, minX, minY;
 
   /**
   * @param largeur du jeu
@@ -33,8 +34,12 @@ public class MyWorld extends PWorld {
     this.physicWorld = new MyPhysicWorld(width, height, this);
 
     //Création de la balle
-    float x = (float)(Math.random() * (3 - 2))/10f;
-    float y = (float)(Math.random() * (3 - 2))/10f;
+    maxX = 0.3f;
+    maxY = 0.3f;
+    minX = -0.3f;
+    minY = - 0.3f;
+    float x = (float)(Math.random() * (3 - 2)+1)/10f;
+    float y = (float)(Math.random() * (3 - 2)+1)/10f;
     double sx = (Math.random());
     double sy = (Math.random());
     if(sx > 0.5){
@@ -174,10 +179,11 @@ public class MyWorld extends PWorld {
     if(sy > 0.5){
       y *= -1;
     }
-    if(pointA + pointB > 4){
+    if(pointA + pointB > 4 && x < maxX && y < maxY && x > minX && y > minY){
       x *= 1.3f;
       y *= 1.3f;
     }
+    System.out.println("VITE "+x+" "+y);
     ball.getBody().setVelocity(new Vector2D(x, y));
     this.addEntity(ball);
     System.out.println(this.getEntities());
