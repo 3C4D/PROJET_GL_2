@@ -33,8 +33,8 @@ public abstract class Server extends Thread {
     private ExecutorService executor;
 
     // Clients
-    private HashMap<String, ObjectOutputStream> clientsOut;     // Client's names and output streams
-    private HashMap<String, ObjectInputStream> clientsIn;       // Client's names and input streams
+    public HashMap<String, ObjectOutputStream> clientsOut;     // Client's names and output streams
+    public HashMap<String, ObjectInputStream> clientsIn;       // Client's names and input streams
     private int clientsConnected;                               // The current number of clients connected
     private int clientsNumber;                                  // The maximum number of clients that should be connected
 
@@ -141,29 +141,16 @@ public abstract class Server extends Thread {
     }
 
     /***
-     * Get a message from a client
-     * 
-     * @return The object read by the server
+     * Send user list
      */
-    synchronized public Object getMessage(ObjectInputStream in) {
-        try {
-            return in.readObject();
-        } catch (ClassNotFoundException | IOException e) {
-            return null;
+    synchronized public void sendUserList() {
+        Object[] users = clientsOut.keySet().toArray();
+        NetworkData data = new NetworkData("USERLIST");
+        for (int i=0; i<clientsOut.size(); i++) {
+            data.message += " " + users[i].toString();
         }
+        diffuseMessage(data, null);
     }
-
-    /***
-     * Tasks the server will run with each client during execution
-     * 
-     * @param in
-     */
-    public abstract void runningRoutine(ObjectInputStream in, String username);
-
-    /***
-     * Send the list of connected clients to every connected client
-     */
-    public abstract void sendUserList();
 
     /***
      * Get a message from a client
