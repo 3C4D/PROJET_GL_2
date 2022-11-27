@@ -2,12 +2,10 @@ package projet;
 
 import projet.spp.Game;
 
-/** Classe principale du projet */
-
 public class Main{
-  /** Fonction principale du programme */
-  public static void main(String[] args) {
-    Game game = new Game();
-    game.launch();
-  }
+	/** Fonction principale du programme */
+	public static void main(String[] args) {
+	  Game game = new Game();
+	  game.launch();
+	}
 }

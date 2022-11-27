@@ -27,19 +27,19 @@ public class MyKeyboard extends KeyboardHandler{
   public void actionKeyboardPressed(char letter, int code){
     switch (code) {
       case IKeyCode.KEY_UP:
-        this.world.getRacketA().moveUp(); //La raquette monte
-      break;
-
-      case IKeyCode.KEY_DOWN:
-        this.world.getRacketA().moveDown();  //La raquette descend
-      break;
-
-      case IKeyCode.KEY_Z:
         this.world.getRacketB().moveUp(); //La raquette monte
       break;
 
+      case IKeyCode.KEY_DOWN:
+        this.world.getRacketB().moveDown();  //La raquette descend
+      break;
+
+      case IKeyCode.KEY_Z:
+        this.world.getRacketA().moveUp(); //La raquette monte
+      break;
+
       case IKeyCode.KEY_S:
-        this.world.getRacketB().moveDown(); //La raquette descend
+        this.world.getRacketA().moveDown(); //La raquette descend
       break;
 
       default:
@@ -52,19 +52,19 @@ public class MyKeyboard extends KeyboardHandler{
   public void actionKeyboardReleased(char letter, int code){
     switch (code) {
       case IKeyCode.KEY_UP:
-        this.world.getRacketA().stop(); //La raquette s'arrête
+        this.world.getRacketB().stop(); //La raquette s'arrête
       break;
 
       case IKeyCode.KEY_DOWN:
-        this.world.getRacketA().stop(); //La raquette s'arrête
+        this.world.getRacketB().stop(); //La raquette s'arrête
       break;
 
       case IKeyCode.KEY_Z:
-        this.world.getRacketB().stop(); //La raquette s'arrête
+        this.world.getRacketA().stop(); //La raquette s'arrête
       break;
 
       case IKeyCode.KEY_S:
-        this.world.getRacketB().stop(); //La raquette s'arrête
+        this.world.getRacketA().stop(); //La raquette s'arrête
       break;
 
       default:

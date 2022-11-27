@@ -23,9 +23,9 @@ public abstract class KeyboardHandler implements KeyListener{
     }
 
     /**
-      * Fonction d'écoute d'une touche frapée
-      * @param letter Lettre éventuellement frapée
-      * @param code Code de la touche frapée
+      * Fonction d'écoute d'une touche tapée (pressée puis relachée) imprimable
+      * @param letter Caractère imprimable tapée
+      * @param code Code de la touche tapée (normalement 0)
     */
     public abstract void actionKeyboardTyped(char letter, int code);
 
