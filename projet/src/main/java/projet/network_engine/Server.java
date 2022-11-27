@@ -32,8 +32,8 @@ public abstract class Server extends Thread {
     private ExecutorService executor;
 
     // Clients
-    private HashMap<String, ObjectOutputStream> clientsOut;     // Client's names and output streams
-    private HashMap<String, ObjectInputStream> clientsIn;       // Client's names and input streams
+    public HashMap<String, ObjectOutputStream> clientsOut;     // Client's names and output streams
+    public HashMap<String, ObjectInputStream> clientsIn;       // Client's names and input streams
     private int clientsConnected;                               // The current number of clients connected
     private int clientsNumber;                                  // The maximum number of clients that should be connected
 
@@ -135,9 +135,16 @@ public abstract class Server extends Thread {
     }
 
     /***
-     * Send the list of connected clients to every connected client
+     * Send user list
      */
-    public abstract void sendUserList();
+    synchronized public void sendUserList() {
+        Object[] users = clientsOut.keySet().toArray();
+        NetworkData data = new NetworkData("USERLIST");
+        for (int i=0; i<clientsOut.size(); i++) {
+            data.message += " " + users[i].toString();
+        }
+        diffuseMessage(data, null);
+    }
 
     /***
      * Get a message from a client
