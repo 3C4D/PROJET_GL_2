@@ -10,5 +10,5 @@ import java.io.Serializable;    // To allow network transmission
  * Data exchanged between Client and Server
  */
 public class NetworkData implements Serializable {
-
+    // Need to be defined by user
 }
