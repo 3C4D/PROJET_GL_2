@@ -1,16 +1,15 @@
 package projet.spp;
 
+// Input/Output
+import java.io.IOException;
+import java.io.ObjectInputStream;
+// Others
+import java.util.Vector;
+
 /***** IMPORTS *****/
 
 // Server
 import projet.network_engine.Server;
-
-// Input/Output
-import java.io.ObjectInputStream;
-import java.io.IOException;
-
-// Others
-import java.util.Vector;
 
 /***** CLASS *****/
 
@@ -52,19 +51,29 @@ public class PastisServer extends Server {
     @Override
     public void runningRoutine(ObjectInputStream in, String username) {
         PastisNetworkData data = new PastisNetworkData();
-        do {
+        String message = "";
+        Object read = new Object();
+        while (true) {
             try {
-                data = (PastisNetworkData) in.readObject();
-            } catch (ClassNotFoundException | IOException e) {
-                break;
+                read = in.readObject();
+            } catch (ClassNotFoundException | IOException e) {}
+
+            if (read instanceof PastisNetworkData) {
+                data = (PastisNetworkData) read;
+                if (data.message.split(" ")[0].equals("UPDATE")) {
+                    getEntities();
+                    data.entities = entities;
+                    data.message = "UPDATE";
+                    diffuseMessage(data, null);
+                }
+            } else if (read instanceof String) {
+                message = (String) read;
+                if (message.split(" ")[0].equals("DISCONNECT")) {
+                    break;
+                }
             }
-            if (data.message.split(" ")[0].equals("UPDATE")) {
-                getEntities();
-                data.entities = entities;
-                data.message = "UPDATE";
-                diffuseMessage(data, null);
-            }
-        } while (data.message.split(" ")[0].equals("DISCONNECT"));
-        disconnectClient(data.message.split(" ")[1]);
+            
+        }
+        disconnectClient(message.split(" ")[1]);
     }
 }

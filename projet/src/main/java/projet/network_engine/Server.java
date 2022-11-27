@@ -6,7 +6,7 @@ package projet.network_engine;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
+
 // Networking things
 import java.net.ServerSocket;
 
@@ -27,20 +27,18 @@ public abstract class Server extends Thread {
     /***** PARAMETERS *****/
 
     // Networking
-    private ServerSocket listener;
+    ServerSocket listener;
 
     // Threads
-    private ExecutorService executor;
+    ExecutorService executor;
 
     // Clients
-    public HashMap<String, ObjectOutputStream> clientsOut;     // Client's names and output streams
-    public HashMap<String, ObjectInputStream> clientsIn;       // Client's names and input streams
-    private int clientsConnected;                               // The current number of clients connected
-    private int clientsNumber;                                  // The maximum number of clients that should be connected
+    HashMap<String, ObjectOutputStream> clients;    // Client's names and output streams
+    private int clientsConnected;                   // The current number of clients connected
+    private int clientsNumber;                      // The maximum number of clients that should be connected
 
     // Others
-
-    private int port;                                           // Port where the server is listenning
+    private int port;                               // Port where the server is listenning
     private volatile boolean isRunning;
 
     /***** METHODS *****/
@@ -58,8 +56,7 @@ public abstract class Server extends Thread {
             listener = new ServerSocket(port);
             executor = Executors.newFixedThreadPool(clientsNumber);
             clientsConnected = 0;
-            clientsOut = new HashMap<String, ObjectOutputStream>();
-            clientsIn = new HashMap<String, ObjectInputStream>();
+            clients = new HashMap<String, ObjectOutputStream>();
             isRunning = true;
         } catch (IOException e) {
             System.out.println("Invalid port number");
@@ -81,10 +78,9 @@ public abstract class Server extends Thread {
      * @param _out The output stream of this client
      * @param _in  The input stream of this client
      */
-    synchronized public void connectClient(String username, ObjectOutputStream out, ObjectInputStream in) {
+    synchronized public void connectClient(String username, ObjectOutputStream out) {
         clientsConnected++;
-        clientsOut.put(username, out);
-        clientsIn.put(username, in);
+        clients.put(username, out);
         sendUserList();
     }
 
@@ -95,8 +91,7 @@ public abstract class Server extends Thread {
      */
     synchronized public void disconnectClient(String username) {
         clientsConnected--;
-        clientsOut.remove(username);
-        clientsIn.remove(username);
+        clients.remove(username);
         if (clientsConnected > 0) {
             sendUserList();
         }
@@ -109,10 +104,10 @@ public abstract class Server extends Thread {
      */
     synchronized public void diffuseMessage(Object message, String username) {
         if (clientsConnected > 0) {
-            for (String client : clientsOut.keySet()) {
+            for (String client : clients.keySet()) {
                 if (!client.equals(username)) {
                     try {
-                        clientsOut.get(client).writeObject(message);
+                        clients.get(client).writeObject(message);
                     } catch (IOException e) {
                         System.out.println("Error while sending message to " + client);
                     }
@@ -129,7 +124,7 @@ public abstract class Server extends Thread {
      */
     synchronized public void sendMessage(String message, String username) {
         ObjectOutputStream send;
-        send = clientsOut.get(username);
+        send = clients.get(username);
         if (send != null) {
             try {
                 send.writeObject(message);
@@ -141,28 +136,13 @@ public abstract class Server extends Thread {
     }
 
     /***
-     * Send user list
-     */
-    synchronized public void sendUserList() {
-        Object[] users = clientsOut.keySet().toArray();
-        NetworkData data = new NetworkData("USERLIST");
-        for (int i=0; i<clientsOut.size(); i++) {
-            data.message += " " + users[i].toString();
-        }
-        diffuseMessage(data, null);
-    }
-
-    /***
      * Get a message from a client
-     * @return The object read by the server if there is one, null otherwise
+     * 
+     * @return The object read by the server
      */
     synchronized public Object getMessage(ObjectInputStream in) {
         try {
-            if (in.available() > 0) {
-                return in.readObject();
-            } else {
-                return null;
-            }
+            return in.readObject();
         } catch (ClassNotFoundException | IOException e) {
             return null;
         }
@@ -170,9 +150,22 @@ public abstract class Server extends Thread {
 
     /***
      * Tasks the server will run with each client during execution
+     * 
      * @param in
      */
-    public abstract void runningRoutine(String username);
+    public abstract void runningRoutine(ObjectInputStream in, String username);
+
+    /***
+     * Send the list of connected clients to every connected client
+     */
+    synchronized public void sendUserList() {
+        Object[] users = clients.keySet().toArray();
+        String message = "USERLIST";
+        for (int i = 0; i < clients.size(); i++) {
+            message += " " + users[i].toString();
+        }
+        diffuseMessage(message, "");
+    }
 
     /***
      * Wait for the end of client threads
@@ -180,7 +173,7 @@ public abstract class Server extends Thread {
      * @throws InterruptedException
      */
     synchronized public void end() throws InterruptedException {
-        isRunning = false;
+        diffuseMessage("STOP", "");
         executor.shutdown();
     }
 

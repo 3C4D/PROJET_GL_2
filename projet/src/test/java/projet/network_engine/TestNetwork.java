@@ -17,16 +17,20 @@ public class TestNetwork {
         }
 
         @Override 
-        public void runningRoutine(String username) {
-            NetworkData data = new NetworkData("");
+        public void runningRoutine(ObjectInputStream in, String username) {
+            String message = "";
             do {
-                data = (NetworkData) getMessage(clientsIn.get(username));
-                if (data != null && !data.message.split(" ")[0].equals("DISCONNECT")) {
-                    diffuseMessage(data, username);
+                try {
+                    message = in.readObject().toString();
+                } catch (ClassNotFoundException | IOException e) {
+                    break;
                 }
-            } while (data == null || !data.message.split(" ")[0].equals("DISCONNECT"));
-            System.out.println(data.message.split(" ")[1] + " disconnected");
-            disconnectClient(data.message.split(" ")[1]);
+                if (!message.split(" ")[0].equals("DISCONNECT")) {
+                    diffuseMessage(message, username);
+                }
+            } while (!message.split(" ")[0].equals("DISCONNECT"));
+            System.out.println(message.split(" ")[1] + " disconnected");
+            disconnectClient(message.split(" ")[1]);
         }
     }
 
@@ -67,13 +71,9 @@ public class TestNetwork {
         client1.connect(InetAddress.getLocalHost(), 4002, "Client1");
         client2.connect(InetAddress.getLocalHost(), 4002, "Client2");
         Thread.sleep(1000);
-        NetworkData data = new NetworkData("");
-        data = (NetworkData) client1.getMessage();
-        assertEquals("USERLIST Client1", data.message);
-        data = (NetworkData) client1.getMessage();
-        assertEquals("USERLIST Client1 Client2", data.message);
-        data = (NetworkData) client2.getMessage();
-        assertEquals("USERLIST Client1 Client2", data.message);
+        assertEquals("USERLIST Client1", client1.getMessage());
+        assertEquals("USERLIST Client1 Client2", client1.getMessage());
+        assertEquals("USERLIST Client1 Client2", client2.getMessage());
     }
 
     @Test

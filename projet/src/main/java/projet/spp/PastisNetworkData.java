@@ -18,6 +18,7 @@ public class PastisNetworkData  extends NetworkData {
     String message;
 
     PastisNetworkData() {
+        super();
         entities = new Vector<>();
     }
 }
