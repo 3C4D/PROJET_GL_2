@@ -9,6 +9,19 @@ import java.io.Serializable;    // To allow network transmission
 /***
  * Data exchanged between Client and Server
  */
-public abstract class NetworkData implements Serializable {
-    // Data defined by the user to suit its needs
+public class NetworkData implements Serializable {
+    String message;
+
+    /***
+     * Default constructor
+     */
+    NetworkData() {}
+
+    /***
+     * Constructor with message
+     * @param _message
+     */
+    NetworkData(String _message) {
+        message = _message;
+    }
 }
