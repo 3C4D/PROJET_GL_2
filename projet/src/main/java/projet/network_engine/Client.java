@@ -30,7 +30,6 @@ public class Client {
 
     // Others
     private String username;
-    private String message;
 
     /***** METHODS *****/
 
@@ -53,7 +52,7 @@ public class Client {
             connection = new Socket(_address, _port);
             out = new ObjectOutputStream(connection.getOutputStream());
             in = new ObjectInputStream(connection.getInputStream());
-            sendMessage("USERNAME " + username);
+            sendMessage(new NetworkData("CONNECT " + username));
         } catch (IOException e) {
             System.out.println("Invalid IP address or port number");
         }
@@ -64,7 +63,7 @@ public class Client {
      */
     public void disconnect() {
         try {
-            sendMessage("DISCONNECT " + username);
+            sendMessage(new NetworkData("DISCONNECT " + username));
             in.close();
             out.close();
             connection.close();
@@ -77,7 +76,7 @@ public class Client {
      * Send a message to the server
      * @param message  The message to send
      */
-    public void sendMessage(String message) {
+    public void sendMessage(Object message) {
         try {
             out.writeObject(message);
             out.flush();
@@ -87,13 +86,17 @@ public class Client {
     }
 
     /***
-     * Get a message from the server
+     * Get a message from the server if there is one, return null otherwise
      */
-    public String getMessage() throws EOFException {
+    public Object getMessage() throws EOFException {
         try {
-            message = in.readObject().toString();
+            if (in.available() > 0) {
+                return in.readObject();
+            } else {
+                return null;
+            }
         } catch (ClassNotFoundException | IOException e) {
         }
-        return message;
+        return null;
     }
 }

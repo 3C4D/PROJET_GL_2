@@ -25,7 +25,7 @@ public class Ball extends MyEntity{
 
     @Override
     public void paint(Graphics g){
-      g.setColor(Color.RED);
+      g.setColor(Color.WHITE);
       g.fillOval(this.x-this.width, this.y-this.width, this.width*2, this.width*2);
     }
   }

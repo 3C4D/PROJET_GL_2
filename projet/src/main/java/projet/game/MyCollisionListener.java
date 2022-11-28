@@ -16,13 +16,15 @@ import java.lang.Math;
 */
 public class MyCollisionListener extends CollisionListener{
   public SoundPlayer[] sp = new SoundPlayer[20];
+  private MyWorld world;
   public int count = 0;
 
   /**
   * Son constructeur
   */
-  public MyCollisionListener(MyPhysicWorld pw){
+  public MyCollisionListener(MyPhysicWorld pw, MyWorld w){
     this.physicW = pw;
+    this.world = w;
   }
 
 
@@ -158,19 +160,23 @@ public class MyCollisionListener extends CollisionListener{
       switch(interNum){
         case 0: //Tentative de sortie par le haut
         body.setVelocity(new Vector2D(0,0));
-        body.applyImpulse(new Vector2D(0, 10));
+        body.applyImpulse(new Vector2D(0, 1f));
+        break;
+
+        case 1: // Tentative de sortir par le bas
+        body.setVelocity(new Vector2D(0,0));
+        body.applyImpulse(new Vector2D(-1,0));
         break;
 
         case 3: // Tentative de sortir par le bas
         body.setVelocity(new Vector2D(0,0));
-        body.applyImpulse(new Vector2D(0, -10));
+        body.applyImpulse(new Vector2D(0, -1f));
         break;
       }
     }
 
     //Si c'est une ball
     if(body.getShape().getType() == ShapeType.CIRCLE){
-
       switch (interNum) {
        case 0: // Côté haut
          if(velocity.getCoordX() > 0){ //arrive de la gauche
@@ -211,6 +217,17 @@ public class MyCollisionListener extends CollisionListener{
          body.setVelocity(oppositeRotation);
        break;
 
+       case 1: //Point pour la raquette A
+         world.removeBall();
+         world.addPointA();
+         world.replay();
+       break;
+
+       case 3: //Point pour la raquette B
+         world.removeBall();
+         world.addPointB();
+         world.replay();
+       break;
 
        default:
        break;
@@ -238,9 +255,6 @@ public class MyCollisionListener extends CollisionListener{
 
       for(j = i+1; j < bodyList.size(); j++){
           bb = bodyList.get(j);
-
-          //On vérifie que le corps soit toujours dans la fenetre de jeu
-          insideGameOutline(bb, gameOutline);
 
           inter = areInCollision(ba, bb); //On regarde s'il y a collision
 

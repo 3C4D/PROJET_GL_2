@@ -1,4 +1,4 @@
-package projet.moteur_ia;
+package projet.ai_engine;
 /**
  * Class which implements node structure.
  **/

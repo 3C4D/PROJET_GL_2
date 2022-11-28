@@ -29,7 +29,6 @@ public class ClientThread implements Runnable {
 
     // Others
     private String username;
-    private String message;
 
     /***** METHODS *****/
 
@@ -46,33 +45,20 @@ public class ClientThread implements Runnable {
         try {
             in = new ObjectInputStream(connection.getInputStream());
             out = new ObjectOutputStream(connection.getOutputStream());
-            username = in.readObject().toString().split(" ")[1];
-            server.connectClient(username, out);
+            NetworkData data = (NetworkData) in.readObject();
+            username = data.message.split(" ")[1];
+            server.connectClient(username, out, in);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
+     
+
     /***
      * Run method : instructions the server will execute with every client
      */
     public void run() {
-        do {
-            try {
-                message = in.readObject().toString();
-                if (!message.split(" ")[0].equals("DISCONNECT")) {
-                    server.diffuseMessage(message, username);
-                }
-            } catch (ClassNotFoundException | IOException e) {
-                break;
-            }
-        } while (!message.split(" ")[0].equals("DISCONNECT"));
-        System.out.println(message.split(" ")[1] + " disconnected");
-        server.disconnectClient(message.split(" ")[1]);
-        try {
-            in.close();
-            out.close();
-        } catch (IOException e) {
-        }
+        server.runningRoutine(username);
     }
 }
