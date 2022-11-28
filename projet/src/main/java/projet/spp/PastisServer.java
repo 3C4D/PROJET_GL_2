@@ -6,6 +6,8 @@ import java.io.ObjectInputStream;
 // Others
 import java.util.Vector;
 
+import projet.game.Racket;
+
 /***** IMPORTS *****/
 
 // Server
@@ -18,9 +20,9 @@ import projet.network_engine.Server;
  * define the server routine and a new constructor
  */
 public class PastisServer extends Server {
+    PastisNetworkData data;
     MyWorld world;
-    Vector<MyEntity> entities;
-
+    
     /***
      * Constructor for the PastisServer class
      * @param _port
@@ -30,17 +32,13 @@ public class PastisServer extends Server {
     public PastisServer(int _port, int _clientsNumber, MyWorld _world) {
         super(_port, _clientsNumber);
         world = _world;
-        entities = new Vector<MyEntity>();
     }
 
     /***
-     * Getter for entities to update during a game session
+     * Update current entities during game session
      */
-    private void getEntities() {
-        Vector<Ball> balls = world.getBalls();
-        for (int i=0; i<balls.size(); i++) {
-            entities.add(balls.get(i));
-        }
+    private void updateEntities() {
+        data.setEntities(world.getBalls());
     }
 
     /***
@@ -50,8 +48,7 @@ public class PastisServer extends Server {
      */
     @Override
     public void runningRoutine(ObjectInputStream in, String username) {
-        PastisNetworkData data = new PastisNetworkData();
-        String message = "";
+        PastisNetworkData receive = new PastisNetworkData();
         Object read = new Object();
         while (true) {
             try {
@@ -59,21 +56,23 @@ public class PastisServer extends Server {
             } catch (ClassNotFoundException | IOException e) {}
 
             if (read instanceof PastisNetworkData) {
-                data = (PastisNetworkData) read;
-                if (data.message.split(" ")[0].equals("UPDATE")) {
-                    getEntities();
-                    data.entities = entities;
-                    data.message = "UPDATE";
+                receive = (PastisNetworkData) read;
+                if (receive.getMessage().split(" ")[0].equals("UPDATE")) {
+                    updateEntities();
+                    data.setMessage("UPDATE");
                     diffuseMessage(data, null);
+                } else if (receive.getMessage().split(" ")[0].equals("RACKET")) {
+                    data.setRacket(receive.getRackets().get(0));
+                    data.setMessage("RACKET");
+                    diffuseMessage(data, receive.getMessage().split(" ")[1]);
                 }
             } else if (read instanceof String) {
-                message = (String) read;
-                if (message.split(" ")[0].equals("DISCONNECT")) {
+                receive.setMessage((String) read);
+                if (receive.getMessage().split(" ")[0].equals("DISCONNECT")) {
                     break;
                 }
-            }
-            
+            }            
         }
-        disconnectClient(message.split(" ")[1]);
+        disconnectClient(receive.getMessage().split(" ")[1]);
     }
 }

@@ -16,7 +16,7 @@ public class PastisPlayer extends Client {
      */
     public void askForUpdate() {
         PastisNetworkData data = new PastisNetworkData();
-        data.message = "UPDATE";
+        data.setMessage("UPDATE");
         sendMessage(data);
     }
 }
