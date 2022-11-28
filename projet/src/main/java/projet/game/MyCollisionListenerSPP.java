@@ -1,4 +1,4 @@
-package projet.spp;
+package projet.game;
 
 import projet.physicEngine.CollisionListener;
 import projet.physicEngine.Body.BodyType;
@@ -14,14 +14,14 @@ import java.lang.Math;
 /**
 * Classe définissant les comportenants des entités suite à une collision
 */
-public class MyCollisionListener extends CollisionListener{
+public class MyCollisionListenerSPP extends CollisionListener{
   public SoundPlayer[] sp = new SoundPlayer[20];
   public int count = 0;
 
   /**
   * Son constructeur
   */
-  public MyCollisionListener(MyPhysicWorld pw){
+  public MyCollisionListenerSPP(MyPhysicWorldSPP pw){
     this.physicW = pw;
   }
 
@@ -169,7 +169,7 @@ public class MyCollisionListener extends CollisionListener{
 
     //On cherche le numéro du côté de la raquette que la balle touche
     int interNum = racketCollision((CircleShape)ball.getShape(), racket);
-    if(interNum !=0) System.out.println("TOUCHE COTE : "+interNum);
+    if(interNum != -1) System.out.println("TOUCHE COTE : "+interNum);
     switch (interNum) {
       case 0:
         normal = new Vector2D(s3,s2);
@@ -186,6 +186,7 @@ public class MyCollisionListener extends CollisionListener{
 
           theta = (float)(alpha - Math.PI); //Angle de rotation
         }
+        ball.applyImpulse(new Vector2D(normal.getCoordX()/normal.norme2(),normal.getCoordY()/normal.norme2()));
       break;
 
       case 1:
@@ -203,6 +204,7 @@ public class MyCollisionListener extends CollisionListener{
 
           theta = (float)(alpha - Math.PI); //Angle de rotation
         }
+        ball.applyImpulse(new Vector2D(normal.getCoordX()/normal.norme2(),normal.getCoordY()/normal.norme2()));
       break;
 
       case 2:
@@ -220,6 +222,7 @@ public class MyCollisionListener extends CollisionListener{
 
           theta = (float)(alpha - Math.PI); //Angle de rotation
         }
+        ball.applyImpulse(new Vector2D(normal.getCoordX()/normal.norme2(),normal.getCoordY()/normal.norme2()));
       break;
 
       case 3:
@@ -237,6 +240,7 @@ public class MyCollisionListener extends CollisionListener{
 
           theta = (float)(alpha - Math.PI); //Angle de rotation
         }
+        ball.applyImpulse(new Vector2D(normal.getCoordX()/normal.norme2(),normal.getCoordY()/normal.norme2()));
       break;
 
       case 4:
@@ -254,6 +258,7 @@ public class MyCollisionListener extends CollisionListener{
 
           theta = (float)(alpha - Math.PI); //Angle de rotation
         }
+        ball.applyImpulse(new Vector2D(normal.getCoordX()/normal.norme2(),normal.getCoordY()/normal.norme2()));
       break;
 
       case 5:
@@ -271,6 +276,7 @@ public class MyCollisionListener extends CollisionListener{
 
           theta = (float)(alpha - Math.PI); //Angle de rotation
         }
+        ball.applyImpulse(new Vector2D(normal.getCoordX()/normal.norme2(),normal.getCoordY()/normal.norme2()));
       break;
 
       default:

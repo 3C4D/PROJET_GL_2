@@ -14,15 +14,15 @@ import java.lang.Math;
 /**
 * Classe définissant les comportenants des entités suite à une collision
 */
-public class MyCollisionListener extends CollisionListener{
+public class MyCollisionListenerPong extends CollisionListener{
   public SoundPlayer[] sp = new SoundPlayer[20];
-  private MyWorld world;
+  private MyWorldPong world;
   public int count = 0;
 
   /**
   * Son constructeur
   */
-  public MyCollisionListener(MyPhysicWorld pw, MyWorld w){
+  public MyCollisionListenerPong(MyPhysicWorldPong pw, MyWorldPong w){
     this.physicW = pw;
     this.world = w;
   }

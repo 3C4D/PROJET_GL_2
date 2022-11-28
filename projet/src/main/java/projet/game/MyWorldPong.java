@@ -14,11 +14,11 @@ import java.awt.Color;
 /**
 * Classe définissant le monde de jeu
 */
-public class MyWorld extends PWorld {
+public class MyWorldPong extends PWorld {
   private final int WIDTH = 500; // Largeur du monde
   private final int HEIGHT = 500; // Hauteur du mond
   private static float BALL_SIZE = 20f;
-  private static float RACKET_WIDTH = 20f , RACKET_HEIGHT = 150f;
+  public static float RACKET_WIDTH = 20f , RACKET_HEIGHT = 150f;
   private int pointA;
   private int pointB;
   private int count = 0, pow = 0;
@@ -30,11 +30,11 @@ public class MyWorld extends PWorld {
   * @param largeur du jeu
   * @param hauteur du jeu
   */
-  public MyWorld(float width, float height){
+  public MyWorldPong(float width, float height){
     super(width, height);
 
     // Création de mon monde physique
-    this.physicWorld = new MyPhysicWorld(width, height, this);
+    this.physicWorld = new MyPhysicWorldPong(width, height, this);
 
     //Création de la balle
     maxX = 0.27f;
@@ -57,10 +57,10 @@ public class MyWorld extends PWorld {
     ball.getBody().setVelocity(new Vector2D(x,y));
 
     // Création de la première raqutte
-    Racket racket1 = new Racket(new Point(RACKET_WIDTH/2f, HEIGHT/2f), MyEntity.RACKET_A, RACKET_WIDTH, RACKET_HEIGHT);
+    RacketPong racket1 = new RacketPong(new Point(RACKET_WIDTH/2f, HEIGHT/2f), MyEntity.RACKET_A, RACKET_WIDTH, RACKET_HEIGHT);
 
     // Création de la deuxième raquette
-    Racket racket2 = new Racket(new Point(WIDTH - RACKET_WIDTH/2f, HEIGHT/2f), MyEntity.RACKET_B, RACKET_WIDTH, RACKET_HEIGHT);
+    RacketPong racket2 = new RacketPong(new Point(WIDTH - RACKET_WIDTH/2f, HEIGHT/2f), MyEntity.RACKET_B, RACKET_WIDTH, RACKET_HEIGHT);
 
     //On les ajoute a la liste d'entité
     this.addEntity(ball);
@@ -74,7 +74,7 @@ public class MyWorld extends PWorld {
   public void processPhysic(float dt) {
     int i;
     // On calcule lance l'écouteur de collision
-    ((MyPhysicWorld)physicWorld).launchCollisionListener();
+    ((MyPhysicWorldPong)physicWorld).launchCollisionListener();
 
     //On calcule le déplacement de chacune des corps des entités
     for(i = 0; i < this.entities.size(); i++){
@@ -95,11 +95,11 @@ public class MyWorld extends PWorld {
   /**
   * @return la racketA du jeu
   */
-  public Racket getRacketA(){
+  public RacketPong getRacketA(){
     int i;
     for(i = 0; i < this.entities.size(); i++){
       if(this.entities.get(i).getType() == MyEntity.RACKET_A){
-        return (Racket)this.entities.get(i);
+        return (RacketPong)this.entities.get(i);
       }
     }
     return null;
@@ -108,11 +108,11 @@ public class MyWorld extends PWorld {
   /**
   * @return la racketB du jeu
   */
-  public Racket getRacketB(){
+  public RacketPong getRacketB(){
     int i;
     for(i = 0; i < this.entities.size(); i++){
       if(this.entities.get(i).getType() == MyEntity.RACKET_B){
-        return (Racket)this.entities.get(i);
+        return (RacketPong)this.entities.get(i);
       }
     }
     return null;
@@ -181,12 +181,11 @@ public class MyWorld extends PWorld {
     if(sy > 0.5){
       y *= -1;
     }
-    System.out.println("PIUTEEEEEEE "+count);
+
     if(count > 4 && x < maxX && y < maxY && x > minX && y > minY){
       x *= 1.3f;
       y *= 1.3f;
       pow ++;
-      System.out.println("pow   "+pow);
     }
     if(count == 10){
       count = 0;

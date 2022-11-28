@@ -1,6 +1,6 @@
 package projet;
 
-import projet.spp.Game;
+import projet.game.Game;
 
 public class Main{
 	/** Fonction principale du programme */

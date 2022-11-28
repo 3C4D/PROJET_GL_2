@@ -15,14 +15,14 @@ import java.awt.Color;
 /**
 * Classe définissant une raquette
 */
-public class Racket extends MyEntity implements IConfig{
+public class RacketPong extends MyEntity implements IConfig{
 
   /**
   * Classe définissant l'aspect graphique d'une raquette
   */
-  public class RacketTexture extends PFixedTexturedDrawable{
+  public class RacketPongTexture extends PFixedTexturedDrawable{
 
-    public RacketTexture(int x, int y, int width, int height){
+    public RacketPongTexture(int x, int y, int width, int height){
       super(x,y,width,height);
     }
 
@@ -40,7 +40,7 @@ public class Racket extends MyEntity implements IConfig{
   * @param la largeur de la raquette
   * @param la hauteur de la raquette
   */
-  public Racket(Point position, int type, float width, float height){
+  public RacketPong(Point position, int type, float width, float height){
     super(type);
 
 
@@ -64,7 +64,7 @@ public class Racket extends MyEntity implements IConfig{
     this.body.getFilter().setMaskBits(MyFilter.RACKET_MASK);
 
     // On ajoute son aspect graphique
-    RacketTexture texture = new RacketTexture((int)trans.getCoordX(), (int)trans.getCoordY(), (int)width,(int)height);
+    RacketPongTexture texture = new RacketPongTexture((int)trans.getCoordX(), (int)trans.getCoordY(), (int)width,(int)height);
     this.setDrawable(texture);
   }
 
