@@ -1,4 +1,4 @@
-package projet.spp;
+package projet.game;
 
 /***** IMPORTS *****/
 

@@ -1,12 +1,10 @@
-package projet.spp;
+package projet.game;
 
 // Input/Output
 import java.io.IOException;
 import java.io.ObjectInputStream;
 // Others
 import java.util.Vector;
-
-import projet.game.Racket;
 
 /***** IMPORTS *****/
 
@@ -21,7 +19,7 @@ import projet.network_engine.Server;
  */
 public class PastisServer extends Server {
     PastisNetworkData data;
-    MyWorld world;
+    MyWorldSPP world;
     
     /***
      * Constructor for the PastisServer class
@@ -29,7 +27,7 @@ public class PastisServer extends Server {
      * @param _clientsNumber
      * @param _world
      */
-    public PastisServer(int _port, int _clientsNumber, MyWorld _world) {
+    public PastisServer(int _port, int _clientsNumber, MyWorldSPP _world) {
         super(_port, _clientsNumber);
         world = _world;
     }

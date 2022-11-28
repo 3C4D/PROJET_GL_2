@@ -1,20 +1,21 @@
-package projet.spp;
+package projet.game;
 
 import projet.physicEngine.PhysicWorld;
 
 /**
 * Classe définissant le monde physique du jeu
 */
-public class MyPhysicWorld extends PhysicWorld{
+public class MyPhysicWorldPong extends PhysicWorld{
 
   /**
   * @param sa largeur
   * @param sa hauteur
   */
-  public MyPhysicWorld(float width, float height){
+  public MyPhysicWorldPong(float width, float height, MyWorldPong w){
     super(width, height);
     // On initialise l'écouteur de collision
-    this.collisionL = new MyCollisionListener(this);
+    this.collisionL = new MyCollisionListenerPong(this, w);
   }
+
 
 }

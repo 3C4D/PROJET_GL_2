@@ -1,4 +1,4 @@
-package projet.spp;
+package projet.game;
 
 import projet.physicEngine.common.Transform;
 import projet.physicEngine.common.*;
@@ -41,11 +41,11 @@ public class Zone extends MyEntity{
   }
 
   public Point getMaxPoint(){
-    return new Point(MyWorld.TABLE_SIZE/2f * (float)Math.cos(this.maxAngle),MyWorld.TABLE_SIZE/2f * (float)Math.sin(this.maxAngle));
+    return new Point(MyWorldSPP.TABLE_SIZE/2f * (float)Math.cos(this.maxAngle),MyWorldSPP.TABLE_SIZE/2f * (float)Math.sin(this.maxAngle));
   }
 
   public Point getMinPoint(){
-    return new Point(MyWorld.TABLE_SIZE/2f * (float)Math.cos(this.minAngle),MyWorld.TABLE_SIZE/2f * (float)Math.sin(this.minAngle));
+    return new Point(MyWorldSPP.TABLE_SIZE/2f * (float)Math.cos(this.minAngle),MyWorldSPP.TABLE_SIZE/2f * (float)Math.sin(this.minAngle));
   }
 
 }

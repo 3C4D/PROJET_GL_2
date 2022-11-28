@@ -1,6 +1,4 @@
-package projet.spp;
-
-import projet.game.Racket;
+package projet.game;
 
 /***** IMPORTS *****/
 
@@ -17,7 +15,7 @@ import java.util.Vector;
  */
 public class PastisNetworkData  extends NetworkData {
     private Vector<MyEntity> entities;
-    private Vector<Racket> rackets;
+    private Vector<PastisRacket> rackets;
     private String message;
 
     /***
@@ -41,7 +39,7 @@ public class PastisNetworkData  extends NetworkData {
      * Getter for rackets
      * @return A vector of the current rackets
      */
-    public Vector<Racket> getRackets() {
+    public Vector<PastisRacket> getRackets() {
         return rackets;
     }
 
@@ -66,7 +64,7 @@ public class PastisNetworkData  extends NetworkData {
      * Setter for rackets
      * @param _rackets New vector for the rackets
      */
-    public void setRackets(Vector<Racket> _rackets) {
+    public void setRackets(Vector<PastisRacket> _rackets) {
         rackets = new Vector<>();
         rackets = _rackets;
     }
@@ -75,7 +73,7 @@ public class PastisNetworkData  extends NetworkData {
      * Setter for one racket
      * @param _racket New racket
      */
-    public void setRacket(Racket _racket) {
+    public void setRacket(PastisRacket _racket) {
         rackets.setElementAt(_racket, _racket.getId());
     }
 
