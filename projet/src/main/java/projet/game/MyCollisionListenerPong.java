@@ -157,21 +157,34 @@ public class MyCollisionListenerPong extends CollisionListener{
 
     //Si c'est une raquette
     if(body.getShape().getType() == ShapeType.POLYGON){
+      if(interNum !=-1) System.out.println("INTERNUM "+interNum);
       switch(interNum){
         case 0: //Tentative de sortie par le haut
         body.setVelocity(new Vector2D(0,0));
-        body.applyImpulse(new Vector2D(0, 1f));
+        body.applyImpulse(new Vector2D(0, 10f));
         break;
 
         case 1: // Tentative de sortir par le bas
         body.setVelocity(new Vector2D(0,0));
-        body.applyImpulse(new Vector2D(-1,0));
+        System.out.println("AVANT "+body.getShape());
+        body.applyImpulse(new Vector2D(-1f,0));
+        System.out.println("APRES "+body.getShape());
         break;
 
         case 3: // Tentative de sortir par le bas
         body.setVelocity(new Vector2D(0,0));
-        body.applyImpulse(new Vector2D(0, -1f));
+        body.applyImpulse(new Vector2D(0, -10f));
         break;
+      }
+
+      PolygonShape racket = (PolygonShape)(body.getShape());
+      if(racket.getVertex(0).getY() <= outline.getVertex(0).getY()){
+        body.setVelocity(new Vector2D(0,0));
+        body.applyImpulse(new Vector2D(0, 1f));
+      }
+      if(racket.getVertex(2).getY() >= outline.getVertex(2).getY()){
+        body.setVelocity(new Vector2D(0,0));
+        body.applyImpulse(new Vector2D(0, -1f));
       }
     }
 

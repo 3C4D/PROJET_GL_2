@@ -124,7 +124,7 @@ public class MyWorldSPP extends PWorld implements IConfig {
   * Permet d'ajouter dynamiquement des balles
   */
   public void addBall(){
-    Ball ball = new Ball(new Point(WIDTH/2f,HEIGHT/2f), BALL_SIZE);
+    Ball ball = new Ball(new Point(WIDTH/2f,HEIGHT/2f), BALL_SIZE, Color.BLUE);
     ball.getBody().setVelocity(new Vector2D(0.1f, 0f));
     this.addEntity(ball);
   }

@@ -7,8 +7,8 @@ import java.lang.Math;
 */
 public interface IConfig{
 
-  public static int WIDTH = 800; // Largeur de la fenetre
-  public static int HEIGHT = 800; // Hauteur de la fenetre
+  public static int WIDTH = 400; // Largeur de la fenetre
+  public static int HEIGHT = 400; // Hauteur de la fenetre
 
   public static float DELTA_T = 1000f/600f; // Fréquence de rafraichissement des frames
 
