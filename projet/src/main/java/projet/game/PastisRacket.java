@@ -135,4 +135,18 @@ public class PastisRacket extends MyEntity implements IConfig{
   */
   public void stop(){
   }
+
+  /**
+  * @return la zone de la raquette
+  */
+  public Zone getZone(){
+    return this.zone;
+  }
+
+  /**
+  * @return le point d'origine de la table où se trouve la raquette
+  */
+  public Point getTableOrigin(){
+    return this.tableOrigin;
+  }
 }
