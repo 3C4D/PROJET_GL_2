@@ -152,7 +152,7 @@ public class PastisRacket extends MyEntity implements IConfig{
   }
 
   /**
-  * @return le numéro de la raquette
+  * @return le numéro(identifiant unique) de la raquette
   */
   public int getId(){
     return this.num;
