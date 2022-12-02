@@ -168,18 +168,18 @@ public class MyWorldSPP extends PWorld implements IConfig {
         return rackets.get(i);
       }
     }
-    return null; 
+    return null;
   }
 
   /**
-  * @return la racketB du jeu
+  * @return la liste des balles du jeu (en entités)
   */
-  public Vector<Ball> getBalls(){
+  public Vector<Entity> getBalls(){
     int i;
-    Vector pastisBall = new Vector<Ball>();
+    Vector pastisBall = new Vector<Entity>();
     for(i = 0; i < this.entities.size(); i++){
       if(this.entities.get(i).getType() == MyEntity.BALL){
-        pastisBall.add((PastisRacket)this.entities.get(i));
+        pastisBall.add(this.entities.get(i));
       }
     }
     return pastisBall;
