@@ -12,12 +12,16 @@ import java.awt.Color;
 import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.JTextArea;
+import java.awt.Dimension;
+import java.lang.Exception;
 
 
 /**
 * Classe pour la création et le lancement du jeu
 */
 public class Game implements IConfig{
+   private volatile boolean pongEnd = true;
+   private volatile boolean sppEnd = true;
 
    private MyWorldPong pongWorld;
    private MyKeyboardPong pongKeyboard;
@@ -63,7 +67,8 @@ public class Game implements IConfig{
    */
    public Game(){
      this.window = new PWindow("Menu", WIDTH, HEIGHT);
-     this.panel = new PPanel();
+     this.context = new PContext(WIDTH, HEIGHT);
+     PStage stage = new PStage(WIDTH, HEIGHT);
 
      pongB = new PButton("PONG");
      pongB.addActionListener(new ActionListener(){
@@ -81,11 +86,17 @@ public class Game implements IConfig{
        }
      });
 
-     this.panel.add(pongB);
-     this.panel.add(sppB);
+     PGridLayout layout = new PGridLayout(2,1);
+     layout.setVgap((int)(HEIGHT/10));
+     stage.getGUI().setLayout(layout);
 
-     this.window.getContentPane().add(panel);
+     stage.getGUI().add(pongB);
+     stage.getGUI().add(sppB);
+
+     this.context.changeStage(stage);
+     this.window.addContext(this.context);
      this.window.setVisible(true);
+     this.window.setFocusable(true);
    }
 
 
@@ -93,12 +104,10 @@ public class Game implements IConfig{
    * Permet de créer le menu du jeu
    */
    public void menu(){
+     pongEnd = true;
+     sppEnd = true;
      this.window.setTitle("Menu");
-     this.window.remove(panel);
-     this.window.removeContext();
-     this.pongContext = null;
-     this.sppContext = null;
-     this.panel = new PPanel();
+     PStage stage = new PStage(WIDTH, HEIGHT);
 
      pongB = new PButton("PONG");
      pongB.addActionListener(new ActionListener(){
@@ -116,10 +125,16 @@ public class Game implements IConfig{
        }
      });
 
-     this.panel.add(pongB);
-     this.panel.add(sppB);
 
-     this.window.getContentPane().add(panel);
+     PGridLayout layout = new PGridLayout(2,1);
+     layout.setVgap((int)(HEIGHT/10));
+     stage.getGUI().setLayout(layout);
+
+     stage.getGUI().add(pongB);
+     stage.getGUI().add(sppB);
+
+     this.context.setBackground(Color.WHITE);
+     this.context.changeStage(stage);
      this.window.setVisible(true);
    }
 
@@ -127,38 +142,34 @@ public class Game implements IConfig{
    * Permet de créer une partie de PONG
    */
    public void pong(){
+     pongEnd = false;
      //On met à jour le titre de la fenetre
      this.window.setTitle("PONG");
      //On empeche que la fenetre soit redimensionnée
      this.window.setResizable(false);
-     this.panel.remove(pongB);
-     this.panel.remove(sppB);
-     this.window.remove(panel);
 
-     this.panel = new PPanel();
      this.menu = new PButton("Retour Menu");
      menu.addActionListener(new ActionListener(){
         public void actionPerformed(ActionEvent e){
           menu();
         }
       });
-      this.panel.add(menu);
-      this.window.getContentPane().add(panel);
-
-     // On créer le contexte
-     this.pongContext = new PContext(WIDTH+50, HEIGHT+50);
 
      //Création du monde du jeu
      this.pongWorld = new MyWorldPong(WIDTH, HEIGHT);
-     // System.out.println(this.pongWorld.getStage());
-     this.pongContext.changeStage(this.pongWorld.getStage());
-     this.pongContext.setBackground(Color.BLACK);
+     this.pongWorld.getStage().getGUI().add(menu);
+     this.context.changeStage(this.pongWorld.getStage());
+     this.context.setBackground(Color.BLACK);
+
+
+     PGridLayout layout = new PGridLayout(2,1);
+     layout.setVgap((int)(HEIGHT/10));
+     this.pongWorld.getStage().getGUI().setLayout(layout);
 
      //Initialisation du contrôle clavier
      pongKeyboard = new MyKeyboardPong(pongWorld);
      this.window.addKeyListener(pongKeyboard);
 
-     this.window.addContext(pongContext);
      this.window.setVisible(true);
 
      //On lance un thread avec le jeus
@@ -173,11 +184,9 @@ public class Game implements IConfig{
    * Permet de créer le menu du SPP
    */
    public void sppMenu(){
+     sppEnd = false;
+     PStage stage = new PStage(WIDTH, HEIGHT);
      this.window.setTitle("SUPER PASTIS PONG");
-     this.panel.remove(pongB);
-     this.panel.remove(sppB);
-     this.window.remove(panel);
-     this.panel = new PPanel();
 
      host = new PButton("HEBERGER");
      host.addActionListener(new ActionListener(){
@@ -193,10 +202,14 @@ public class Game implements IConfig{
        }
      });
 
-     this.panel.add(host);
-     this.panel.add(join);
+     PGridLayout layout = new PGridLayout(2,1);
+     layout.setVgap((int)(HEIGHT/10));
+     stage.getGUI().setLayout(layout);
 
-     this.window.getContentPane().add(panel);
+     stage.getGUI().add(host);
+     stage.getGUI().add(join);
+
+     this.context.changeStage(stage);
      this.window.setVisible(true);
    }
 
@@ -204,11 +217,8 @@ public class Game implements IConfig{
    * Permet de créer le menu d'hebergement d'une partie SPP
    */
    public void hostMenu(){
+     PStage stage = new PStage(WIDTH, HEIGHT);
      this.window.setTitle("SUPER PASTIS PONG");
-     this.panel.remove(host);
-     this.panel.remove(join);
-     this.window.remove(panel);
-     this.panel = new PPanel();
 
      this.usernameL = new PLabel("Pseudo : ");
      this.username = new JTextArea("username");
@@ -224,10 +234,14 @@ public class Game implements IConfig{
      this.playersNbL = new PLabel("Nombre de joueurs :");
      this.playersNb = new JTextArea("4");
      this.playersNbB = new PButton("Valider");
-     usernameB.addActionListener(new ActionListener(){
+     playersNbB.addActionListener(new ActionListener(){
         public void actionPerformed(ActionEvent e){
-          int players = Integer.parseInt(playersNb.getText());
-          sppWorld.setNbPlayers(players);
+          try{
+            int players = Integer.parseInt(playersNb.getText());
+            sppWorld.setNbPlayers(players);
+          }catch(Exception ex){
+            System.out.println("Dommage");
+          }
         }
       });
 
@@ -243,15 +257,19 @@ public class Game implements IConfig{
      });
      run.setEnabled(false);
 
-     this.panel.add(usernameL);
-     this.panel.add(username);
-     this.panel.add(usernameB);
-     this.panel.add(playersNbL);
-     this.panel.add(playersNb);
-     this.panel.add(playersNbB);
-     this.panel.add(run);
+     PGridLayout layout = new PGridLayout(3,3);
+     layout.setVgap((int)(HEIGHT/10));
+     stage.getGUI().setLayout(layout);
 
-     this.window.getContentPane().add(panel);
+     stage.getGUI().add(usernameL);
+     stage.getGUI().add(username);
+     stage.getGUI().add(usernameB);
+     stage.getGUI().add(playersNbL);
+     stage.getGUI().add(playersNb);
+     stage.getGUI().add(playersNbB);
+     stage.getGUI().add(run);
+
+     this.context.changeStage(stage);
      this.window.setVisible(true);
    }
 
@@ -260,10 +278,7 @@ public class Game implements IConfig{
    */
    public void joinMenu(){
      this.window.setTitle("SUPER PASTIS PONG");
-     this.panel.remove(host);
-     this.panel.remove(join);
-     this.window.remove(panel);
-     this.panel = new PPanel();
+     PStage stage = new PStage(WIDTH, HEIGHT);
      boolIp = false;
      boolPort = false;
 
@@ -286,11 +301,16 @@ public class Game implements IConfig{
       this.portB = new PButton("Valider");
       portB.addActionListener(new ActionListener(){
          public void actionPerformed(ActionEvent e){
-           int portt = Integer.parseInt(port.getText());
-           // JEAN --> Récupération du port (pas pas du cochon lol)
-           boolPort = true;
-           if(boolIp){
-             run.setEnabled(true);
+           try{
+             int portt = Integer.parseInt(port.getText());
+             // JEAN --> Récupération du port (pas pas du cochon lol)
+             boolPort = true;
+             if(boolIp){
+               run.setEnabled(true);
+             }
+
+           }catch (Exception ex) {
+             System.out.println("Dommage");
            }
          }
        });
@@ -304,15 +324,19 @@ public class Game implements IConfig{
      });
      run.setEnabled(false);
 
-     this.panel.add(ipL);
-     this.panel.add(ip);
-     this.panel.add(ipB);
-     this.panel.add(portL);
-     this.panel.add(port);
-     this.panel.add(portB);
-     this.panel.add(run);
+     PGridLayout layout = new PGridLayout(3,3);
+     layout.setVgap((int)(HEIGHT/10));
+     stage.getGUI().setLayout(layout);
 
-     this.window.getContentPane().add(panel);
+     stage.getGUI().add(ipL);
+     stage.getGUI().add(ip);
+     stage.getGUI().add(ipB);
+     stage.getGUI().add(portL);
+     stage.getGUI().add(port);
+     stage.getGUI().add(portB);
+     stage.getGUI().add(run);
+
+     this.context.changeStage(stage);
      this.window.setVisible(true);
    }
 
@@ -324,23 +348,14 @@ public class Game implements IConfig{
      this.window.setTitle("Super Pastis Pong");
      //On empeche que la fenetre soit redimensionnée
      this.window.setResizable(false);
-     this.panel.remove(join);
-     this.panel.remove(host);
-     this.window.remove(panel);
-
-     // On créer le contexte
-     this.sppContext = new PContext(WIDTH+50, HEIGHT+50);
-
 
      // System.out.println(this.pongWorld.getStage());
-     this.sppContext.changeStage(this.sppWorld.getStage());
-     this.sppContext.setBackground(Color.WHITE);
+     this.context.changeStage(this.sppWorld.getStage());
+     this.context.setBackground(Color.WHITE);
 
      //Initialisation du contrôle clavier
      sppKeyboard = new MyKeyboardSPP(sppWorld);
      this.window.addKeyListener(sppKeyboard);
-
-     this.window.addContext(sppContext);
 
      //On lance un thread avec le jeus
      new Thread(){
@@ -355,8 +370,8 @@ public class Game implements IConfig{
    * Boucle principale du jeu de pong
    */
    public void launchPong(){
-     while(true) {
-       this.pongContext.repaint();
+     while(!pongEnd) {
+       this.context.repaint();
        this.pongWorld.process(DELTA_T);
        try {
              Thread.sleep((long)DELTA_T);
@@ -372,9 +387,9 @@ public class Game implements IConfig{
    * Boucle principale du jeu de SPP
    */
    public void launchSPP(){
-     while(true) {
+     while(!sppEnd) {
        this.sppWorld.process(DELTA_T);
-       this.sppContext.repaint();
+       this.context.repaint();
        try {
              Thread.sleep((long)DELTA_T);
              } catch (InterruptedException e) {

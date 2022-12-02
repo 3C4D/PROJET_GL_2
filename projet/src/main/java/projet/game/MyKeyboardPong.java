@@ -25,6 +25,7 @@ public class MyKeyboardPong extends KeyboardHandler{
 
   @Override
   public void actionKeyboardPressed(char letter, int code){
+    System.out.println("PUTE TU APPUIES");
     switch (code) {
       case IKeyCode.KEY_UP:
         this.world.getRacketB().moveUp(); //La raquette monte

@@ -10,6 +10,8 @@ public class PPanel extends JPanel {
      */
     public PPanel() {
         super();
+        this.setOpaque(true);
+        this.setBackground(new Color(0,0,0,0));
     }
 
     /**
