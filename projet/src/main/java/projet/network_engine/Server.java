@@ -18,7 +18,7 @@ import java.util.HashMap;
 
 /***** CLASS *****/
 
-/***
+/**
  * Server class
  */
 public abstract class Server extends Thread {
@@ -42,9 +42,9 @@ public abstract class Server extends Thread {
     private int port;                                           // Port where the server is listenning
     private volatile boolean isRunning;
 
-    /***** METHODS *****/
+    /***** CONSTRUCTORS *****/
 
-    /***
+    /**
      * Constructor
      * @param _port Where the server will listen
      */
@@ -64,7 +64,9 @@ public abstract class Server extends Thread {
         }
     }
 
-    /***
+    /***** METHODS *****/
+
+    /**
      * Return the number of clients connected
      * @return The number of clients connected
      */
@@ -72,7 +74,7 @@ public abstract class Server extends Thread {
         return clientsConnected;
     }
 
-    /***
+    /**
      * Connect a client to the server
      * @param _out The output stream of this client
      * @param _in The input stream of this client
@@ -84,7 +86,7 @@ public abstract class Server extends Thread {
         sendUserList();
     }
 
-    /***
+    /**
      * Disconnect a client from the server
      * @param _clientID The ID of the client who will be disconnected
      */
@@ -97,7 +99,7 @@ public abstract class Server extends Thread {
         }
     }
 
-    /***
+    /**
      * Diffuse a message to every connected client
      * @param _message  The message to diffuse
      */
@@ -115,7 +117,7 @@ public abstract class Server extends Thread {
         }
     }
 
-    /***
+    /**
      * Send a message to a client
      * @param _message  The message to send
      * @param _clientID The ID of the client
@@ -134,41 +136,37 @@ public abstract class Server extends Thread {
         }
     }
 
-    /***
+    /**
      * Send user list
      */
     synchronized public void sendUserList() {
         Object[] users = clientsOut.keySet().toArray();
-        NetworkData data = new NetworkData("USERLIST");
+        String message = "USERLIST";
         for (int i=0; i<clientsOut.size(); i++) {
-            data.message += " " + users[i].toString();
+            message += " " + users[i].toString();
         }
-        diffuseMessage(data, null);
+        diffuseMessage(message, null);
     }
 
-    /***
+    /**
      * Get a message from a client
      * @return The object read by the server if there is one, null otherwise
      */
     synchronized public Object getMessage(ObjectInputStream in) {
         try {
-            if (in.available() > 0) {
-                return in.readObject();
-            } else {
-                return null;
-            }
+            return in.readObject();
         } catch (ClassNotFoundException | IOException e) {
             return null;
         }
     }
 
-    /***
+    /**
      * Tasks the server will run with each client during execution
      * @param in
      */
-    public abstract void runningRoutine(String username);
+    public abstract void runningRoutine(ObjectInputStream in, String username);
 
-    /***
+    /**
      * Wait for the end of client threads
      * @throws InterruptedException
      */
@@ -177,7 +175,7 @@ public abstract class Server extends Thread {
         executor.shutdown();
     }
 
-    /***
+    /**
      * Run method, where the server will lauch client threads for every new connection
      */
     public void run() {
