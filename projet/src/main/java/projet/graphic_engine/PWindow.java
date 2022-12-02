@@ -12,7 +12,6 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
 import java.awt.event.ComponentAdapter;
-
 import java.awt.event.ComponentEvent;
 
 
@@ -29,6 +28,12 @@ public class PWindow extends JFrame {
 
     private String title;
 
+    /**
+    * Permet de créer une fenêtre
+    * @param title Le titre de la fenêtre
+    * @param width La largeur de la fenêtre
+    * @param height La hauteur de la fenêtre
+    */
     public PWindow(String title, int width, int height) {
         this.title = title;
 
@@ -61,21 +66,34 @@ public class PWindow extends JFrame {
 
     }
 
+    /**
+     * fonction privée appelée lorsque la fenêtre est redimensionnée
+     */
     private void windowSizeChanged() {
         for(int i = 0; i < this.contexts.size(); i++) {
             this.contexts.get(i).setSize((int)(this.getWidth() / this.contexts.size()), this.getHeight());
         }
     }
 
+    /**
+     * permet de mettre en plein écran la fenêtre
+     */
     public void setFullScreenMode() {
         this.device.setFullScreenWindow(this);
     }
 
+    /**
+     * permet de quitter le mode plein écran
+     */
     public void setWindowMode() {
         this.dispose();
         this.setVisible(true);
     }
 
+    /**
+     * permet d'ajouter un contexte à la fenêtre
+     * @param context Le contexte à ajouter
+     */
     public void addContext(PContext context) {
         
         this.contexts.add(context);
@@ -86,12 +104,5 @@ public class PWindow extends JFrame {
         this.layout.setColumns(this.contexts.size());
 
     }
-
-
-    
-    
-
-
-
 
 }
