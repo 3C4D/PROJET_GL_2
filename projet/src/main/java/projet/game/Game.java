@@ -11,9 +11,14 @@ import java.awt.Color;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.EOFException;
+
 import javax.swing.JTextArea;
 import java.awt.Dimension;
 import java.lang.Exception;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Vector;
 
 
 /**
@@ -61,6 +66,13 @@ public class Game implements IConfig{
    private PLabel portL;
 
    private boolean boolIp = false, boolPort=false;
+
+   // Online game
+   String user;                               // Username
+   String ipp;                                // Server IP
+   int portt;                                 // Port
+   PastisPlayer player;                       // Client
+   Vector<String> players = new Vector<>();   // Players list
 
    /**
    * Créateur d'un jeu
@@ -225,8 +237,8 @@ public class Game implements IConfig{
      this.usernameB = new PButton("Valider");
      usernameB.addActionListener(new ActionListener(){
         public void actionPerformed(ActionEvent e){
-          String user = username.getText();
-          // JEAN --> recupère le username
+          // Récupère le username et le stocke
+          user = username.getText();
           run.setEnabled(true);
         }
       });
@@ -249,10 +261,22 @@ public class Game implements IConfig{
     run = new PButton("LANCER LA PARTIE");
     run.addActionListener(new ActionListener(){
        public void actionPerformed(ActionEvent e){
-         // JEAN --> lancement du serveur
+          // Lancement du serveur
+          PastisServer server = new PastisServer(1234, 4, sppWorld);
+          server.start();
+          System.out.println("Le serveur a démarré !");
 
-         //Lancement de la partie spp;
-         spp();
+          // Connexion de l'hôte
+          player = new PastisPlayer();
+          try {
+            System.out.println("L'hôte se connecte");
+            player.connect(InetAddress.getLocalHost(), 1234, user);
+          } catch (UnknownHostException e1) {
+            System.out.println("L'hôte ne peut pas se connecter !");
+          }
+
+          //Lancement de la partie spp;
+          spp();
        }
      });
      run.setEnabled(false);
@@ -287,8 +311,8 @@ public class Game implements IConfig{
      this.ipB = new PButton("Valider");
      ipB.addActionListener(new ActionListener(){
         public void actionPerformed(ActionEvent e){
-          String ipp = ip.getText();
-          // JEAN --> Récupération (jsp si ça te dit mais t'as compris mdr) de l'IP
+          // Récupération de l'IP du serveur renseignée
+          ipp = ip.getText();
           boolIp = true;
           if(boolPort == true){
             run.setEnabled(true);
@@ -302,8 +326,8 @@ public class Game implements IConfig{
       portB.addActionListener(new ActionListener(){
          public void actionPerformed(ActionEvent e){
            try{
-             int portt = Integer.parseInt(port.getText());
-             // JEAN --> Récupération du port (pas pas du cochon lol)
+             // Récupération du port de connexion au serveur
+             portt = Integer.parseInt(port.getText());
              boolPort = true;
              if(boolIp){
                run.setEnabled(true);
@@ -319,7 +343,14 @@ public class Game implements IConfig{
      run = new PButton("REJOINDRE LA PARTIE");
      run.addActionListener(new ActionListener(){
        public void actionPerformed(ActionEvent e){
-         // JEAN --> Lancement du client etc
+          player = new PastisPlayer();
+          try {
+            player.connect(InetAddress.getLocalHost(), 1234, "user");
+            sppWorld.addPastisRacket();
+            System.out.println("Connecté au serveur !");
+          } catch (UnknownHostException e1) {
+            System.out.println("Impossible de se connecter au serveur !");
+          }
        }
      });
      run.setEnabled(false);
@@ -396,6 +427,29 @@ public class Game implements IConfig{
                  e.printStackTrace();
              }
 
+       // Online game related stuff
+       try {
+        Object read = player.getMessage();
+        if (read instanceof String) {
+          String msg = (String) read;
+          if (msg.split(" ")[0].equals("USERLIST")) {
+            players.add(msg.split(" ")[1]);
+            System.out.println(players);
+          }
+        } else if (read instanceof PastisNetworkData) {
+          PastisNetworkData data = (PastisNetworkData) read;
+          if (data.getMessage().equals("RACKETS")) {
+            while (data.getRackets().size() > sppWorld.getRackets().size()) {
+              sppWorld.addPastisRacket();
+            }
+            for (int i=0; i<data.getRackets().size(); i++) {
+              sppWorld.setRacket(i, data.getRackets().get(i));
+            }
+          }
+        }
+       } catch (EOFException e) {
+        e.printStackTrace();
+      }
      }
    }
  }

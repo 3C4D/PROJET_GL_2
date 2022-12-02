@@ -21,6 +21,8 @@ public class PastisRacket extends MyEntity implements IConfig{
   private Point tableOrigin;
   private int num;
 
+  private PastisPlayer player;  // Le joueur à qui la raquette est atitrée
+
   /**
   * Classe définissant l'aspect graphique d'une raquette
   */
@@ -60,7 +62,7 @@ public class PastisRacket extends MyEntity implements IConfig{
   * @param son type pour savoir si c'est la raquette A ou B
   * @param sa couleur
   */
-  public PastisRacket(Point position, int type, Color color, Point tableOrigin, Zone zone){
+  public PastisRacket(Point position, int type, Color color, Point tableOrigin, Zone zone, PastisPlayer player){
     super(type);
 
     this.tableOrigin = tableOrigin;
