@@ -15,8 +15,8 @@ import java.awt.Color;
 * Classe définissant le monde de jeu
 */
 public class MyWorldPong extends PWorld {
-  private final int WIDTH = 500; // Largeur du monde
-  private final int HEIGHT = 500; // Hauteur du mond
+  private int WIDTH = 500; // Largeur du monde
+  private int HEIGHT = 500; // Hauteur du mond
   private static float BALL_SIZE = 20f;
   public static float RACKET_WIDTH = 20f , RACKET_HEIGHT = 150f;
   private int pointA;
@@ -35,7 +35,10 @@ public class MyWorldPong extends PWorld {
 
     // Création de mon monde physique
     this.physicWorld = new MyPhysicWorldPong(width, height, this);
+    System.out.println(physicWorld.getGameOutline());
 
+    WIDTH = (int)width;
+    HEIGHT = (int)height;
     //Création de la balle
     maxX = 0.27f;
     maxY = 0.27f;
@@ -53,19 +56,20 @@ public class MyWorldPong extends PWorld {
     }
     this.x = x;
     this.y = y;
-    Ball ball = new Ball(new Point(WIDTH/2f,HEIGHT/2f), BALL_SIZE);
+
+    Ball ball = new Ball(new Point(width/2f,height/2f), BALL_SIZE, Color.WHITE);
     ball.getBody().setVelocity(new Vector2D(x,y));
 
     // Création de la première raqutte
-    RacketPong racket1 = new RacketPong(new Point(RACKET_WIDTH/2f, HEIGHT/2f), MyEntity.RACKET_A, RACKET_WIDTH, RACKET_HEIGHT);
+    RacketPong racket1 = new RacketPong(new Point(RACKET_WIDTH/2f, height/2f), MyEntity.RACKET_A, RACKET_WIDTH, RACKET_HEIGHT);
 
     // Création de la deuxième raquette
-    RacketPong racket2 = new RacketPong(new Point(WIDTH - RACKET_WIDTH/2f, HEIGHT/2f), MyEntity.RACKET_B, RACKET_WIDTH, RACKET_HEIGHT);
+    RacketPong racket2 = new RacketPong(new Point(width - RACKET_WIDTH/2f, height/2f), MyEntity.RACKET_B, RACKET_WIDTH, RACKET_HEIGHT);
 
     //On les ajoute a la liste d'entité
-    this.addEntity(ball);
     this.addEntity(racket1);
     this.addEntity(racket2);
+    this.addEntity(ball);
     pointA = 0;
     pointB = 0;
   }
@@ -171,7 +175,7 @@ public class MyWorldPong extends PWorld {
   */
   public void replay(){
     //On recrée une balle que l'on ajoute au jeu
-    Ball ball = new Ball(new Point(WIDTH/2f,HEIGHT/2f), BALL_SIZE);
+    Ball ball = new Ball(new Point(WIDTH/2f,HEIGHT/2f), BALL_SIZE, Color.WHITE);
     double sx = (Math.random());
     double sy = (Math.random());
     count++;
@@ -193,9 +197,8 @@ public class MyWorldPong extends PWorld {
       y /= (float)(Math.pow(1.3f, pow));
       pow = 0;
     }
-    System.out.println("VITE "+x+" "+y);
+
     ball.getBody().setVelocity(new Vector2D(x, y));
     this.addEntity(ball);
-    System.out.println(this.getEntities());
   }
 }

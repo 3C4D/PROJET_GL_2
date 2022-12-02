@@ -79,10 +79,16 @@ public class MyWorldSPP extends PWorld implements IConfig {
 
 }
 
-  // /**
-  // *
-  // */
-  // public void setRacket
+  /**
+  * Permet de mettre à jour les informations d'une raquette
+  */
+  public void setRacket(int num, PastisRacket racket){
+    PastisRacket gameRacket = this.getRacket(num);
+
+    // gameRacket.getBody().setVelocity(racket.getBody().getVelocity());
+    gameRacket.setBody(racket.getBody());
+
+  }
 
   /**
   * Permet de mettre à jour la liste d'entités du monde
@@ -124,9 +130,15 @@ public class MyWorldSPP extends PWorld implements IConfig {
   * Permet d'ajouter dynamiquement des balles
   */
   public void addBall(){
-    Ball ball = new Ball(new Point(WIDTH/2f,HEIGHT/2f), BALL_SIZE);
-    ball.getBody().setVelocity(new Vector2D(0.1f, 0f));
-    this.addEntity(ball);
+    if(WIDTH < HEIGHT){
+      Ball ball = new Ball(new Point(WIDTH/2f,HEIGHT/2f), WIDTH/50f, Color.BLUE);
+      ball.getBody().setVelocity(new Vector2D(0.1f, 0f));
+      this.addEntity(ball);
+    }else{
+      Ball ball = new Ball(new Point(WIDTH/2f,HEIGHT/2f), HEIGHT/50f , Color.BLUE);
+      ball.getBody().setVelocity(new Vector2D(0.1f, 0f));
+      this.addEntity(ball);
+    }
   }
 
   /**
@@ -141,6 +153,22 @@ public class MyWorldSPP extends PWorld implements IConfig {
       }
     }
     return pastisRackets;
+  }
+
+  /*g
+  * @param le numéro de la raquette qu'on souhaite récupérer
+  * @return la raquette souhaité
+  */
+  public PastisRacket getRacket(int num){
+    //TO DO
+    Vector<PastisRacket> rackets = this.getRackets();
+    int i;
+    for(i=0 ; i<rackets.size(); i++){
+      if(rackets.get(i).getNum() == num){
+        return rackets.get(i);
+      }
+    }
+    return null; 
   }
 
   /**

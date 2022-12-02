@@ -43,7 +43,6 @@ public class RacketPong extends MyEntity implements IConfig{
   public RacketPong(Point position, int type, float width, float height){
     super(type);
 
-
     //On créer son enveloppe
 
     Point[] vertex = new Point[4];
