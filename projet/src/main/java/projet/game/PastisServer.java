@@ -1,27 +1,30 @@
 package projet.game;
 
+/***** IMPORTS *****/
+
 // Input/Output
 import java.io.IOException;
 import java.io.ObjectInputStream;
-// Others
-import java.util.Vector;
-
-/***** IMPORTS *****/
 
 // Server
 import projet.network_engine.Server;
 
 /***** CLASS *****/
 
-/***
+/**
  * PastisServer class that extends the server class from the network engine to 
  * define the server routine and a new constructor
  */
 public class PastisServer extends Server {
+
+    /***** PARAMETERS *****/
+
     PastisNetworkData data;
     MyWorldSPP world;
+
+    /***** CONSTRUCTORS *****/
     
-    /***
+    /**
      * Constructor for the PastisServer class
      * @param _port
      * @param _clientsNumber
@@ -32,14 +35,16 @@ public class PastisServer extends Server {
         world = _world;
     }
 
-    /***
+    /***** METHODS *****/
+
+    /**
      * Update current entities during game session
      */
     private void updateEntities() {
         data.setEntities(world.getBalls());
     }
 
-    /***
+    /**
      * Definition of the server routine
      * @param in The input stream of the client
      * @param username The username of the client

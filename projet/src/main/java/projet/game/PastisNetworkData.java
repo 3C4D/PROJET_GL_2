@@ -10,16 +10,21 @@ import java.util.Vector;
 
 /***** CLASS *****/
 
-/***
+/**
  * Data that will be exchanged between the GameServer and GamePlayers
  */
 public class PastisNetworkData  extends NetworkData {
-    private Vector<MyEntity> entities;
-    private Vector<PastisRacket> rackets;
+
+    /***** PARAMETERS *****/
+
+    private Vector<PastisRacket> rackets;           // Rackets list
+    private Vector<MyEntity> entities;              // Game entities list
     private String message;
 
-    /***
-     * Constructor
+    /***** CONSTRUCTORS *****/
+
+    /**
+     * Default constructor
      */
     PastisNetworkData() {
         super();
@@ -27,23 +32,25 @@ public class PastisNetworkData  extends NetworkData {
         rackets = new Vector<>();
     }
 
-    /***
-     * Getter for entities
+    /***** GETTERS/SETTERS *****/
+
+    /**
+     * Getter for the list of entities
      * @return A vector of the current entities
      */
     public Vector<MyEntity> getEntities() {
         return entities;
     }
 
-    /***
-     * Getter for rackets
+    /**
+     * Getter for the list of rackets
      * @return A vector of the current rackets
      */
     public Vector<PastisRacket> getRackets() {
         return rackets;
     }
 
-    /***
+    /**
      * Getter for the message
      * @return The current message
      */
@@ -51,7 +58,7 @@ public class PastisNetworkData  extends NetworkData {
         return message;
     }
 
-    /***
+    /**
      * Setter for entities
      * @param _entities New vector for the entities
      */
@@ -60,7 +67,7 @@ public class PastisNetworkData  extends NetworkData {
         entities = _entities;
     }
 
-    /***
+    /**
      * Setter for rackets
      * @param _rackets New vector for the rackets
      */
@@ -69,7 +76,7 @@ public class PastisNetworkData  extends NetworkData {
         rackets = _rackets;
     }
 
-    /***
+    /**
      * Setter for one racket
      * @param _racket New racket
      */
@@ -77,7 +84,7 @@ public class PastisNetworkData  extends NetworkData {
         rackets.setElementAt(_racket, _racket.getId());
     }
 
-    /***
+    /**
      * Setter for the message
      * @param _entities New vector for the rackets
      */
