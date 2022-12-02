@@ -2,9 +2,13 @@ package projet.graphic_engine;
 
 
 
+
 import java.awt.*;
+import javax.swing.*;
+
 
 import projet.graphic_engine.drawable.PIDrawable;
+import projet.graphic_engine.GUI.*;
 
 import java.util.LinkedList;
 
@@ -18,48 +22,75 @@ public class PStage {
 
     private LinkedList<PIDrawable> listToPaint;
 
-    // TODO
-    // Create GUI for the stage. But swing must be invisible
-    // private JPanel GUI;
+    private PPanel GUI;
 
-
+    /**
+     * permet de créer un stage (ou niveau de jeu)
+     * @param width
+     * @param height
+     */
     public PStage(int width, int height) {
         this.width = width;
         this.height = height;
         this.listToPaint = new LinkedList<PIDrawable>();
-        //this.GUI = new JPanel();
+        this.GUI = new PPanel();
     }
 
+    /**
+     * permet d'afficher le stage
+     * Cette méthode est appelée par la méthode paint de PContext
+     * et ne peut pas être appelée directement
+     * @param g
+     */
     public void paint(Graphics g) {
         while(this.listToPaint.size() != 0) {
             this.listToPaint.poll().paint(g);
         }
     }
 
+    /**
+     * permet de changer la taille du stage
+     * @param width
+     * @param height
+     */
     public void setSize(int width, int height) {
         this.width = width;
         this.height = height;
     }
 
+    /**
+     * permet de recuperer la largeur du stage
+     * @return width
+     */
     public int getWidth() {
         return this.width;
     }
 
+    /**
+     * permet de recuperer la hauteur du stage
+     * @return height
+     */
     public int getHeight() {
         return this.height;
     }
 
+    /**
+     * permet d'ajouter un objet à dessiner sur le stage
+     * @param drawable
+     */
     public void add(PIDrawable drawable) {
         this.listToPaint.add(drawable);
     }
 
 
-
-    /*
-    public JPanel getGUI() {
+    /**
+     * permet de recuperer le panel du stage
+     * @return GUI
+     */
+    public PPanel getGUI() {
         return this.GUI;
     }
-    */
+
 
     public LinkedList<PIDrawable> getListToPaint() {
         return this.listToPaint;
