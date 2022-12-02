@@ -12,7 +12,7 @@ import java.net.Socket;
 
 /***** CLASS *****/
 
-/***
+/**
  * Client thread class : used to handle one connection between the server and a client
  */
 public class ClientThread implements Runnable {
@@ -30,9 +30,9 @@ public class ClientThread implements Runnable {
     // Others
     private String username;
 
-    /***** METHODS *****/
+    /***** CONSTRUCTORS *****/
 
-    /***
+    /**
      * Constructor
      * @param _connection The socket used to discuss with the client
      * @param _server The server that runs everything
@@ -45,14 +45,17 @@ public class ClientThread implements Runnable {
         try {
             in = new ObjectInputStream(connection.getInputStream());
             out = new ObjectOutputStream(connection.getOutputStream());
-            username = in.readObject().toString().split(" ")[1];
-            server.connectClient(username, out);
+            String message = in.readObject().toString();
+            username = message.split(" ")[1];
+            server.connectClient(username, out, in);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    /***
+    /***** METHODS *****/
+
+    /**
      * Run method : instructions the server will execute with every client
      */
     public void run() {
