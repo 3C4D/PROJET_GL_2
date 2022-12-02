@@ -38,7 +38,9 @@ public class PContext extends JPanel{
      * et ne peut pas être appelée directement
      */
     public void contextSizeChanged() {
-        this.currentStage.setSize(this.getWidth(), this.getHeight());
+      if(this.currentStage != null){
+        this.currentStage.setSize(this.getWidth(), this.getHeight());      
+      }
     }
 
     /**
@@ -50,7 +52,7 @@ public class PContext extends JPanel{
     public void paint(Graphics g) {
         super.paint(g);
         if(this.currentStage != null) {
-          this.currentStage.paint(g);          
+          this.currentStage.paint(g);
         }
     }
 
