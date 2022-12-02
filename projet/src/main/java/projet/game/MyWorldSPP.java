@@ -19,6 +19,7 @@ public class MyWorldSPP extends PWorld implements IConfig {
   public static float RACKET_WIDTH = 50;
   public static float RACKET_HEIGHT = 25;
   public static float BALL_SIZE = 20f;
+  private int playersMax = PLAYERS_NB;
   private int players_nb;
 
   /**
@@ -50,9 +51,6 @@ public class MyWorldSPP extends PWorld implements IConfig {
 
 
     players_nb = 0;
-    for(int i = 0; i < PLAYERS_NB; i++){
-      addPastisRacket();
-    }
 
   }
 
@@ -96,6 +94,10 @@ public class MyWorldSPP extends PWorld implements IConfig {
   */
   public void setMyWorld(Vector<MyEntity> entitiesList){
     int i;
+    Vector<MyEntity> balls =  getBalls();
+    for(i = 0; i < balls.size(); i++){
+      this.removeEntity(balls.get(i));
+    }
 
     for(i = 0; i < entitiesList.size(); i++){
       this.addEntity(entitiesList.get(i));
@@ -108,7 +110,7 @@ public class MyWorldSPP extends PWorld implements IConfig {
   */
   public int addPastisRacket(){
     int player_num;
-    if(players_nb >= PLAYERS_NB){
+    if(players_nb >= playersMax){
       return -1; //Les joueurs sont au complet
     }
 
@@ -186,6 +188,6 @@ public class MyWorldSPP extends PWorld implements IConfig {
   }
 
   public void setNbPlayers(int nb){
-    this.players_nb= nb;
+    this.playersMax= nb;
   }
 }
