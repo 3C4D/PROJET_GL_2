@@ -164,7 +164,7 @@ public class MyWorldSPP extends PWorld implements IConfig {
     Vector<PastisRacket> rackets = this.getRackets();
     int i;
     for(i=0 ; i<rackets.size(); i++){
-      if(rackets.get(i).getNum() == num){
+      if(rackets.get(i).getId() == num){
         return rackets.get(i);
       }
     }
@@ -174,9 +174,9 @@ public class MyWorldSPP extends PWorld implements IConfig {
   /**
   * @return la liste des balles du jeu (en entités)
   */
-  public Vector<Entity> getBalls(){
+  public Vector<MyEntity> getBalls(){
     int i;
-    Vector pastisBall = new Vector<Entity>();
+    Vector pastisBall = new Vector<MyEntity>();
     for(i = 0; i < this.entities.size(); i++){
       if(this.entities.get(i).getType() == MyEntity.BALL){
         pastisBall.add(this.entities.get(i));
