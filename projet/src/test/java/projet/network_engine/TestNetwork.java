@@ -1,13 +1,25 @@
 package projet.network_engine;
 
+/***** IMPORTS *****/
+
+// Tests
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.io.EOFException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 import org.junit.jupiter.api.Test;
 
+// Exceptions
+import java.net.UnknownHostException;
+import java.io.EOFException;
+import java.io.IOException;
+
+// Input/Output
+import java.io.ObjectInputStream;
+
+// Networking
+import java.net.InetAddress;
+
+/**
+ * Test class for the network engine
+ */
 public class TestNetwork {
     class TestServer extends Server {
         public TestServer(int _port, int _clientsNumber) {
@@ -15,16 +27,20 @@ public class TestNetwork {
         }
 
         @Override 
-        public void runningRoutine(String username) {
-            NetworkData data = new NetworkData("");
+        public void runningRoutine(ObjectInputStream in, String username) {
+            String message = "";
             do {
-                data = (NetworkData) getMessage(clientsIn.get(username));
-                if (data != null && !data.message.split(" ")[0].equals("DISCONNECT")) {
-                    diffuseMessage(data, username);
+                try {
+                    message = in.readObject().toString();
+                } catch (ClassNotFoundException | IOException e) {
+                    break;
                 }
-            } while (data == null || !data.message.split(" ")[0].equals("DISCONNECT"));
-            System.out.println(data.message.split(" ")[1] + " disconnected");
-            disconnectClient(data.message.split(" ")[1]);
+                if (!message.split(" ")[0].equals("DISCONNECT")) {
+                    diffuseMessage(message, username);
+                }
+            } while (!message.split(" ")[0].equals("DISCONNECT"));
+            System.out.println(message.split(" ")[1] + " disconnected");
+            disconnectClient(message.split(" ")[1]);
         }
     }
 
