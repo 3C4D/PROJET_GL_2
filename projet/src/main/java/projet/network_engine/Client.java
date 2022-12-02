@@ -54,7 +54,7 @@ public class Client {
             connection = new Socket(_address, _port);
             out = new ObjectOutputStream(connection.getOutputStream());
             in = new ObjectInputStream(connection.getInputStream());
-            sendMessage(new NetworkData("CONNECT " + username));
+            sendMessage("CONNECT " + username);
         } catch (IOException e) {
             System.out.println("Invalid IP address or port number");
         }

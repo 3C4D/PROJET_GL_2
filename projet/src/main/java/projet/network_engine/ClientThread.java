@@ -45,8 +45,8 @@ public class ClientThread implements Runnable {
         try {
             in = new ObjectInputStream(connection.getInputStream());
             out = new ObjectOutputStream(connection.getOutputStream());
-            NetworkData data = (NetworkData) in.readObject();
-            username = data.message.split(" ")[1];
+            String message = in.readObject().toString();
+            username = message.split(" ")[1];
             server.connectClient(username, out, in);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
