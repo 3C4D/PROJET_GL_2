@@ -184,4 +184,8 @@ public class MyWorldSPP extends PWorld implements IConfig {
     }
     return pastisBall;
   }
+
+  public void setNbPlayers(int nb){
+    this.players_nb= nb;
+  }
 }

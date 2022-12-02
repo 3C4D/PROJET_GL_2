@@ -1,15 +1,25 @@
 package projet.network_engine;
 
+/***** IMPORTS *****/
+
+// Tests
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.EOFException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 import org.junit.jupiter.api.Test;
 
+// Exceptions
+import java.net.UnknownHostException;
+import java.io.EOFException;
+import java.io.IOException;
+
+// Input/Output
+import java.io.ObjectInputStream;
+
+// Networking
+import java.net.InetAddress;
+
+/**
+ * Test class for the network engine
+ */
 public class TestNetwork {
     class TestServer extends Server {
         public TestServer(int _port, int _clientsNumber) {

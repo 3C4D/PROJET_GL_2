@@ -61,8 +61,8 @@ public abstract class PWorld {
     * @param l'entité à supprimer
     */
     public void removeEntity(PEntity entity) {
-      this.entities.remove(entity);
       this.physicWorld.removeBody(entity.getBody());
+      this.entities.remove(entity);
     }
 
     public PStage getStage(){
