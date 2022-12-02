@@ -14,7 +14,7 @@ import java.net.Socket;
 
 /***** CLASS *****/
 
-/***
+/**
  * Client class
  */
 public class Client {
@@ -31,16 +31,18 @@ public class Client {
     // Others
     private String username;
 
-    /***** METHODS *****/
+    /***** CONSTRUCTORS *****/
 
-    /***
-     * Constructor
+    /**
+     * Default constructor
      */
     public Client() {
         // Nothing to do
     }
 
-    /***
+    /***** METHODS *****/
+
+    /**
      * Connect to a server
      * @param ip IP address of the server
      * @param port Port of the server
@@ -58,12 +60,12 @@ public class Client {
         }
     }
 
-    /***
+    /**
      * Disconnect from the server
      */
     public void disconnect() {
         try {
-            sendMessage(new NetworkData("DISCONNECT " + username));
+            sendMessage("DISCONNECT " + username);
             in.close();
             out.close();
             connection.close();
@@ -72,7 +74,7 @@ public class Client {
         }
     }
 
-    /***
+    /**
      * Send a message to the server
      * @param message  The message to send
      */
@@ -85,18 +87,14 @@ public class Client {
         }
     }
 
-    /***
+    /**
      * Get a message from the server if there is one, return null otherwise
      */
     public Object getMessage() throws EOFException {
         try {
-            if (in.available() > 0) {
-                return in.readObject();
-            } else {
-                return null;
-            }
+            return in.readObject();
         } catch (ClassNotFoundException | IOException e) {
+            return null;
         }
-        return null;
     }
 }
