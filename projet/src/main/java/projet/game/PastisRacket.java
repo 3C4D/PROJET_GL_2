@@ -19,6 +19,7 @@ public class PastisRacket extends MyEntity implements IConfig{
   private Color color;
   private Zone zone;
   private Point tableOrigin;
+  private int num;
 
   /**
   * Classe définissant l'aspect graphique d'une raquette
@@ -148,5 +149,12 @@ public class PastisRacket extends MyEntity implements IConfig{
   */
   public Point getTableOrigin(){
     return this.tableOrigin;
+  }
+
+  /**
+  * @return le numéro de la raquette
+  */
+  public int getNum(){
+    return this.num;
   }
 }
