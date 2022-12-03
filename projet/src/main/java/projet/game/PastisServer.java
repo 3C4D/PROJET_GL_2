@@ -62,10 +62,15 @@ public class PastisServer extends Server {
                             data.setMessage("UPDATE");
                             diffuseMessage(data, null);
                         } else if (receive.getMessage().split(" ")[0].equals("RACKET")) {
-                            System.out.println(receive.getRackets().get(0));
-                            data.setRacket(receive.getRackets().get(0));
+                            System.out.println("AV : " + world.getRackets());
+                            if (receive.getRackets().get(0).getId() >= world.getRackets().size()) {
+                                world.addPastisRacket(null);
+                            }
+                            world.setRacket(receive.getRackets().get(0).getId(), receive.getRackets().get(0));
+                            System.out.println("AP : " + world.getRackets());
+                            data.setRackets(world.getRackets());
                             data.setMessage("RACKETS");
-                            diffuseMessage(data, null);
+                            diffuseMessage(data, "");
                         }
                     } else if (read instanceof String) {
                         receive.setMessage((String) read);

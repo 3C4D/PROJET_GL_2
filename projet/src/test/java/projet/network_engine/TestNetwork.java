@@ -9,10 +9,6 @@ import org.junit.jupiter.api.Test;
 // Exceptions
 import java.net.UnknownHostException;
 import java.io.EOFException;
-import java.io.IOException;
-
-// Input/Output
-import java.io.ObjectInputStream;
 
 // Networking
 import java.net.InetAddress;
@@ -27,14 +23,10 @@ public class TestNetwork {
         }
 
         @Override 
-        public void runningRoutine(ObjectInputStream in, String username) {
+        public void runningRoutine(ClientThread c, String username) {
             String message = "";
             do {
-                try {
-                    message = in.readObject().toString();
-                } catch (ClassNotFoundException | IOException e) {
-                    break;
-                }
+                message = c.messages.remove().toString();
                 if (!message.split(" ")[0].equals("DISCONNECT")) {
                     diffuseMessage(message, username);
                 }
@@ -65,11 +57,12 @@ public class TestNetwork {
         Client client1 = new Client();
         Client client2 = new Client();
         client1.connect(InetAddress.getLocalHost(), 4001, "Client1");
+        client1.startReading();
         client2.connect(InetAddress.getLocalHost(), 4001, "Client2");
+        client2.startReading();
         client1.sendMessage("Hello");
-        Thread.sleep(1000);
-        client2.getMessage();
-        assertEquals("Hello", client2.getMessage());
+        Thread.sleep(2000);
+        assertEquals("Hello", client2.messages.removeFirst().toString());
     }
 
     @Test
@@ -96,10 +89,10 @@ public class TestNetwork {
         client2.connect(InetAddress.getLocalHost(), 4003, "Client2");
         Thread.sleep(1000);
         client1.disconnect();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         assertEquals(1, server.getClientsConnected());
         client2.disconnect();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         assertEquals(0, server.getClientsConnected());
     }
 }

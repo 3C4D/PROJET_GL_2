@@ -471,6 +471,8 @@ public class Game implements IConfig {
             if (data.getMessage().equals("UPDATE")) {
               sppWorld.setMyWorld(data.getEntities());
             } else if (data.getMessage().equals("RACKETS")) {
+                System.out.println("TAILLE : " + data.getRackets().size());
+                System.out.println("RACKETS RECUES : " + data.getRackets());
               /*while (data.getRackets().size() > sppWorld.getRackets().size()) {
                 System.out.println("TAILLE : " + data.getRackets().size());
                 sppWorld.addPastisRacket(null);
@@ -479,8 +481,14 @@ public class Game implements IConfig {
               for (int i = 0; i < data.getRackets().size(); i++) {
                 sppWorld.setRacket(i, data.getRackets().get(i));
               }*/
-              for (PastisRacket p : data.getRackets()) {
+              if (data.getRackets().size() > sppWorld.getRackets().size()) {
+                sppWorld.addPastisRacket(null);
+              }
+              /*for (PastisRacket p : data.getRackets()) {
                 sppWorld.setRacket(p.getId(), p);
+              }*/
+              for (int i=0; i<data.getRackets().size(); i++) {
+                sppWorld.setRacket(i, data.getRackets().get(i));
               }
             }
           }

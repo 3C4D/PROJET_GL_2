@@ -81,11 +81,19 @@ public class MyWorldSPP extends PWorld implements IConfig {
   * Permet de mettre à jour les informations d'une raquette
   */
   public void setRacket(int num, PastisRacket racket){
-    PastisRacket gameRacket = this.getRacket(num);
-
+    for (int i=0; i<entities.size(); i++) {
+      if (entities.get(i) instanceof PastisRacket) {
+        if (((PastisRacket) entities.get(i)).getId() == num) {
+          entities.set(i, racket);
+        }
+      }
+    }
+    /*PastisRacket gameRacket = this.getRacket(num);
+    System.out.println("Mon body : " + gameRacket.getBody().toString());
+    System.out.println("Mon param : " + racket.getBody().toString());
     // gameRacket.getBody().setVelocity(racket.getBody().getVelocity());
     gameRacket.setBody(racket.getBody());
-
+    System.out.println("Le bodi dapre : " + gameRacket.getBody().toString());*/
   }
 
   /**
@@ -150,7 +158,7 @@ public class MyWorldSPP extends PWorld implements IConfig {
   */
   public Vector<PastisRacket> getRackets(){
     int i;
-    Vector pastisRackets = new Vector<PastisRacket>();
+    Vector<PastisRacket> pastisRackets = new Vector<PastisRacket>();
     for(i = 0; i < this.entities.size(); i++){
       if(this.entities.get(i).getType() == MyEntity.RACKET){
         pastisRackets.add((PastisRacket)this.entities.get(i));
