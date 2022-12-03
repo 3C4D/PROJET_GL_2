@@ -14,7 +14,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 // Others
-import java.util.Vector;
 import java.util.LinkedList;
 
 /***** CLASS *****/
@@ -48,7 +47,11 @@ public class Client {
         public void run() {
             while (true) {
                 try {
-                    messages.add(c.getMessage());
+                    Object msg = new Object();
+                    msg = c.getMessage();
+                    if (msg != null) {
+                        messages.add(msg);
+                    } 
                 } catch (EOFException e) {
                     e.printStackTrace();
                 }
@@ -107,7 +110,9 @@ public class Client {
      */
     public void sendMessage(Object message) {
         try {
+            System.out.println("Je send");
             out.writeObject(message);
+            System.out.println("C'est ici la merde");
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();

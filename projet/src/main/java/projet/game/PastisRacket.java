@@ -63,7 +63,7 @@ public class PastisRacket extends MyEntity implements IConfig {
   * @param son type pour savoir si c'est la raquette A ou B
   * @param sa couleur
   */
-  public PastisRacket(Point position, int type, Color color, Point tableOrigin, Zone zone, PastisPlayer player){
+  public PastisRacket(Point position, int type, Color color, Point tableOrigin, Zone zone, PastisPlayer player, int _num){
     super(type);
 
     this.tableOrigin = tableOrigin;
@@ -101,6 +101,7 @@ public class PastisRacket extends MyEntity implements IConfig {
     this.setDrawable(texture);
 
     myPlayer = player;
+    num = _num;
   }
 
   /**
@@ -123,7 +124,7 @@ public class PastisRacket extends MyEntity implements IConfig {
     }
 
     // On envoie sur le réseau la modification
-    if (myPlayer != null) {
+    if (myPlayer != null && myPlayer.racketId == num) {
       System.out.println("Je met a jour");
       PastisNetworkData data = new PastisNetworkData();
       data.setMessage("RACKET");

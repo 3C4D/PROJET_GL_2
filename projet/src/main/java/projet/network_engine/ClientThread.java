@@ -38,8 +38,11 @@ public class ClientThread implements Runnable {
         @Override
         public void run() {
             while (true) {
-                messages.add(getMessage());
-                System.out.println(messages);
+                Object msg = getMessage();
+                if (msg != null) {
+                    messages.add(msg);
+                    System.out.println(messages);
+                }
             }
         }
     }

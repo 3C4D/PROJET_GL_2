@@ -92,6 +92,7 @@ public class PastisNetworkData  extends NetworkData {
         if (!found) {
             rackets.add(_racket);
         }
+        System.out.println("TAMAIRE " + rackets);
         
     }
 

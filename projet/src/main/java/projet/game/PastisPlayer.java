@@ -13,6 +13,8 @@ import projet.network_engine.Client;
  * GamePlayer class is a simple client to exchange information with a GameServer
  */
 public class PastisPlayer extends Client implements Serializable {
+    public int racketId;
+
     /**
      * Ask for initialisation to the server
      */

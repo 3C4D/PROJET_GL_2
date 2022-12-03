@@ -124,7 +124,8 @@ public class MyWorldSPP extends PWorld implements IConfig {
                    Color.BLUE,
                    new Point(WIDTH/2f,HEIGHT/2f),
                    new Zone((float)Math.PI*2*(player_num+1)/PLAYERS_NB, (float)Math.PI*2*player_num/PLAYERS_NB, angle ),
-                   player));
+                   player,
+                   player_num));
 
     return player_num;
   }

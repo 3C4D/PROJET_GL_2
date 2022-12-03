@@ -354,6 +354,7 @@ public class Game implements IConfig {
             if (player.messages.size() > 0) {
               msg = player.messages.removeFirst();
               player.messages.remove(msg);
+              // Initialisation liste joueurs
               if (msg instanceof String && ((String) msg).split(" ")[0].equals("USERLIST")) {
                 players = new Vector<>();
                 for (int i = 1; i < ((String) msg).split(" ").length; i++) {
@@ -364,9 +365,12 @@ public class Game implements IConfig {
             }
           } while (!(msg instanceof MyWorldSPP));
           sppWorld = (MyWorldSPP) msg;
-          sppWorld.addPastisRacket(player);
+          player.racketId = sppWorld.addPastisRacket(player);
           init = true;
           System.out.println("Connecté au serveur et raquette ajoutée!");
+          System.out.println("id1 : " + sppWorld.getRackets());
+          System.out.println("id1 : " + sppWorld.getRacket(0).getId());
+          System.out.println("id1 : " + sppWorld.getRacket(1).getId());
           player.askForUpdate();
           System.out.println("Demande de mise à jour");
           spp();
@@ -407,7 +411,7 @@ public class Game implements IConfig {
     this.context.setBackground(Color.WHITE);
 
     // Initialisation du contrôle clavier
-    sppKeyboard = new MyKeyboardSPP(sppWorld);
+    sppKeyboard = new MyKeyboardSPP(sppWorld, player);
     this.window.addKeyListener(sppKeyboard);
 
     // On lance un thread avec le jeu spp
@@ -468,7 +472,7 @@ public class Game implements IConfig {
               sppWorld.setMyWorld(data.getEntities());
             } else if (data.getMessage().equals("RACKETS")) {
               while (data.getRackets().size() > sppWorld.getRackets().size()) {
-                System.out.println("Ajout des raquettes manquantes");
+                System.out.println("TAILLE : " + data.getRackets().size());
                 sppWorld.addPastisRacket(null);
                 System.out.println("Les raquettes : " + sppWorld.getRackets());
               }
