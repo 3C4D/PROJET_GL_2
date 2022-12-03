@@ -108,7 +108,7 @@ public class MyWorldSPP extends PWorld implements IConfig {
   * Permet d'ajouter dynamiquement des raquette au jeu
   * @return -1 si la partie et complète, le numéro de la raquette sinon
   */
-  public int addPastisRacket(){
+  public int addPastisRacket(PastisPlayer player){
     int player_num;
     if(players_nb >= playersMax){
       return -1; //Les joueurs sont au complet
@@ -123,7 +123,8 @@ public class MyWorldSPP extends PWorld implements IConfig {
                    MyEntity.RACKET,
                    Color.BLUE,
                    new Point(WIDTH/2f,HEIGHT/2f),
-                   new Zone((float)Math.PI*2*(player_num+1)/PLAYERS_NB, (float)Math.PI*2*player_num/PLAYERS_NB, angle )));
+                   new Zone((float)Math.PI*2*(player_num+1)/PLAYERS_NB, (float)Math.PI*2*player_num/PLAYERS_NB, angle ),
+                   player));
 
     return player_num;
   }

@@ -1,24 +1,23 @@
 package projet.game;
 
-import projet.physicEngine.*;
-import projet.physicEngine.common.*;
-
-import projet.graphic_engine.GUI.*;
-import projet.graphic_engine.*;
 import java.awt.Color;
-
-
-
-import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.EOFException;
-
-import javax.swing.JTextArea;
-import java.awt.Dimension;
-import java.lang.Exception;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JTextArea;
+
+import projet.graphic_engine.PContext;
+import projet.graphic_engine.PStage;
+import projet.graphic_engine.PWindow;
+import projet.graphic_engine.GUI.PButton;
+import projet.graphic_engine.GUI.PGridLayout;
+import projet.graphic_engine.GUI.PLabel;
+import projet.graphic_engine.GUI.PPanel;
 
 
 /**
@@ -73,6 +72,7 @@ public class Game implements IConfig{
    int portt;                                 // Port
    PastisPlayer player;                       // Client
    Vector<String> players = new Vector<>();   // Players list
+   int playersNbb;
 
    /**
    * Créateur d'un jeu
@@ -249,8 +249,8 @@ public class Game implements IConfig{
      playersNbB.addActionListener(new ActionListener(){
         public void actionPerformed(ActionEvent e){
           try{
-            int players = Integer.parseInt(playersNb.getText());
-            sppWorld.setNbPlayers(players);
+            playersNbb = Integer.parseInt(playersNb.getText());
+            sppWorld.setNbPlayers(playersNbb);
           }catch(Exception ex){
             System.out.println("Dommage");
           }
@@ -262,7 +262,7 @@ public class Game implements IConfig{
     run.addActionListener(new ActionListener(){
        public void actionPerformed(ActionEvent e){
           // Lancement du serveur
-          PastisServer server = new PastisServer(1234, 4, sppWorld);
+          PastisServer server = new PastisServer(1234, playersNbb, sppWorld);
           server.start();
           System.out.println("Le serveur a démarré !");
 
@@ -271,11 +271,13 @@ public class Game implements IConfig{
           try {
             System.out.println("L'hôte se connecte");
             player.connect(InetAddress.getLocalHost(), 1234, user);
+            sppWorld.addPastisRacket(player);
+            System.out.println(sppWorld.getRackets());
           } catch (UnknownHostException e1) {
             System.out.println("L'hôte ne peut pas se connecter !");
           }
 
-          //Lancement de la partie spp;
+          // Lancement de la partie spp
           spp();
        }
      });
@@ -346,8 +348,9 @@ public class Game implements IConfig{
           player = new PastisPlayer();
           try {
             player.connect(InetAddress.getLocalHost(), 1234, "user");
-            sppWorld.addPastisRacket();
+            sppWorld.addPastisRacket(player);
             System.out.println("Connecté au serveur !");
+            spp();
           } catch (UnknownHostException e1) {
             System.out.println("Impossible de se connecter au serveur !");
           }
@@ -388,7 +391,7 @@ public class Game implements IConfig{
      sppKeyboard = new MyKeyboardSPP(sppWorld);
      this.window.addKeyListener(sppKeyboard);
 
-     //On lance un thread avec le jeus
+     //On lance un thread avec le jeu spp
      new Thread(){
        public void run(){
          launchSPP();
@@ -432,15 +435,20 @@ public class Game implements IConfig{
         Object read = player.getMessage();
         if (read instanceof String) {
           String msg = (String) read;
+          System.out.println(msg);
           if (msg.split(" ")[0].equals("USERLIST")) {
-            players.add(msg.split(" ")[1]);
+            players = new Vector<>();
+            for (int i=1; i<msg.split(" ").length; i++) {
+              players.add(msg.split(" ")[i]);
+            }
             System.out.println(players);
           }
         } else if (read instanceof PastisNetworkData) {
           PastisNetworkData data = (PastisNetworkData) read;
+          System.out.println(data.toString());
           if (data.getMessage().equals("RACKETS")) {
             while (data.getRackets().size() > sppWorld.getRackets().size()) {
-              sppWorld.addPastisRacket();
+              sppWorld.addPastisRacket(null);
             }
             for (int i=0; i<data.getRackets().size(); i++) {
               sppWorld.setRacket(i, data.getRackets().get(i));

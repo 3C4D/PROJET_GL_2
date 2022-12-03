@@ -9,19 +9,20 @@ import projet.physicEngine.*;
 import projet.graphic_engine.drawable.*;
 
 import java.lang.Math;
+import java.util.Vector;
 import java.awt.Graphics;
 import java.awt.Color;
 
 /**
 * Classe définissant une raquette
 */
-public class PastisRacket extends MyEntity implements IConfig{
+public class PastisRacket extends MyEntity implements IConfig {
   private Color color;
   private Zone zone;
   private Point tableOrigin;
   private int num;
 
-  private PastisPlayer player;  // Le joueur à qui la raquette est atitrée
+  private PastisPlayer myPlayer;  // Le joueur à qui la raquette est atitrée
 
   /**
   * Classe définissant l'aspect graphique d'une raquette
@@ -98,6 +99,8 @@ public class PastisRacket extends MyEntity implements IConfig{
     // On ajoute son aspect graphique
     PastisRacketTexture texture = new PastisRacketTexture((int)position.getX(), (int)position.getY(), (int)MyWorldSPP.RACKET_WIDTH,(int)MyWorldSPP.RACKET_HEIGHT);
     this.setDrawable(texture);
+
+    myPlayer = player;
   }
 
   /**
@@ -118,6 +121,17 @@ public class PastisRacket extends MyEntity implements IConfig{
       //On rotationne le polygone
       Transform.rotationShape(this.body.getShape(), tableOrigin, -RACKET_VELOCITY);
     }
+
+    // On envoie sur le réseau la modification
+    if (myPlayer != null) {
+      System.out.println("Je met a jour");
+      PastisNetworkData data = new PastisNetworkData();
+      data.setMessage("RACKET");
+      Vector<PastisRacket> rsend = new Vector<>();
+      rsend.add(this);
+      data.setRackets(rsend);
+      myPlayer.sendMessage(data);
+    }
   }
 
   /**
@@ -130,6 +144,17 @@ public class PastisRacket extends MyEntity implements IConfig{
       //On rotationne le polygone
       zone.setAngle(angle + RACKET_VELOCITY);
       Transform.rotationShape(this.body.getShape(), tableOrigin, RACKET_VELOCITY);
+    }
+
+    // On envoie sur le réseau la modification
+    if (myPlayer != null) {
+      System.out.println("Je met a jour");
+      PastisNetworkData data = new PastisNetworkData();
+      data.setMessage("RACKET");
+      Vector<PastisRacket> rsend = new Vector<>();
+      rsend.add(this);
+      data.setRackets(rsend);
+      myPlayer.sendMessage(data);
     }
   }
 

@@ -6,7 +6,7 @@ import projet.physicEngine.*;
 import java.awt.*;
 
 
-public class PEntity {
+public class PEntity{
 
     protected PIDrawable drawable;
     protected PIAnimatedDrawable animatedDrawable;

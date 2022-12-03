@@ -66,8 +66,8 @@ public class PastisServer extends Server {
                     diffuseMessage(data, null);
                 } else if (receive.getMessage().split(" ")[0].equals("RACKET")) {
                     data.setRacket(receive.getRackets().get(0));
-                    data.setMessage("RACKET");
-                    diffuseMessage(data, receive.getMessage().split(" ")[1]);
+                    data.setMessage("RACKETS");
+                    diffuseMessage(data, null);
                 }
             } else if (read instanceof String) {
                 receive.setMessage((String) read);

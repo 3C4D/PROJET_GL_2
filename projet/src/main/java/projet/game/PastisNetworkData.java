@@ -81,7 +81,17 @@ public class PastisNetworkData  extends NetworkData {
      * @param _racket New racket
      */
     public void setRacket(PastisRacket _racket) {
-        rackets.setElementAt(_racket, _racket.getId());
+        boolean found = false;
+        for (int i=0; i<rackets.size(); i++) {
+            if (rackets.get(i).getId() == _racket.getId()) {
+                rackets.setElementAt(_racket, i);
+                found = true;
+            }
+        }
+        if (!found) {
+            rackets.add(_racket);
+        }
+        
     }
 
     /**

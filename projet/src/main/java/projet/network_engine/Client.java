@@ -92,7 +92,11 @@ public class Client {
      */
     public Object getMessage() throws EOFException {
         try {
-            return in.readObject();
+            if (in.available() > 0) {
+                return in.readObject();
+            } else {
+                return null;
+            }
         } catch (ClassNotFoundException | IOException e) {
             return null;
         }
