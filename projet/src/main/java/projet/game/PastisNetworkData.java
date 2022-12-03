@@ -27,7 +27,6 @@ public class PastisNetworkData  extends NetworkData {
      * Default constructor
      */
     PastisNetworkData() {
-        super();
         entities = new Vector<>();
         rackets = new Vector<>();
     }
@@ -81,9 +80,11 @@ public class PastisNetworkData  extends NetworkData {
      * @param _racket New racket
      */
     public void setRacket(PastisRacket _racket) {
+        System.out.println(_racket);
         boolean found = false;
         for (int i=0; i<rackets.size(); i++) {
             if (rackets.get(i).getId() == _racket.getId()) {
+                System.out.println("ICI" + getRackets().size());
                 rackets.setElementAt(_racket, i);
                 found = true;
             }

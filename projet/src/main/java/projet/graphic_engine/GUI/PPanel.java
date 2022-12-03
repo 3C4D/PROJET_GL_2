@@ -1,6 +1,7 @@
 package projet.graphic_engine.GUI;
 
 import java.awt.*;
+
 import javax.swing.*;
 
 public class PPanel extends JPanel {

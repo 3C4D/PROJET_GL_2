@@ -1,8 +1,9 @@
 package projet.physicEngine.common;
 
+import java.io.Serializable;
 import java.lang.Math;
 
-public class Vector2D{
+public class Vector2D implements Serializable {
   private Point start;
   private float coordX;
   private float coordY;

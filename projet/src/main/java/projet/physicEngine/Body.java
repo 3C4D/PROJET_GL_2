@@ -5,10 +5,11 @@ import projet.physicEngine.common.Transform;
 import projet.physicEngine.common.Vector2D;
 import projet.physicEngine.common.Point;
 
+import java.io.Serializable;
 import java.util.Vector;
 
 
-public class Body{
+public class Body implements Serializable {
   private BodyType bodyType;
   private Shape shape;
   private Point center;

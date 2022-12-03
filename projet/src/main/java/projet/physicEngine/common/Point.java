@@ -1,9 +1,11 @@
 package projet.physicEngine.common;
 
+import java.io.Serializable;
+
 /**
 * Permet de créer des points du plan 2D
 */
-public class Point{
+public class Point implements Serializable {
   private float x;
   private float y;
 

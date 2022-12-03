@@ -4,9 +4,10 @@ import projet.graphic_engine.drawable.*;
 import projet.physicEngine.*;
 
 import java.awt.*;
+import java.io.Serializable;
 
 
-public class PEntity{
+public class PEntity implements Serializable {
 
     protected PIDrawable drawable;
     protected PIAnimatedDrawable animatedDrawable;

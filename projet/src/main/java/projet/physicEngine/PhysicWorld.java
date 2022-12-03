@@ -4,9 +4,10 @@ import projet.physicEngine.common.Transform;
 import projet.physicEngine.common.Vector2D;
 import projet.physicEngine.common.Point;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PhysicWorld{
+public class PhysicWorld implements Serializable {
   protected ArrayList<Body> bodyList;
   protected CollisionListener collisionL;
   protected PolygonShape gameOutline;

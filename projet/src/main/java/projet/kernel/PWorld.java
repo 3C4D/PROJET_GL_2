@@ -1,12 +1,13 @@
 package projet.kernel;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.Vector;
 
 import projet.graphic_engine.PStage;
 import projet.physicEngine.PhysicWorld;
 
-public abstract class PWorld {
+public abstract class PWorld implements Serializable {
 
     protected PStage stage;
     protected PhysicWorld physicWorld;

@@ -1,11 +1,13 @@
 package projet.physicEngine;
 
+import java.io.Serializable;
+
 import projet.physicEngine.common.Point;
 
 /**
 * Permet de définir un box indépenamment de sa forme
 */
-public class Shape{
+public class Shape implements Serializable {
   /**
   * Enumération des types possible de box
   */

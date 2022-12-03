@@ -1,11 +1,12 @@
 package projet.physicEngine;
 
+import java.io.Serializable;
 import java.lang.Byte;
 
 /**
 * Permet un filtrage fin lors de la gestion de collision
 */
-public class Filter{
+public class Filter implements Serializable {
     public static byte DEFAULT = 0;
     private byte categoryBits;
     private byte maskBits;

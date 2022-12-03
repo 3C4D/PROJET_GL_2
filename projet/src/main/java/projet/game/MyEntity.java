@@ -1,13 +1,11 @@
 package projet.game;
 
-import java.io.Serializable;
-
 import projet.kernel.PEntity;
 
 /**
 * Classe représentant une entité du jeu
 */
-public class MyEntity extends PEntity implements Serializable {
+public class MyEntity extends PEntity {
   public static int BALL = 0;
   public static int RACKET= 1;
   public static int TABLE = 2;

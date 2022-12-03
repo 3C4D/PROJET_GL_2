@@ -27,7 +27,7 @@ public class PastisRacket extends MyEntity implements IConfig {
   /**
   * Classe définissant l'aspect graphique d'une raquette
   */
-  public class PastisRacketTexture extends PFixedTexturedDrawable{
+  public class PastisRacketTexture extends PFixedTexturedDrawable {
 
     public PastisRacketTexture(int x, int y, int width, int height){
       super(x,y,width,height);

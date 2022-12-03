@@ -3,9 +3,11 @@ package projet.physicEngine;
 import projet.physicEngine.common.*;
 import projet.physicEngine.Body.BodyType;
 import projet.physicEngine.Shape.ShapeType;
+
+import java.io.Serializable;
 import java.lang.Math;
 import java.util.ArrayList;
-public class CollisionListener{
+public class CollisionListener implements Serializable {
   protected PhysicWorld physicW;
 
   public CollisionListener(){

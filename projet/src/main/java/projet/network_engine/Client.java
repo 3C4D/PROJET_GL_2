@@ -5,12 +5,17 @@ package projet.network_engine;
 // Input/Output
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.io.EOFException;
 import java.io.IOException;
 
 // Networking things
 import java.net.InetAddress;
 import java.net.Socket;
+
+// Others
+import java.util.Vector;
+import java.util.LinkedList;
 
 /***** CLASS *****/
 
@@ -25,11 +30,31 @@ public class Client {
     private Socket connection;
 
     // Input/Output
+    public LinkedList<Object> messages;
     private ObjectOutputStream out;
     private ObjectInputStream in;
 
     // Others
     private String username;
+
+    private class ReadingThread extends Thread implements Serializable {
+        Client c;
+
+        ReadingThread(Client _c) {
+            c = _c;
+        }
+
+        @Override
+        public void run() {
+            while (true) {
+                try {
+                    messages.add(c.getMessage());
+                } catch (EOFException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
     /***** CONSTRUCTORS *****/
 
@@ -37,15 +62,16 @@ public class Client {
      * Default constructor
      */
     public Client() {
-        // Nothing to do
+        messages = new LinkedList<>();
     }
 
     /***** METHODS *****/
 
     /**
      * Connect to a server
-     * @param ip IP address of the server
-     * @param port Port of the server
+     * 
+     * @param ip       IP address of the server
+     * @param port     Port of the server
      * @param username Username of the client
      */
     public void connect(InetAddress _address, int _port, String _username) {
@@ -76,7 +102,8 @@ public class Client {
 
     /**
      * Send a message to the server
-     * @param message  The message to send
+     * 
+     * @param message The message to send
      */
     public void sendMessage(Object message) {
         try {
@@ -92,13 +119,13 @@ public class Client {
      */
     public Object getMessage() throws EOFException {
         try {
-            if (in.available() > 0) {
-                return in.readObject();
-            } else {
-                return null;
-            }
+            return in.readObject();
         } catch (ClassNotFoundException | IOException e) {
             return null;
         }
+    }
+
+    public void startReading() {
+        new ReadingThread(this).start();
     }
 }

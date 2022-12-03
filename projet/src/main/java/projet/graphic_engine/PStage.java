@@ -4,6 +4,8 @@ package projet.graphic_engine;
 
 
 import java.awt.*;
+import java.io.Serializable;
+
 import javax.swing.*;
 
 
@@ -15,7 +17,7 @@ import java.util.LinkedList;
 
 
 
-public class PStage {
+public class PStage implements Serializable {
 
     private int width;
     private int height;

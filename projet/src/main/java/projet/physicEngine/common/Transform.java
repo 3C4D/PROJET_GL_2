@@ -1,6 +1,9 @@
 package projet.physicEngine.common;
 
 import projet.physicEngine.Shape;
+
+import java.io.Serializable;
+
 import projet.physicEngine.CircleShape;
 import projet.physicEngine.PolygonShape;
 import projet.physicEngine.Shape.ShapeType;
@@ -8,7 +11,7 @@ import projet.physicEngine.Shape.ShapeType;
 /**
 * Permet de définir les transformation dans le plan 2D
 */
-public class Transform{
+public class Transform implements Serializable {
 
 
   /**

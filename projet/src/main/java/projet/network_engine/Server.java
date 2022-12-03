@@ -15,6 +15,8 @@ import java.util.concurrent.Executors;
 
 // Components
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Vector;
 
 /***** CLASS *****/
 
@@ -149,22 +151,10 @@ public abstract class Server extends Thread {
     }
 
     /**
-     * Get a message from a client
-     * @return The object read by the server if there is one, null otherwise
-     */
-    synchronized public Object getMessage(ObjectInputStream in) {
-        try {
-            return in.readObject();
-        } catch (ClassNotFoundException | IOException e) {
-            return null;
-        }
-    }
-
-    /**
      * Tasks the server will run with each client during execution
      * @param in
      */
-    public abstract void runningRoutine(ObjectInputStream in, String username);
+    public abstract void runningRoutine(ClientThread c, String username);
 
     /**
      * Wait for the end of client threads
