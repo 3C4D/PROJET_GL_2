@@ -162,8 +162,8 @@ public class Game implements IConfig{
      this.context.setBackground(Color.BLACK);
 
 
-     PGridLayout layout = new PGridLayout(2,1);
-     layout.setVgap((int)(HEIGHT/10));
+     PGridLayout layout = new PGridLayout(2,3);
+     layout.setVgap((int)(HEIGHT - HEIGHT/6));
      this.pongWorld.getStage().getGUI().setLayout(layout);
 
      //Initialisation du contrôle clavier

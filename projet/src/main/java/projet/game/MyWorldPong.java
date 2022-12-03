@@ -5,11 +5,14 @@ import projet.physicEngine.common.*;
 import projet.physicEngine.*;
 
 import projet.graphic_engine.*;
+import projet.graphic_engine.GUI.*;
 import projet.graphic_engine.drawable.*;
 
 
 import java.awt.Graphics;
 import java.awt.Color;
+import javax.swing.JTextArea;
+import java.awt.Font;
 
 /**
 * Classe définissant le monde de jeu
@@ -25,6 +28,22 @@ public class MyWorldPong extends PWorld {
   private float x, y;
   private float maxX, maxY, minX, minY;
 
+  private PLabel scoreA, scoreB;
+
+  public class LineTexture extends PFixedTexturedDrawable{
+
+    public LineTexture(int x, int y, int width, int height){
+      super(x,y,width,height);
+    }
+
+    @Override
+    public void paint(Graphics g){
+      System.out.println("PROUTE PROUTE");
+      g.setColor(Color.WHITE);
+      g.fillRect(this.x, this.y, this.width, this.height);
+      // g.drawLine(this.x, this.y, this.x+width, this.y+height);
+    }
+  }
 
   /**
   * @param largeur du jeu
@@ -72,6 +91,14 @@ public class MyWorldPong extends PWorld {
     this.addEntity(ball);
     pointA = 0;
     pointB = 0;
+    scoreA = new PLabel(""+pointA);
+    scoreB = new PLabel(""+pointB);
+    scoreA.setFont(new Font(Font.DIALOG, Font.PLAIN, 40));
+    scoreB.setFont(new Font(Font.DIALOG, Font.PLAIN, 40));
+    this.getStage().add(new LineTexture((int)(WIDTH/2f), 0, 150, (int)(HEIGHT)));
+    this.getStage().getGUI().add(scoreA);
+    this.getStage().getGUI().add(scoreB);
+
   }
 
   @Override
@@ -161,6 +188,7 @@ public class MyWorldPong extends PWorld {
   */
   public void addPointA(){
     this.pointA += 1;
+    this.scoreA.setText(""+pointA);
   }
 
   /**
@@ -168,6 +196,7 @@ public class MyWorldPong extends PWorld {
   */
   public void addPointB(){
     this.pointB += 1;
+    this.scoreB.setText(""+pointB);
   }
 
   /**
