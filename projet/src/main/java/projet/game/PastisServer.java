@@ -7,9 +7,6 @@ import projet.network_engine.ClientThread;
 // Server
 import projet.network_engine.Server;
 
-// Others 
-import java.util.LinkedList;
-
 /***** CLASS *****/
 
 /**
@@ -20,7 +17,6 @@ public class PastisServer extends Server {
 
     /***** PARAMETERS *****/
 
-    PastisNetworkData data;
     MyWorldSPP world;
 
     /***** CONSTRUCTORS *****/
@@ -35,17 +31,9 @@ public class PastisServer extends Server {
     public PastisServer(int _port, int _clientsNumber, MyWorldSPP _world) {
         super(_port, _clientsNumber);
         world = _world;
-        data = new PastisNetworkData();
     }
 
     /***** METHODS *****/
-
-    /**
-     * Update current entities during game session
-     */
-    private void updateEntities() {
-        data.setEntities(world.getBalls());
-    }
 
     /**
      * Definition of the server routine
@@ -56,6 +44,7 @@ public class PastisServer extends Server {
     @Override
     public void runningRoutine(ClientThread c, String username) {
         PastisNetworkData receive = new PastisNetworkData();
+        PastisNetworkData data = new PastisNetworkData();
         Object read = new Object();
         while (true) {
             if (c.messages.size() > 0) {
@@ -69,7 +58,7 @@ public class PastisServer extends Server {
                         if (receive.getMessage().split(" ")[0].equals("INIT")) {
                             diffuseMessage(world, null);
                         } else if (receive.getMessage().split(" ")[0].equals("UPDATE")) {
-                            updateEntities();
+                            data.setEntities(world.getBalls());
                             data.setMessage("UPDATE");
                             diffuseMessage(data, null);
                         } else if (receive.getMessage().split(" ")[0].equals("RACKET")) {
