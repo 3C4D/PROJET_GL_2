@@ -62,8 +62,7 @@ public class PastisRacket extends MyEntity implements IConfig {
   * @return une copie de la raquette courante
   */
   public PastisRacket copy(){
-    PastisRacket pp = new PastisRacket(this.getBody().getCenter(), this.type, this.color, this.tableOrigin, this.zone);
-    pp.num = this.num;
+    PastisRacket pp = new PastisRacket(this.getBody().getCenter(), this.type, this.color, this.tableOrigin, this.zone, this.myPlayer, this.num);
     return pp;
   }
 

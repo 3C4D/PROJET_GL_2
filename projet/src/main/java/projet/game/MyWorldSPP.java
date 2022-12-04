@@ -34,8 +34,13 @@ public class MyWorldSPP extends PWorld implements IConfig {
 
     // Création de la table
     Table table;
-    table = new Table(new Point(WIDTH/2f,HEIGHT/2f), (float)(HEIGHT/2f - 12f));
-    TABLE_SIZE = HEIGHT-24;
+    if(HEIGHT > WIDTH){
+      table = new Table(new Point(WIDTH/2f,HEIGHT/2f), (float)(WIDTH/2f - 12f));
+      TABLE_SIZE = WIDTH-24;
+    }else{
+      table = new Table(new Point(WIDTH/2f,HEIGHT/2f), (float)(HEIGHT/2f - 12f));
+      TABLE_SIZE = HEIGHT-24;
+    }
     this.addEntity(table);
 
     float size_zone = (float)(2 * Math.sin(Math.PI/PLAYERS_NB) * TABLE_SIZE/2);
@@ -46,7 +51,7 @@ public class MyWorldSPP extends PWorld implements IConfig {
 
     players_nb = 0;
     for(int i = 0; i<PLAYERS_NB; i++){
-      addPastisRacket();
+      addPastisRacket(null);
     }
 
   }
@@ -78,19 +83,11 @@ public class MyWorldSPP extends PWorld implements IConfig {
   * Permet de mettre à jour les informations d'une raquette
   */
   public void setRacket(int num, PastisRacket racket){
-    /*for (int i=0; i<entities.size(); i++) {
-      if (entities.get(i) instanceof PastisRacket) {
-        if (((PastisRacket) entities.get(i)).getId() == num) {
-          entities.set(i, racket);
-        }
-      }
-    }*/
     PastisRacket gameRacket = this.getRacket(num);
-    System.out.println("Mon body : " + gameRacket.getBody().toString());
-    System.out.println("Mon param : " + racket.getBody().toString());
+
     // gameRacket.getBody().setVelocity(racket.getBody().getVelocity());
     gameRacket.setBody(racket.getBody());
-    System.out.println("Le bodi dapre : " + gameRacket.getBody().toString());
+
   }
 
   /**
@@ -128,7 +125,9 @@ public class MyWorldSPP extends PWorld implements IConfig {
                    MyEntity.RACKET,
                    Color.BLUE,
                    new Point(WIDTH/2f,HEIGHT/2f),
-                   new Zone((float)Math.PI*2*(player_num+1)/playersMax, (float)Math.PI*2*player_num/playersMax, angle )));
+                   new Zone((float)Math.PI*2*(player_num+1)/playersMax, (float)Math.PI*2*player_num/playersMax, angle ),
+                   player,
+                   player_num));
 
     players_nb++;
     return player_num;
@@ -154,7 +153,7 @@ public class MyWorldSPP extends PWorld implements IConfig {
   */
   public Vector<PastisRacket> getRackets(){
     int i;
-    Vector<PastisRacket> pastisRackets = new Vector<PastisRacket>();
+    Vector pastisRackets = new Vector<PastisRacket>();
     for(i = 0; i < this.entities.size(); i++){
       if(this.entities.get(i).getType() == MyEntity.RACKET){
         pastisRackets.add((PastisRacket)this.entities.get(i));

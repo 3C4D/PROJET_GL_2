@@ -10,15 +10,13 @@ import projet.physicEngine.common.Vector2D;
 */
 public class MyKeyboardSPP extends KeyboardHandler{
   private MyWorldSPP world;
-  private PastisPlayer player;
 
   /**
   * @param le monde associé au jeu
   */
-  public MyKeyboardSPP(MyWorldSPP world, PastisPlayer player){
+  public MyKeyboardSPP(MyWorldSPP world){
     super();
     this.world = world;
-    this.player = player;
   }
 
   @Override
@@ -29,11 +27,19 @@ public class MyKeyboardSPP extends KeyboardHandler{
   public void actionKeyboardPressed(char letter, int code){
     switch (code) {
       case IKeyCode.KEY_RIGHT:
-        this.world.getRackets().get(player.racketId).moveDown();  //La raquette descend
+        this.world.getRackets().get(0).moveDown();  //La raquette descend
       break;
 
       case IKeyCode.KEY_LEFT:
-        this.world.getRackets().get(player.racketId).moveUp(); //La raquette monte
+        this.world.getRackets().get(0).moveUp(); //La raquette monte
+      break;
+
+      case IKeyCode.KEY_Z:
+        this.world.getRackets().get(1).moveUp(); //La raquette monte
+      break;
+
+      case IKeyCode.KEY_S:
+        this.world.getRackets().get(1).moveDown(); //La raquette descend
       break;
 
       default:

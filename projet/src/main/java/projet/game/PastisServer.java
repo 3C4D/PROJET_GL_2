@@ -42,45 +42,7 @@ public class PastisServer extends Server {
      * @param username The username of the client
      */
     @Override
-    public void runningRoutine(ClientThread c, String username) {
-        PastisNetworkData receive = new PastisNetworkData();
-        PastisNetworkData data = new PastisNetworkData();
-        Object read = new Object();
-        while (true) {
-            if (c.messages.size() > 0) {
-                read = c.messages.remove();
-                System.out.println("Sereur LIS");
-                System.out.println(read);
-                if (read != null) {
-                    if (read instanceof PastisNetworkData) {
-                        receive = (PastisNetworkData) read;
-                        System.out.println(receive.getMessage());
-                        if (receive.getMessage().split(" ")[0].equals("INIT")) {
-                            diffuseMessage(world, null);
-                        } else if (receive.getMessage().split(" ")[0].equals("UPDATE")) {
-                            data.setEntities(world.getBalls());
-                            data.setMessage("UPDATE");
-                            diffuseMessage(data, null);
-                        } else if (receive.getMessage().split(" ")[0].equals("RACKET")) {
-                            System.out.println("AV : " + world.getRackets());
-                            if (receive.getRackets().get(0).getId() >= world.getRackets().size()) {
-                                world.addPastisRacket(null);
-                            }
-                            world.setRacket(receive.getRackets().get(0).getId(), receive.getRackets().get(0));
-                            System.out.println("AP : " + world.getRackets());
-                            data.setRackets(world.getRackets());
-                            data.setMessage("RACKETS");
-                            diffuseMessage(data, "");
-                        }
-                    } else if (read instanceof String) {
-                        receive.setMessage((String) read);
-                        if (receive.getMessage().split(" ")[0].equals("DISCONNECT")) {
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        disconnectClient(receive.getMessage().split(" ")[1]);
+    public void runningRoutine(String username) {
+        // TODO
     }
 }

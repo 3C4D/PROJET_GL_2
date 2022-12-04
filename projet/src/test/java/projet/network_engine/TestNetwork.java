@@ -23,11 +23,11 @@ public class TestNetwork {
         }
 
         @Override
-        public void runningRoutine(ClientThread c, String username) {
+        public void runningRoutine(String username) {
             String message = "";
             do {
-                if (c.messages.size() > 0) {
-                    message = c.messages.remove().toString();
+                if (messages.size() > 0) {
+                    message = messages.remove().toString();
                     if (!message.split(" ")[0].equals("DISCONNECT")) {
                         diffuseMessage(message, username);
                     }
@@ -95,10 +95,10 @@ public class TestNetwork {
         client2.connect(InetAddress.getLocalHost(), 4003, "Client2");
         Thread.sleep(1000);
         client1.disconnect();
-        Thread.sleep(2000);
+        Thread.sleep(5000);
         assertEquals(1, server.getClientsConnected());
         client2.disconnect();
-        Thread.sleep(2000);
+        Thread.sleep(5000);
         assertEquals(0, server.getClientsConnected());
     }
 }
