@@ -51,6 +51,8 @@ public class PStage {
       catch(Exception e){
         // e.printStackTrace();
       }
+
+      this.GUI.repaint();
     }
 
     /**

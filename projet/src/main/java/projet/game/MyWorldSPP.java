@@ -45,12 +45,14 @@ public class MyWorldSPP extends PWorld implements IConfig {
 
     float size_zone = (float)(2 * Math.sin(Math.PI/PLAYERS_NB) * TABLE_SIZE/2);
     RACKET_WIDTH = size_zone/3;
-    RACKET_HEIGHT = TABLE_SIZE/10;
+    RACKET_HEIGHT = RACKET_WIDTH/2f;
 
     addBall();
 
-
     players_nb = 0;
+    for(int i = 0; i<PLAYERS_NB; i++){
+      addPastisRacket();
+    }
 
   }
 
@@ -113,18 +115,19 @@ public class MyWorldSPP extends PWorld implements IConfig {
     if(players_nb >= playersMax){
       return -1; //Les joueurs sont au complet
     }
+    System.out.println("POUTE");
 
     player_num = players_nb;
-    players_nb++;
 
-    float angle = (float)(2*(player_num)*Math.PI/PLAYERS_NB);
+    float angle = (float)(2*(player_num)*Math.PI/playersMax);
     Point position = new Point((float)((TABLE_SIZE/2f)*Math.cos(angle) + RACKET_WIDTH/2f), (float)((TABLE_SIZE/2f)*Math.sin(angle) + RACKET_HEIGHT/2f));
     this.addEntity(new PastisRacket(position,
                    MyEntity.RACKET,
                    Color.BLUE,
                    new Point(WIDTH/2f,HEIGHT/2f),
-                   new Zone((float)Math.PI*2*(player_num+1)/PLAYERS_NB, (float)Math.PI*2*player_num/PLAYERS_NB, angle )));
+                   new Zone((float)Math.PI*2*(player_num+1)/playersMax, (float)Math.PI*2*player_num/playersMax, angle )));
 
+    players_nb++;
     return player_num;
   }
 

@@ -56,6 +56,15 @@ public class PastisRacket extends MyEntity implements IConfig{
   }
 
   /**
+  * @return une copie de la raquette courante
+  */
+  public PastisRacket copy(){
+    PastisRacket pp = new PastisRacket(this.getBody().getCenter(), this.type, this.color, this.tableOrigin, this.zone);
+    pp.num = this.num;
+    return pp;
+  }
+
+  /**
   * @param sa position initiale
   * @param son type pour savoir si c'est la raquette A ou B
   * @param sa couleur
@@ -109,13 +118,17 @@ public class PastisRacket extends MyEntity implements IConfig{
   */
   public void moveUp(){
     float angle = zone.getAngle();
+    System.out.println("AVANT MOUV "+this.body.getShape());
     //On vérifie que la raquette ne sorte pas de sa zone
     if((angle - RACKET_VELOCITY) <= zone.getMaxAngle() && (angle - RACKET_VELOCITY) >= zone.getMinAngle()){
       //On met à jour l'angle
       zone.setAngle(angle - RACKET_VELOCITY);
+      //Mise à jour de la position
+      Transform.rotation(this.body.getCenter(), tableOrigin, -RACKET_VELOCITY);
       //On rotationne le polygone
       Transform.rotationShape(this.body.getShape(), tableOrigin, -RACKET_VELOCITY);
     }
+    System.out.println("APRES MOUV "+this.body.getShape());
   }
 
   /**
@@ -127,6 +140,9 @@ public class PastisRacket extends MyEntity implements IConfig{
     if((angle + RACKET_VELOCITY) <= zone.getMaxAngle() && (angle + RACKET_VELOCITY) >= zone.getMinAngle()){
       //On rotationne le polygone
       zone.setAngle(angle + RACKET_VELOCITY);
+      //Mise à jour de la position
+      Transform.rotation(this.body.getCenter(), tableOrigin, RACKET_VELOCITY);
+
       Transform.rotationShape(this.body.getShape(), tableOrigin, RACKET_VELOCITY);
     }
   }
