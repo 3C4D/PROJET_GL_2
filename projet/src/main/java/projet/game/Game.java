@@ -425,11 +425,7 @@ public class Game implements IConfig {
          while(!isFinished.get()){
 
            stage.add(background);
-
-
            context.repaint();
-
-
            try{
              Thread.sleep(1000/60);
            }catch(Exception e){
