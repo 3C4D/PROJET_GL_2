@@ -53,16 +53,13 @@ public class AIpong extends RacketPong implements IConfig{
                 solution=true;
             }
 
+            System.out.println(p.getY());
+            System.out.println(p.getX());
             if(solution){
-                n = (int)(Math.random() * 100);
                 if(this.getBody().getCenter().getY()<this.height-100 && this.getBody().getCenter().getY()<p.getY()){
                     if(this.levelOfDifficulty!=4){
-                        if(n>10){
                             this.moveDown();
-                        }
-                        else{
-                            this.moveUp();
-                        }
+
 
                     }
 
@@ -71,12 +68,8 @@ public class AIpong extends RacketPong implements IConfig{
                 }
                 else if( this.getBody().getCenter().getY()>100 && this.getBody().getCenter().getY()>p.getY()){
                     if(this.levelOfDifficulty!=4){
-                        if(n>10){
                             this.moveUp();
-                        }
-                        else{
-                            this.moveDown();
-                        }
+
 
                     }
                    // this.moveUp();
