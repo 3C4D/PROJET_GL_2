@@ -155,7 +155,7 @@ public abstract class Server extends Thread {
      * @param c the client thread itself
      * @param username the username of the client
      */
-    public abstract void runningRoutine(ClientThread c, String username);
+    public abstract void runningRoutine(String username);
 
     /**
      * Wait for the end of client threads

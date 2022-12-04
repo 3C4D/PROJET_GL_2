@@ -85,6 +85,6 @@ public class ClientThread implements Runnable {
      */
     public void run() {
         new ReadingThread().start();
-        server.runningRoutine(this, username);
+        server.runningRoutine(username);
     }
 }
