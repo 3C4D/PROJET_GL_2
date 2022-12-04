@@ -136,11 +136,36 @@ public class MyCollisionListenerSPP extends CollisionListener{
     //vy*xc - vx*yc + c > 0 --> point (xc, yc) au dessus de la droite
     //Sinon en dessous
     if( (v.getCoordY()*ball.getCenter().getX() - v.getCoordX()*ball.getCenter().getY() + c) >= 0 ){
-      // System.out.println("TOUCHE DE LA DROITE");
-      return 0;
+      if(ball.getCenter().getX() >= ((MyPhysicWorldSPP)physicW).getOrigin().getX()){
+        if(ball.getCenter().getY() >= ((MyPhysicWorldSPP)physicW).getOrigin().getY()){ //1er Quart
+          return 1;
+        }else{ //2eme Quart
+          return 0;
+        }
+      }else{
+        if(ball.getCenter().getY() >= ((MyPhysicWorldSPP)physicW).getOrigin().getY()){ //4er Quart
+          return 1;
+        }else{ //3eme Quart
+          return 1;
+        }
+
+      }
     }else{
-      // System.out.println("TOUCHE DE LA GAUCHE");
-      return 1;
+      if(ball.getCenter().getX() >= ((MyPhysicWorldSPP)physicW).getOrigin().getX()){
+        if(ball.getCenter().getY() >= ((MyPhysicWorldSPP)physicW).getOrigin().getY()){ //1er Quart
+          return 1;
+
+        }else{ //2eme Quart
+          return 0;
+        }
+      }else{
+        if(ball.getCenter().getY() >= ((MyPhysicWorldSPP)physicW).getOrigin().getY()){ //4er Quart
+          return 1;
+        }else{ //3eme Quart
+          return 0;
+        }
+
+      }
     }
   }
 
@@ -186,7 +211,7 @@ public class MyCollisionListenerSPP extends CollisionListener{
 
           theta = (float)(alpha - Math.PI); //Angle de rotation
         }
-        ball.applyImpulse(new Vector2D(normal.getCoordX()/normal.norme2(),normal.getCoordY()/normal.norme2()));
+        // ball.applyImpulse(new Vector2D(normal.getCoordX()/normal.norme2(),normal.getCoordY()/normal.norme2()));
       break;
 
       case 1:
@@ -204,7 +229,7 @@ public class MyCollisionListenerSPP extends CollisionListener{
 
           theta = (float)(alpha - Math.PI); //Angle de rotation
         }
-        ball.applyImpulse(new Vector2D(normal.getCoordX()/normal.norme2(),normal.getCoordY()/normal.norme2()));
+        // ball.applyImpulse(new Vector2D(normal.getCoordX()/normal.norme2(),normal.getCoordY()/normal.norme2()));
       break;
 
       case 2:
@@ -222,7 +247,7 @@ public class MyCollisionListenerSPP extends CollisionListener{
 
           theta = (float)(alpha - Math.PI); //Angle de rotation
         }
-        ball.applyImpulse(new Vector2D(normal.getCoordX()/normal.norme2(),normal.getCoordY()/normal.norme2()));
+        // ball.applyImpulse(new Vector2D(normal.getCoordX()/normal.norme2(),normal.getCoordY()/normal.norme2()));
       break;
 
       case 3:
@@ -240,11 +265,11 @@ public class MyCollisionListenerSPP extends CollisionListener{
 
           theta = (float)(alpha - Math.PI); //Angle de rotation
         }
-        ball.applyImpulse(new Vector2D(normal.getCoordX()/normal.norme2(),normal.getCoordY()/normal.norme2()));
+        // ball.applyImpulse(new Vector2D(normal.getCoordX()/normal.norme2(),normal.getCoordY()/normal.norme2()));
       break;
 
       case 4:
-        normal = new Vector2D(s3,s4);
+        normal = new Vector2D(s1,s0);
         middle = new Point((s4.getX()+s5.getX())/2f, (s4.getY()+s5.getY())/2f);
         if(leftOrRightCote((CircleShape)ball.getShape(), normal, middle) == 0){//A gauche
           prodS = normal.scalarProduct(velocity);
@@ -258,7 +283,7 @@ public class MyCollisionListenerSPP extends CollisionListener{
 
           theta = (float)(alpha - Math.PI); //Angle de rotation
         }
-        ball.applyImpulse(new Vector2D(normal.getCoordX()/normal.norme2(),normal.getCoordY()/normal.norme2()));
+        // ball.applyImpulse(new Vector2D(normal.getCoordX()/normal.norme2(),normal.getCoordY()/normal.norme2()));
       break;
 
       case 5:
@@ -276,7 +301,7 @@ public class MyCollisionListenerSPP extends CollisionListener{
 
           theta = (float)(alpha - Math.PI); //Angle de rotation
         }
-        ball.applyImpulse(new Vector2D(normal.getCoordX()/normal.norme2(),normal.getCoordY()/normal.norme2()));
+        // ball.applyImpulse(new Vector2D(normal.getCoordX()/normal.norme2(),normal.getCoordY()/normal.norme2()));
       break;
 
       default:

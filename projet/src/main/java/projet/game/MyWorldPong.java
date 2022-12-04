@@ -5,11 +5,14 @@ import projet.physicEngine.common.*;
 import projet.physicEngine.*;
 
 import projet.graphic_engine.*;
+import projet.graphic_engine.GUI.*;
 import projet.graphic_engine.drawable.*;
 
 
 import java.awt.Graphics;
 import java.awt.Color;
+import javax.swing.JTextArea;
+import java.awt.Font;
 
 /**
 * Classe définissant le monde de jeu
@@ -24,18 +27,36 @@ public class MyWorldPong extends PWorld {
   private int count = 0, pow = 0;
   private float x, y;
   private float maxX, maxY, minX, minY;
+  private int ia;
 
+  private PLabel scoreA, scoreB;
+
+  public class LineTexture extends PFixedTexturedDrawable{
+
+    public LineTexture(int x, int y, int width, int height){
+      super(x,y,width,height);
+    }
+
+    @Override
+    public void paint(Graphics g){
+      System.out.println("PROUTE PROUTE");
+      g.setColor(Color.WHITE);
+      g.fillRect(this.x, this.y, this.width, this.height);
+      // g.drawLine(this.x, this.y, this.x+width, this.y+height);
+    }
+
+  }
 
   /**
   * @param largeur du jeu
   * @param hauteur du jeu
+  * @param qui spécifie si il y a une racket IA dans le jeu
   */
-  public MyWorldPong(float width, float height){
+  public MyWorldPong(float width, float height, int ia){
     super(width, height);
 
     // Création de mon monde physique
     this.physicWorld = new MyPhysicWorldPong(width, height, this);
-    System.out.println(physicWorld.getGameOutline());
 
     WIDTH = (int)width;
     HEIGHT = (int)height;
@@ -60,18 +81,33 @@ public class MyWorldPong extends PWorld {
     Ball ball = new Ball(new Point(width/2f,height/2f), BALL_SIZE, Color.WHITE);
     ball.getBody().setVelocity(new Vector2D(x,y));
 
-    // Création de la première raqutte
-    RacketPong racket1 = new RacketPong(new Point(RACKET_WIDTH/2f, height/2f), MyEntity.RACKET_A, RACKET_WIDTH, RACKET_HEIGHT);
+    this.ia = ia;
+    if(ia == -1){
+      // Création de la première raquette
+      RacketPong racket1 = new RacketPong(new Point(RACKET_WIDTH/2f, height/2f), MyEntity.RACKET_A, RACKET_WIDTH, RACKET_HEIGHT);
+      this.addEntity(racket1);
+    }else{
+      // Création de la première raqutte qui est une IA
+      AIpong racket1 = new AIpong(WIDTH,HEIGHT, new Point(RACKET_WIDTH/2f, height/2f), MyEntity.RACKET_A, 0, ia);
+      this.addEntity(racket1);
+    }
 
     // Création de la deuxième raquette
     RacketPong racket2 = new RacketPong(new Point(width - RACKET_WIDTH/2f, height/2f), MyEntity.RACKET_B, RACKET_WIDTH, RACKET_HEIGHT);
 
     //On les ajoute a la liste d'entité
-    this.addEntity(racket1);
     this.addEntity(racket2);
     this.addEntity(ball);
     pointA = 0;
     pointB = 0;
+    scoreA = new PLabel(""+pointA);
+    scoreB = new PLabel(""+pointB);
+    scoreA.setFont(new Font(Font.DIALOG, Font.PLAIN, 40));
+    scoreB.setFont(new Font(Font.DIALOG, Font.PLAIN, 40));
+    this.getStage().add(new LineTexture((int)(WIDTH/2f), 0, 150, (int)(HEIGHT)));
+    this.getStage().getGUI().add(scoreA);
+    this.getStage().getGUI().add(scoreB);
+
   }
 
   @Override
@@ -79,6 +115,10 @@ public class MyWorldPong extends PWorld {
     int i;
     // On calcule lance l'écouteur de collision
     ((MyPhysicWorldPong)physicWorld).launchCollisionListener();
+
+    if(ia != -1){
+      ((AIpong)getRacketA()).racketDecision(getBall());
+    }
 
     //On calcule le déplacement de chacune des corps des entités
     for(i = 0; i < this.entities.size(); i++){
@@ -161,6 +201,7 @@ public class MyWorldPong extends PWorld {
   */
   public void addPointA(){
     this.pointA += 1;
+    this.scoreA.setText(""+pointA);
   }
 
   /**
@@ -168,6 +209,7 @@ public class MyWorldPong extends PWorld {
   */
   public void addPointB(){
     this.pointB += 1;
+    this.scoreB.setText(""+pointB);
   }
 
   /**

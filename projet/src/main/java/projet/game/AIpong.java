@@ -9,13 +9,15 @@ import java.lang.Math;
 public class AIpong extends RacketPong implements IConfig{
     private int levelOfDifficulty; //0 to 10
     int step;
-    int windowSize;
     Point racket;
     int type;
     int side;
-    AIpong(int windowSize,Point racket,int type,int side,int levelOfDifficulty){
+    int width;
+    int height;
+    AIpong(int width,int height,Point racket,int type,int side,int levelOfDifficulty){
         super(racket,type, MyWorldPong.RACKET_WIDTH, MyWorldPong.RACKET_HEIGHT);
-        this.windowSize=windowSize;
+        this.width=width;
+        this.height=height;
         this.side=side;
         this.levelOfDifficulty=levelOfDifficulty;
     }
@@ -40,27 +42,24 @@ public class AIpong extends RacketPong implements IConfig{
         ||(this.side==1 && p.getX()>200 && this.levelOfDifficulty==2)||(this.levelOfDifficulty==2 &&this.side==0 && p.getX()<300)
         ){
         if((this.side==0 && v.getCoordX()<0)||(this.side==1 && v.getCoordX()>0)){
-            while(((this.side==0 && p.getX()>20)||(this.side==1 && p.getX()<this.windowSize-20)&&this.getBody().getCenter().getX()-p.getX()<20 && p.getX()-this.getBody().getCenter().getX()<20  )){
-                if((p.getY()<0 || p.getY()>this.windowSize)){
+            while(((this.side==0 && p.getX()>20)||(this.side==1 && p.getX()<this.width-20)&&this.getBody().getCenter().getX()-p.getX()<20 && p.getX()-this.getBody().getCenter().getX()<20  )){
+                if((p.getY()<0 || p.getY()>this.height)){
                     v.setCoordY(v.getCoordY()*-1);
                 }
                 p.setX(p.getX()+v.getCoordX());
                 p.setY(p.getY()+v.getCoordY());
             }
-            if(p.getY()>0 && p.getY()<this.windowSize){
+            if(p.getY()>0 && p.getY()<this.height){
                 solution=true;
             }
 
+            System.out.println(p.getY());
+            System.out.println(p.getX());
             if(solution){
-                n = (int)(Math.random() * 100);
-                if(this.getBody().getCenter().getY()<this.windowSize-100 && this.getBody().getCenter().getY()<p.getY()){
+                if(this.getBody().getCenter().getY()<this.height-100 && this.getBody().getCenter().getY()<p.getY()){
                     if(this.levelOfDifficulty!=4){
-                        if(n>10){
                             this.moveDown();
-                        }
-                        else{
-                            this.moveUp();
-                        }
+
 
                     }
 
@@ -69,12 +68,8 @@ public class AIpong extends RacketPong implements IConfig{
                 }
                 else if( this.getBody().getCenter().getY()>100 && this.getBody().getCenter().getY()>p.getY()){
                     if(this.levelOfDifficulty!=4){
-                        if(n>10){
                             this.moveUp();
-                        }
-                        else{
-                            this.moveDown();
-                        }
+
 
                     }
                    // this.moveUp();
@@ -89,11 +84,11 @@ public class AIpong extends RacketPong implements IConfig{
     }
     else{
         if(levelOfDifficulty==3){
-           if( this.getBody().getCenter().getY()<this.windowSize/2){
+           if( this.getBody().getCenter().getY()<this.height/2){
                     this.moveDown();
 
                 }
-            else if(this.getBody().getCenter().getY()>this.windowSize/2)
+            else if(this.getBody().getCenter().getY()>this.height/2)
                 this.moveUp();
             }
             else{

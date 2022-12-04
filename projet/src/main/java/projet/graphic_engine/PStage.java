@@ -53,6 +53,8 @@ public class PStage implements Serializable {
       catch(Exception e){
         // e.printStackTrace();
       }
+
+      this.GUI.repaint();
     }
 
     /**
