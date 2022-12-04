@@ -10,9 +10,6 @@ import java.io.IOException;
 // Networking things
 import java.net.Socket;
 
-// Others
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 /***** CLASS *****/
 
 /**
@@ -27,7 +24,6 @@ public class ClientThread implements Runnable {
     private Server server;
 
     // Input/Output
-    public ConcurrentLinkedQueue<Object> messages;
     private ObjectInputStream in;
     private ObjectOutputStream out;
 
@@ -40,8 +36,7 @@ public class ClientThread implements Runnable {
             while (true) {
                 Object msg = getMessage();
                 if (msg != null) {
-                    messages.add(msg);
-                    System.out.println(messages);
+                    server.messages.add(msg);
                 }
             }
         }
@@ -65,7 +60,6 @@ public class ClientThread implements Runnable {
             String message = in.readObject().toString();
             username = message.split(" ")[1];
             server.connectClient(username, out, in);
-            messages = new ConcurrentLinkedQueue<>();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

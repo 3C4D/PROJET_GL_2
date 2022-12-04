@@ -4,12 +4,14 @@ package projet.network_engine;
 
 // Input/Output
 import java.io.ObjectOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.IOException;
+
 // Networking things
 import java.net.ServerSocket;
 
 // Threads
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,11 +31,12 @@ public abstract class Server extends Thread {
     private ServerSocket listener;
 
     // Threads
+    public ConcurrentLinkedQueue<Object> messages;
     private ExecutorService executor;
 
     // Clients
-    public HashMap<String, ObjectOutputStream> clientsOut;     // Client's names and output streams
-    public HashMap<String, ObjectInputStream> clientsIn;       // Client's names and input streams
+    public HashMap<String, ObjectOutputStream> clientsOut;      // Client's names and output streams
+    public HashMap<String, ObjectInputStream> clientsIn;        // Client's names and input streams
     private int clientsConnected;                               // The current number of clients connected
     private int clientsNumber;                                  // The maximum number of clients that should be connected
 
@@ -57,6 +60,7 @@ public abstract class Server extends Thread {
             clientsConnected = 0;
             clientsOut = new HashMap<String, ObjectOutputStream>();
             clientsIn = new HashMap<String, ObjectInputStream>();
+            messages = new ConcurrentLinkedQueue<>();
         } catch (IOException e) {
             System.out.println("Invalid port number");
         }
