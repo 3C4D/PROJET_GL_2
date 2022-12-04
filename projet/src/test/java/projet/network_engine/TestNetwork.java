@@ -22,13 +22,15 @@ public class TestNetwork {
             super(_port, _clientsNumber);
         }
 
-        @Override 
+        @Override
         public void runningRoutine(ClientThread c, String username) {
             String message = "";
             do {
-                message = c.messages.remove().toString();
-                if (!message.split(" ")[0].equals("DISCONNECT")) {
-                    diffuseMessage(message, username);
+                if (c.messages.size() > 0) {
+                    message = c.messages.remove().toString();
+                    if (!message.split(" ")[0].equals("DISCONNECT")) {
+                        diffuseMessage(message, username);
+                    }
                 }
             } while (!message.split(" ")[0].equals("DISCONNECT"));
             System.out.println(message.split(" ")[1] + " disconnected");
@@ -62,7 +64,11 @@ public class TestNetwork {
         client2.startReading();
         client1.sendMessage("Hello");
         Thread.sleep(2000);
-        assertEquals("Hello", client2.messages.removeFirst().toString());
+        String msg = "";
+        while (client2.messages.size() > 0) {
+            msg = client2.messages.removeFirst().toString();
+        }
+        assertEquals("Hello", msg);
     }
 
     @Test
