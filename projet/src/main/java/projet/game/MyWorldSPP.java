@@ -34,13 +34,8 @@ public class MyWorldSPP extends PWorld implements IConfig {
 
     // Création de la table
     Table table;
-    if(HEIGHT > WIDTH){
-      table = new Table(new Point(WIDTH/2f,HEIGHT/2f), (float)(WIDTH/2f - 12f));
-      TABLE_SIZE = WIDTH-24;
-    }else{
-      table = new Table(new Point(WIDTH/2f,HEIGHT/2f), (float)(HEIGHT/2f - 12f));
-      TABLE_SIZE = HEIGHT-24;
-    }
+    table = new Table(new Point(WIDTH/2f,HEIGHT/2f), (float)(HEIGHT/2f - 12f));
+    TABLE_SIZE = HEIGHT-24;
     this.addEntity(table);
 
     float size_zone = (float)(2 * Math.sin(Math.PI/PLAYERS_NB) * TABLE_SIZE/2);
@@ -81,19 +76,19 @@ public class MyWorldSPP extends PWorld implements IConfig {
   * Permet de mettre à jour les informations d'une raquette
   */
   public void setRacket(int num, PastisRacket racket){
-    for (int i=0; i<entities.size(); i++) {
+    /*for (int i=0; i<entities.size(); i++) {
       if (entities.get(i) instanceof PastisRacket) {
         if (((PastisRacket) entities.get(i)).getId() == num) {
           entities.set(i, racket);
         }
       }
-    }
-    /*PastisRacket gameRacket = this.getRacket(num);
+    }*/
+    PastisRacket gameRacket = this.getRacket(num);
     System.out.println("Mon body : " + gameRacket.getBody().toString());
     System.out.println("Mon param : " + racket.getBody().toString());
     // gameRacket.getBody().setVelocity(racket.getBody().getVelocity());
     gameRacket.setBody(racket.getBody());
-    System.out.println("Le bodi dapre : " + gameRacket.getBody().toString());*/
+    System.out.println("Le bodi dapre : " + gameRacket.getBody().toString());
   }
 
   /**

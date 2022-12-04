@@ -148,7 +148,7 @@ public class PastisRacket extends MyEntity implements IConfig {
     }
 
     // On envoie sur le réseau la modification
-    if (myPlayer != null) {
+    if (myPlayer != null && myPlayer.racketId == num) {
       System.out.println("Je met a jour");
       PastisNetworkData data = new PastisNetworkData();
       data.setMessage("RACKET");

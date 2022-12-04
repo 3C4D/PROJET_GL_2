@@ -3,10 +3,8 @@ package projet.game;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.EOFException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.security.MessageDigest;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -352,7 +350,7 @@ public class Game implements IConfig {
           do {
             System.out.println("Init demandée");
             if (player.messages.size() > 0) {
-              msg = player.messages.removeFirst();
+              msg = player.messages.remove();
               player.messages.remove(msg);
               // Initialisation liste joueurs
               if (msg instanceof String && ((String) msg).split(" ")[0].equals("USERLIST")) {
@@ -366,6 +364,12 @@ public class Game implements IConfig {
           } while (!(msg instanceof MyWorldSPP));
           sppWorld = (MyWorldSPP) msg;
           player.racketId = sppWorld.addPastisRacket(player);
+          PastisNetworkData data = new PastisNetworkData();
+          data.setMessage("RACKET");
+          Vector<PastisRacket> rsend = new Vector<>();
+          rsend.add(sppWorld.getRacket(player.racketId));
+          data.setRackets(rsend);
+          player.sendMessage(data);
           init = true;
           System.out.println("Connecté au serveur et raquette ajoutée!");
           System.out.println("id1 : " + sppWorld.getRackets());
@@ -452,7 +456,7 @@ public class Game implements IConfig {
       }
 
       if (init && player.messages.size() > 0) {
-        Object read = player.messages.removeFirst();
+        Object read = player.messages.remove();
         if (read != null) {
           System.out.println(read);
 
