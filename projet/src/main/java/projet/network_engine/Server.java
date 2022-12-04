@@ -15,8 +15,6 @@ import java.util.concurrent.Executors;
 
 // Components
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Vector;
 
 /***** CLASS *****/
 
@@ -42,7 +40,6 @@ public abstract class Server extends Thread {
     // Others
 
     private int port;                                           // Port where the server is listenning
-    private volatile boolean isRunning;
 
     /***** CONSTRUCTORS *****/
 
@@ -60,7 +57,6 @@ public abstract class Server extends Thread {
             clientsConnected = 0;
             clientsOut = new HashMap<String, ObjectOutputStream>();
             clientsIn = new HashMap<String, ObjectInputStream>();
-            isRunning = true;
         } catch (IOException e) {
             System.out.println("Invalid port number");
         }
@@ -152,16 +148,15 @@ public abstract class Server extends Thread {
 
     /**
      * Tasks the server will run with each client during execution
-     * @param in
+     * @param c the client thread itself
+     * @param username the username of the client
      */
     public abstract void runningRoutine(ClientThread c, String username);
 
     /**
      * Wait for the end of client threads
-     * @throws InterruptedException
      */
-    synchronized public void end() throws InterruptedException {
-        isRunning = false;
+    synchronized public void end() {
         executor.shutdown();
     }
 
@@ -170,12 +165,13 @@ public abstract class Server extends Thread {
      */
     public void run() {
         try {
-            while (isRunning) {
+            while (clientsConnected < clientsNumber) {
                 // Trying to handle a connection
                 Runnable worker = new ClientThread(listener.accept(), this);
                 executor.execute(worker);
             }
         } catch (IOException e) {
+            System.out.println("Impossible d'accepter des connexions");
         }
     }
 }

@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
-// Others
-import java.util.LinkedList;
+// Components
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /***** CLASS *****/
 
@@ -29,13 +29,16 @@ public class Client {
     private Socket connection;
 
     // Input/Output
-    public LinkedList<Object> messages;
+    public ConcurrentLinkedQueue<Object> messages;
     private ObjectOutputStream out;
     private ObjectInputStream in;
 
     // Others
     private String username;
 
+    /**
+     * Internal thread class to read from the ObjectInputStream
+     */
     private class ReadingThread extends Thread implements Serializable {
         Client c;
 
@@ -51,7 +54,7 @@ public class Client {
                     msg = c.getMessage();
                     if (msg != null) {
                         messages.add(msg);
-                    } 
+                    }
                 } catch (EOFException e) {
                     e.printStackTrace();
                 }
@@ -65,7 +68,7 @@ public class Client {
      * Default constructor
      */
     public Client() {
-        messages = new LinkedList<>();
+        messages = new ConcurrentLinkedQueue<>();
     }
 
     /***** METHODS *****/
@@ -110,9 +113,7 @@ public class Client {
      */
     public void sendMessage(Object message) {
         try {
-            System.out.println("Je send");
             out.writeObject(message);
-            System.out.println("C'est ici la merde");
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();

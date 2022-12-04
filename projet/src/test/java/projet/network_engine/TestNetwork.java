@@ -66,7 +66,7 @@ public class TestNetwork {
         Thread.sleep(2000);
         String msg = "";
         while (client2.messages.size() > 0) {
-            msg = client2.messages.removeFirst().toString();
+            msg = client2.messages.remove().toString();
         }
         assertEquals("Hello", msg);
     }
