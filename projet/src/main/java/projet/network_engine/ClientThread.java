@@ -30,6 +30,18 @@ public class ClientThread implements Runnable {
     // Others
     private String username;
 
+    private class ReadingThread extends Thread {
+        @Override
+        public void run() {
+            while (true) {
+                Object msg = getMessage();
+                if (msg != null) {
+                    server.messages.add(msg);
+                }
+            }
+        }
+    }
+
     /***** CONSTRUCTORS *****/
 
     /**
@@ -56,9 +68,23 @@ public class ClientThread implements Runnable {
     /***** METHODS *****/
 
     /**
+     * Get a message from a client
+     * @return The object read by the server if there is one, null otherwise
+     */
+    public Object getMessage() {
+        try {
+            return in.readObject();
+
+        } catch (ClassNotFoundException | IOException e) {
+            return null;
+        }
+    }
+
+    /**
      * Run method : instructions the server will execute with every client
      */
     public void run() {
-        server.runningRoutine(in, username);
+        new ReadingThread().start();
+        server.runningRoutine(username);
     }
 }

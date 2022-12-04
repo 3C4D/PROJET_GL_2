@@ -18,7 +18,7 @@ public class NetworkData implements Serializable {
     /**
      * Default constructor
      */
-    NetworkData() {}
+    protected NetworkData() {}
 
     /**
      * Constructor with message

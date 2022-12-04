@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 // Networking things
 import java.net.ServerSocket;
-
+import java.util.concurrent.ConcurrentLinkedQueue;
 // Threads
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -38,9 +38,8 @@ public abstract class Server extends Thread {
     private int clientsNumber;                                  // The maximum number of clients that should be connected
 
     // Others
-
+    public ConcurrentLinkedQueue<Object> messages;
     private int port;                                           // Port where the server is listenning
-    private volatile boolean isRunning;
 
     /***** CONSTRUCTORS *****/
 
@@ -58,7 +57,7 @@ public abstract class Server extends Thread {
             clientsConnected = 0;
             clientsOut = new HashMap<String, ObjectOutputStream>();
             clientsIn = new HashMap<String, ObjectInputStream>();
-            isRunning = true;
+            messages = new ConcurrentLinkedQueue<>();
         } catch (IOException e) {
             System.out.println("Invalid port number");
         }
@@ -149,29 +148,15 @@ public abstract class Server extends Thread {
     }
 
     /**
-     * Get a message from a client
-     * @return The object read by the server if there is one, null otherwise
-     */
-    synchronized public Object getMessage(ObjectInputStream in) {
-        try {
-            return in.readObject();
-        } catch (ClassNotFoundException | IOException e) {
-            return null;
-        }
-    }
-
-    /**
      * Tasks the server will run with each client during execution
-     * @param in
+     * @param username the username of the client
      */
-    public abstract void runningRoutine(ObjectInputStream in, String username);
+    public abstract void runningRoutine(String username);
 
     /**
      * Wait for the end of client threads
-     * @throws InterruptedException
      */
-    synchronized public void end() throws InterruptedException {
-        isRunning = false;
+    synchronized public void end() {
         executor.shutdown();
     }
 
@@ -180,12 +165,13 @@ public abstract class Server extends Thread {
      */
     public void run() {
         try {
-            while (isRunning) {
+            while (clientsConnected < clientsNumber) {
                 // Trying to handle a connection
                 Runnable worker = new ClientThread(listener.accept(), this);
                 executor.execute(worker);
             }
         } catch (IOException e) {
+            System.out.println("Impossible d'accepter des connexions");
         }
     }
 }
