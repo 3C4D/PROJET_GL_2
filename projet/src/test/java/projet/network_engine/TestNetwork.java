@@ -9,10 +9,6 @@ import org.junit.jupiter.api.Test;
 // Exceptions
 import java.net.UnknownHostException;
 import java.io.EOFException;
-import java.io.IOException;
-
-// Input/Output
-import java.io.ObjectInputStream;
 
 // Networking
 import java.net.InetAddress;
@@ -26,17 +22,15 @@ public class TestNetwork {
             super(_port, _clientsNumber);
         }
 
-        @Override 
-        public void runningRoutine(ObjectInputStream in, String username) {
+        @Override
+        public void runningRoutine(String username) {
             String message = "";
             do {
-                try {
-                    message = in.readObject().toString();
-                } catch (ClassNotFoundException | IOException e) {
-                    break;
-                }
-                if (!message.split(" ")[0].equals("DISCONNECT")) {
-                    diffuseMessage(message, username);
+                if (messages.size() > 0) {
+                    message = messages.remove().toString();
+                    if (!message.split(" ")[0].equals("DISCONNECT")) {
+                        diffuseMessage(message, username);
+                    }
                 }
             } while (!message.split(" ")[0].equals("DISCONNECT"));
             System.out.println(message.split(" ")[1] + " disconnected");
@@ -65,11 +59,16 @@ public class TestNetwork {
         Client client1 = new Client();
         Client client2 = new Client();
         client1.connect(InetAddress.getLocalHost(), 4001, "Client1");
+        client1.startReading();
         client2.connect(InetAddress.getLocalHost(), 4001, "Client2");
+        client2.startReading();
         client1.sendMessage("Hello");
-        Thread.sleep(1000);
-        client2.getMessage();
-        assertEquals("Hello", client2.getMessage());
+        Thread.sleep(2000);
+        String msg = "";
+        while (client2.messages.size() > 0) {
+            msg = client2.messages.remove().toString();
+        }
+        assertEquals("Hello", msg);
     }
 
     @Test
@@ -81,13 +80,9 @@ public class TestNetwork {
         client1.connect(InetAddress.getLocalHost(), 4002, "Client1");
         client2.connect(InetAddress.getLocalHost(), 4002, "Client2");
         Thread.sleep(1000);
-        NetworkData data = new NetworkData("");
-        data = (NetworkData) client1.getMessage();
-        assertEquals("USERLIST Client1", data.message);
-        data = (NetworkData) client1.getMessage();
-        assertEquals("USERLIST Client1 Client2", data.message);
-        data = (NetworkData) client2.getMessage();
-        assertEquals("USERLIST Client1 Client2", data.message);
+        assertEquals("USERLIST Client1", client1.getMessage());
+        assertEquals("USERLIST Client1 Client2", client1.getMessage());
+        assertEquals("USERLIST Client1 Client2", client2.getMessage());
     }
 
     @Test
@@ -100,10 +95,10 @@ public class TestNetwork {
         client2.connect(InetAddress.getLocalHost(), 4003, "Client2");
         Thread.sleep(1000);
         client1.disconnect();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         assertEquals(1, server.getClientsConnected());
         client2.disconnect();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         assertEquals(0, server.getClientsConnected());
     }
 }
