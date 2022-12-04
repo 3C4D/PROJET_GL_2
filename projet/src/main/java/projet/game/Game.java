@@ -101,7 +101,7 @@ public class Game implements IConfig{
      });
 
      PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
-     System.out.println(background.loadTexture("projet/src/main/resources/images/bottle.png"));
+     System.out.println(background.loadTexture("src/main/resources/images/bottle.png"));
      System.out.println("");
      PGridLayout layout = new PGridLayout(2,1);
 
@@ -181,7 +181,7 @@ public class Game implements IConfig{
 
 
      PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
-     System.out.println(background.loadTexture("projet/src/main/resources/images/bottle.png"));
+     background.loadTexture("src/main/resources/images/bottle.png");
 
 
      PGridLayout layout = new PGridLayout(2,1);
@@ -300,7 +300,7 @@ public class Game implements IConfig{
 
 
      PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
-     System.out.println(background.loadTexture("projet/src/main/resources/images/bottle.png"));
+     System.out.println(background.loadTexture("src/main/resources/images/bottle.png"));
 
      PGridLayout layout = new PGridLayout(2,1);
      stage.getGUI().setBorder(BorderFactory.createEmptyBorder((int)(HEIGHT/1.7), (WIDTH/12), 0, 100));
@@ -380,6 +380,9 @@ public class Game implements IConfig{
      });
      run.setEnabled(false);
 
+     PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
+     background.loadTexture("src/main/resources/images/context.png");
+
      PGridLayout layout = new PGridLayout(3,3);
      layout.setVgap((int)(HEIGHT/10));
      stage.getGUI().setLayout(layout);
@@ -394,6 +397,25 @@ public class Game implements IConfig{
 
      this.context.changeStage(stage);
      this.window.setVisible(true);
+
+     new Thread(){
+       public void run(){
+         while(!isFinished.get()){
+
+           stage.add(background);
+
+
+           context.repaint();
+
+
+           try{
+             Thread.sleep(1000/60);
+           }catch(Exception e){
+             e.printStackTrace();
+           }
+         }
+       }
+     }.start();
    }
 
    /**
@@ -578,7 +600,7 @@ public class Game implements IConfig{
 
 
      PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
-     System.out.println(background.loadTexture("projet/src/main/resources/images/bottle.png"));
+     System.out.println(background.loadTexture("src/main/resources/images/bottle.png"));
 
      PGridLayout layout = new PGridLayout(2,1);
      stage.getGUI().setBorder(BorderFactory.createEmptyBorder((int)(HEIGHT/1.7), (WIDTH/12), 0, 100));
@@ -772,7 +794,7 @@ public class Game implements IConfig{
    */
    public void launchPong(){
      PFixedTexturedDrawable background = new PFixedTexturedDrawable(WIDTH/3, 0, WIDTH/3, HEIGHT);
-    background.loadTexture("projet/src/main/resources/images/pointille_3.png");
+    background.loadTexture("src/main/resources/images/pointille_3.png");
 
     this.pongWorld.getStage().getGUI().setBorder(BorderFactory.createEmptyBorder(0, WIDTH/12, 0, 0));
      while(!pongEnd) {
