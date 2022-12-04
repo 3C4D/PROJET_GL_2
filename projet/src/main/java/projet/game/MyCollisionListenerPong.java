@@ -19,10 +19,21 @@ public class MyCollisionListenerPong extends CollisionListener{
   private MyWorldPong world;
   public int count = 0;
 
+  private SoundPlayer ballWallSound;
+  private SoundPlayer ballRacketSound;
+
   /**
   * Son constructeur
   */
   public MyCollisionListenerPong(MyPhysicWorldPong pw, MyWorldPong w){
+    try{
+      ballWallSound = new SoundPlayer("sounds/balle1.wav");
+      ballRacketSound = new SoundPlayer("sounds/balle2.wav");
+    }
+    catch(Exception e){
+      e.printStackTrace();
+    }
+
     this.physicW = pw;
     this.world = w;
   }
@@ -99,6 +110,13 @@ public class MyCollisionListenerPong extends CollisionListener{
     Vector2D newVel;
     Vector2D oppositeRotation;
     float alpha, theta=0, prodS;
+
+    try{
+      ballRacketSound.play(false, .6f);
+    }
+    catch(Exception e){
+      e.printStackTrace();
+    }
 
     //On cherche le numéro du côté de la raquette que la balle touche
     int interNum = racketCollision((CircleShape)ball.getShape(), racket);
@@ -190,8 +208,16 @@ public class MyCollisionListenerPong extends CollisionListener{
 
     //Si c'est une ball
     if(body.getShape().getType() == ShapeType.CIRCLE){
+
       switch (interNum) {
        case 0: // Côté haut
+         try{
+           ballWallSound.play(false, .6f);
+         }
+         catch(Exception e){
+           e.printStackTrace();
+         }
+
          if(velocity.getCoordX() > 0){ //arrive de la gauche
            normal = new Vector2D(velocity.getStart(),1,0);
            prodS = velocity.scalarProduct(normal);
@@ -211,6 +237,13 @@ public class MyCollisionListenerPong extends CollisionListener{
        break;
 
        case 2: //Côté bas
+         try{
+           ballWallSound.play(false, .6f);
+         }
+         catch(Exception e){
+           e.printStackTrace();
+         }
+
          if(velocity.getCoordX() > 0){ //arrive de la gauche
            normal = new Vector2D(velocity.getStart(),1,0);
            prodS = velocity.scalarProduct(normal);
