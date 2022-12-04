@@ -19,8 +19,7 @@ public class MyCollisionListenerPong extends CollisionListener{
   private MyWorldPong world;
   public int count = 0;
 
-  private SoundPlayer ballWallSound;
-  private SoundPlayer ballRacketSound;
+  private SoundPlayer ballWallSound, ballRacketSound;
 
   /**
   * Son constructeur
@@ -267,12 +266,24 @@ public class MyCollisionListenerPong extends CollisionListener{
          world.removeBall();
          world.addPointA();
          world.replay();
+         try{
+           new SoundPlayer("sounds/siuu.wav").play(false, .6f);
+         }
+         catch(Exception e){
+           e.printStackTrace();
+         }
        break;
 
        case 3: //Point pour la raquette B
          world.removeBall();
          world.addPointB();
          world.replay();
+         try{
+           new SoundPlayer("sounds/siuu.wav").play(false, .6f);
+         }
+         catch(Exception e){
+           e.printStackTrace();
+         }
        break;
 
        default:
