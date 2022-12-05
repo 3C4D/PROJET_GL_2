@@ -13,22 +13,15 @@ import projet.network_engine.Server;
  */
 public class PongServer extends Server {
 
-    /***** PARAMETERS *****/
-
-    MyWorldSPP world;
-
     /***** CONSTRUCTORS *****/
 
     /**
      * Constructor for the PongServer class
-     * 
      * @param _port
      * @param _clientsNumber
-     * @param _world
      */
-    public PongServer(int _port, int _clientsNumber, MyWorldSPP _world) {
+    public PongServer(int _port, int _clientsNumber) {
         super(_port, _clientsNumber);
-        world = _world;
     }
 
     /***** METHODS *****/
