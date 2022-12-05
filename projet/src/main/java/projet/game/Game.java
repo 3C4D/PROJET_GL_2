@@ -108,9 +108,7 @@ public class Game implements IConfig {
       }
     });
 
-    // PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
-    // System.out.println(background.loadTexture("src/main/resources/images/bottle.png"));
-    // System.out.println("");
+
     PGridLayout layout = new PGridLayout(2, 1);
 
     stage.getGUI().setBorder(BorderFactory.createEmptyBorder((int) (HEIGHT / 1.7), (WIDTH / 12), 0, 100));
@@ -204,7 +202,6 @@ public class Game implements IConfig {
    * Permet de créer le menu du pong
    */
   public void pongMenu() {
-    System.out.println("EHOH JE SUIS LA");
     pongEnd = false;
     PStage stage = new PStage(WIDTH, HEIGHT);
     this.window.setTitle("PONG");
@@ -284,8 +281,6 @@ public class Game implements IConfig {
       }
     });
 
-    // PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
-    // System.out.println(background.loadTexture("src/main/resources/images/bottle.png"));
 
     PGridLayout layout = new PGridLayout(2, 1);
     stage.getGUI().setBorder(BorderFactory.createEmptyBorder((int) (HEIGHT / 1.7), (WIDTH / 12), 0, 100));
@@ -328,7 +323,7 @@ public class Game implements IConfig {
           run.setEnabled(true);
 
         } catch (Exception ex) {
-          System.out.println("Dommage");
+          System.out.println("Port invalide");
         }
       }
     });
@@ -598,9 +593,6 @@ public class Game implements IConfig {
       }
     });
 
-    // PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
-    // System.out.println(background.loadTexture("src/main/resources/images/bottle.png"));
-
     PGridLayout layout = new PGridLayout(2, 1);
     stage.getGUI().setBorder(BorderFactory.createEmptyBorder((int) (HEIGHT / 1.7), (WIDTH / 12), 0, 100));
 
@@ -767,7 +759,6 @@ public class Game implements IConfig {
     // On empeche que la fenetre soit redimensionnée
     this.window.setResizable(false);
 
-    // System.out.println(this.pongWorld.getStage());
     this.context.changeStage(this.sppWorld.getStage());
     this.context.setBackground(Color.WHITE);
 

@@ -194,7 +194,6 @@ public class MyCollisionListenerSPP extends CollisionListener{
 
     //On cherche le numéro du côté de la raquette que la balle touche
     int interNum = racketCollision((CircleShape)ball.getShape(), racket);
-    if(interNum != -1) System.out.println("TOUCHE COTE : "+interNum);
     switch (interNum) {
       case 0:
         normal = new Vector2D(s3,s2);
@@ -307,11 +306,8 @@ public class MyCollisionListenerSPP extends CollisionListener{
       default:
       break;
     }
-    // System.out.println("VITESSE AVANT : "+ball.getVelocity().getCoordX()+" , "+ball.getVelocity().getCoordY()+" )");
-    // System.out.println("ANGLE ROT: "+theta);
     oppositeRotation = ball.getVelocity().opposite().vectorRotation(2*theta);
     ball.setVelocity(oppositeRotation); //MAJ de la vitesse
-    // System.out.println("VITESSE APRES : "+ball.getVelocity().getCoordX()+" , "+ball.getVelocity().getCoordY()+" )");
     }
 
 

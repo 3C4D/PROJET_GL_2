@@ -21,7 +21,6 @@ public class SoundRunner extends Thread{
     long time = sp.getTime();
 
     // On attends que la musique se finisse
-    System.out.println("joue");
     while(!sp.isEnded()){
       try{
         Thread.sleep(500);

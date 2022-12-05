@@ -115,7 +115,6 @@ public class MyWorldSPP extends PWorld implements IConfig {
     if(players_nb >= playersMax){
       return -1; //Les joueurs sont au complet
     }
-    System.out.println("POUTE");
 
     player_num = players_nb;
 

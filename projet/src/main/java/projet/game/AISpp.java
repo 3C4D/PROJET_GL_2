@@ -97,13 +97,7 @@ public class AISpp extends PastisRacket implements IConfig{
         p.setY(p.getY()+v.getCoordY());
         distanceVecteur=p.distance(pos1);
         distanceVecteur+=p.distance(pos2);
-        ////System.out.println("la balle : ");
-            //System.out.println(p.getX());
-            //System.out.println(p.getY());
         if(distanceVecteur<distanceInitial){
-            //System.out.println("distanceVecteur:"+distanceVecteur);
-            //System.out.println("distanceInitial:"+distanceInitial);
-                //System.out.println(p.getX());
         int distanceParcouru=0;
         int iteration=0;
             while(!line(pos1,pos2,p,this.getTableOrigin()) && iteration<100){
@@ -112,15 +106,14 @@ public class AISpp extends PastisRacket implements IConfig{
                 iteration+=1;
             }
             if(iteration<1000){
-                //System.out.println("on se deplace");
                 if(this.getBody().getCenter().getY()>0){
                     if(this.getBody().getCenter().getX()>p.getX()){
-                       // //System.out.println("on descends");
+
                         this.moveDown();
                         return "DOWN";
                     }
                     else if(this.getBody().getCenter().getX()<p.getX()){
-                       // //System.out.println("on monte");
+                  
                         this.moveUp();
                         return "UP";
                     }

@@ -111,9 +111,7 @@ public class PWindow extends JFrame {
      */
     public void removeAndAddContext(PContext context) {
         this.contexts.remove(0);
-        System.out.println("APRES REMOVE"+this.contexts);
         this.contexts.add(context);
-        System.out.println("APRES ADD"+this.contexts);
         this.windowSizeChanged();
 
         this.add(context);

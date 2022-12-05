@@ -118,7 +118,6 @@ public class PastisRacket extends MyEntity implements IConfig{
   */
   public void moveUp(){
     float angle = zone.getAngle();
-    System.out.println("AVANT MOUV "+this.body.getShape());
     //On vérifie que la raquette ne sorte pas de sa zone
     if((angle - RACKET_VELOCITY) <= zone.getMaxAngle() && (angle - RACKET_VELOCITY) >= zone.getMinAngle()){
       //On met à jour l'angle
@@ -128,7 +127,6 @@ public class PastisRacket extends MyEntity implements IConfig{
       //On rotationne le polygone
       Transform.rotationShape(this.body.getShape(), tableOrigin, -RACKET_VELOCITY);
     }
-    System.out.println("APRES MOUV "+this.body.getShape());
   }
 
   /**

@@ -53,8 +53,6 @@ public class AIpong extends RacketPong implements IConfig{
                 solution=true;
             }
 
-            System.out.println(p.getY());
-            System.out.println(p.getX());
             if(solution){
                 if(this.getBody().getCenter().getY()<this.height-100 && this.getBody().getCenter().getY()<p.getY()){
                     if(this.levelOfDifficulty!=4){

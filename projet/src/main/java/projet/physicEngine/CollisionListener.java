@@ -578,7 +578,6 @@ public class CollisionListener{
               }
             }
 
-            // System.out.println("INTERSECTION");
           }
 
       }
