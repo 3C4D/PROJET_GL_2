@@ -120,6 +120,7 @@ public class RacketPong extends MyEntity implements IConfig {
 
     // Si on est en réseau on envoie les infos
     if (player != null) {
+      System.out.println("J'envoie sur le réseau");
       if (MyEntity.RACKET_A == this.getType()) {
         player.sendMessage("MVT RACKET_A 0;" + RACKET_VELOCITY);
       } else {
@@ -136,6 +137,7 @@ public class RacketPong extends MyEntity implements IConfig {
 
     // Si on est en réseau on envoie les infos
     if (player != null) {
+      System.out.println("J'envoie sur le réseau");
       if (MyEntity.RACKET_A == this.getType()) {
         player.sendMessage("MVT RACKET_A 0;-" + RACKET_VELOCITY);
       } else {
@@ -152,6 +154,7 @@ public class RacketPong extends MyEntity implements IConfig {
 
     // Si on est en réseau on envoie les infos
     if (player != null) {
+      System.out.println("J'envoie sur le réseau");
       if (MyEntity.RACKET_A == this.getType()) {
         player.sendMessage("MVT RACKET_A 0;" + RACKET_VELOCITY);
       } else {
@@ -168,6 +171,7 @@ public class RacketPong extends MyEntity implements IConfig {
 
     // Si on est en réseau on envoie les infos
     if (player != null) {
+      System.out.println("J'envoie sur le réseau");
       if (MyEntity.RACKET_A == this.getType()) {
         player.sendMessage("MVT RACKET_A 0;0");
       } else {

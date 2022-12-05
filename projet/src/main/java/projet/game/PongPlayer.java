@@ -39,8 +39,10 @@ public class PongPlayer extends Client {
         String concern = "";
         String vector = "";
 
+        System.out.println("Le nombre de messages : " + messages.size());
         if (messages.size() > 0) {
             message = messages.remove().toString();
+            System.out.println("Mon message : " + message);
 
             if (message.split(" ")[0].equals("MVT")) {
                 concern = message.split(" ")[1];

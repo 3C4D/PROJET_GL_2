@@ -185,7 +185,7 @@ public class Game implements IConfig {
     };
     new Timer(delay, taskPerformer).start();
   }
-  
+
   /**
    * Permet de créer le menu du pong
    */
@@ -479,7 +479,7 @@ public class Game implements IConfig {
     });
 
     // Création du monde du jeu
-    this.pongWorld = new MyWorldPong(WIDTH, HEIGHT, -1);
+    this.pongWorld = new MyWorldPong(WIDTH, HEIGHT, -2);
     this.pongWorld.getStage().getGUI().add(menu);
     this.context.changeStage(this.pongWorld.getStage());
     this.context.setBackground(Color.BLACK);
