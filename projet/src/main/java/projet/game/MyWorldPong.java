@@ -34,7 +34,6 @@ public class MyWorldPong extends PWorld {
 
     @Override
     public void paint(Graphics g) {
-      System.out.println("PROUTE PROUTE");
       g.setColor(Color.WHITE);
       g.fillRect(this.x, this.y, this.width, this.height);
       // g.drawLine(this.x, this.y, this.x+width, this.y+height);
