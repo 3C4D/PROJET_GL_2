@@ -28,25 +28,10 @@ public class MyWorldPong extends PWorld {
 
   private PongPlayer player;
 
-  public class LineTexture extends PFixedTexturedDrawable {
-
-    public LineTexture(int x, int y, int width, int height) {
-      super(x, y, width, height);
-    }
-
-    @Override
-    public void paint(Graphics g) {
-      g.setColor(Color.WHITE);
-      g.fillRect(this.x, this.y, this.width, this.height);
-      // g.drawLine(this.x, this.y, this.x+width, this.y+height);
-    }
-
-  }
-
   /**
-   * @param largeur du jeu
-   * @param hauteur du jeu
-   * @param qui     spécifie si il y a une racket IA dans le jeu
+   * @param width largeur du jeu
+   * @param hei hauteur du jeu
+   * @param ia  qui spécifie si il y a une racket IA dans le jeu
    */
   public MyWorldPong(float width, float height, int ia) {
     super(width, height);
@@ -114,9 +99,10 @@ public class MyWorldPong extends PWorld {
   }
 
   /**
-   * @param largeur du jeu
-   * @param hauteur du jeu
-   * @param qui     spécifie si il y a une racket IA dans le jeu
+   * @param width largeur du jeu
+   * @param height hauteur du jeu
+   * @param ia qui spécifie si il y a une racket IA dans le jeu
+   * @param player le joueur actuel
    */
   public MyWorldPong(float width, float height, int ia, PongPlayer player) {
     super(width, height);
@@ -229,14 +215,14 @@ public class MyWorldPong extends PWorld {
   }
 
   /**
-  *
+  * @param x la  nouvelle valeur x de vitesse de la balle
   */
   public void setX(float x){
     this.x = x;
   }
 
   /**
-  *
+  * @param y la  nouvelle valeur y de vitesse de la balle
   */
   public void setY(float y){
     this.y = y;
@@ -244,6 +230,8 @@ public class MyWorldPong extends PWorld {
 
   /**
   * Pemet d'ajouter une raquette au jeu
+  * @param type si c'est la racket A ou la racket B
+  * @param player le joueur qui possède la raquette
   */
   public void addPongRacket(int type, PongPlayer player){
     RacketPong racket;
@@ -296,7 +284,7 @@ public class MyWorldPong extends PWorld {
   }
 
   /**
-  *
+  * Permet de supprimer la balle du jeu si il y en a une
   */
   public void removeBall() {
     Ball ball = this.getBall();
@@ -336,14 +324,15 @@ public class MyWorldPong extends PWorld {
   }
 
   /**
-  *
+  * Permet de savoir si on joue en réseau ou non
+  * @return true si on joue en réseau, false sinon
   */
   public boolean isNetwork(){
     return (ia == -2);
   }
 
   /**
-  *
+  * Permet de recréer une balle  suite à une balle sorti du jeu
   */
   public void replay() {
     // On recrée une balle que l'on ajoute au jeu
@@ -372,11 +361,12 @@ public class MyWorldPong extends PWorld {
       }
       ball.getBody().setVelocity(new Vector2D(x, y));
       this.addEntity(ball);
-    
+
   }
 
   /**
-  *
+  * Permet de recréer une balle  suite à une balle sorti du jeu
+  * @param a permet de savoir quelle raquette a marqué le point
   */
   public void replay(int a) {
     // On recrée une balle que l'on ajoute au jeu

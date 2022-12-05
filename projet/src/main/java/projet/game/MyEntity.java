@@ -14,7 +14,7 @@ public class MyEntity extends PEntity{
   public static int RACKET_B = 8;
 
   /**
-  * @param le type de l'entit&
+  * @param type le type de l'entit&
   */
   public MyEntity(int type){
     super(type);

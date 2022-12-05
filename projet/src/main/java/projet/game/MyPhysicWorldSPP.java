@@ -11,8 +11,8 @@ public class MyPhysicWorldSPP extends PhysicWorld{
   private float height;
 
   /**
-  * @param sa largeur
-  * @param sa hauteur
+  * @param width sa largeur
+  * @param height sa hauteur
   */
   public MyPhysicWorldSPP(float width, float height){
     super(width, height);

@@ -8,8 +8,8 @@ import projet.physicEngine.PhysicWorld;
 public class MyPhysicWorldPong extends PhysicWorld{
 
   /**
-  * @param sa largeur
-  * @param sa hauteur
+  * @param width sa largeur
+  * @param height sa hauteur
   */
   public MyPhysicWorldPong(float width, float height, MyWorldPong w){
     super(width, height);

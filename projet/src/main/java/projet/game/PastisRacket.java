@@ -55,19 +55,13 @@ public class PastisRacket extends MyEntity implements IConfig{
     }
   }
 
-  /**
-  * @return une copie de la raquette courante
-  */
-  public PastisRacket copy(){
-    PastisRacket pp = new PastisRacket(this.getBody().getCenter(), this.type, this.color, this.tableOrigin, this.zone);
-    pp.num = this.num;
-    return pp;
-  }
 
   /**
-  * @param sa position initiale
-  * @param son type pour savoir si c'est la raquette A ou B
-  * @param sa couleur
+  * @param position sa position initiale
+  * @param type son type pour savoir si c'est la raquette A ou B
+  * @param color sa couleur
+  * @param tableOrigin l'origine du cercle correspondant à la table
+  * @param zone la zone de déplacement de la raquette
   */
   public PastisRacket(Point position, int type, Color color, Point tableOrigin, Zone zone){
     super(type);
@@ -105,6 +99,15 @@ public class PastisRacket extends MyEntity implements IConfig{
     // On ajoute son aspect graphique
     PastisRacketTexture texture = new PastisRacketTexture((int)position.getX(), (int)position.getY(), (int)MyWorldSPP.RACKET_WIDTH,(int)MyWorldSPP.RACKET_HEIGHT);
     this.setDrawable(texture);
+  }
+
+  /**
+  * @return une copie de la raquette courante
+  */
+  public PastisRacket copy(){
+    PastisRacket pp = new PastisRacket(this.getBody().getCenter(), this.type, this.color, this.tableOrigin, this.zone);
+    pp.num = this.num;
+    return pp;
   }
 
   /**

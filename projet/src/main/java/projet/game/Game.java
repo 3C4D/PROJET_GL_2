@@ -92,7 +92,6 @@ public class Game implements IConfig {
     pongB.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         pongMenu();
-        // isFinished.set(true);
       }
     });
 
@@ -104,7 +103,6 @@ public class Game implements IConfig {
         // Création du monde du jeu
         sppWorld = new MyWorldSPP(WIDTH, HEIGHT);
         sppMenu();
-        // isFinished.set(true);
       }
     });
 
@@ -126,15 +124,6 @@ public class Game implements IConfig {
 
      this.isFinished = new AtomicBoolean(false);
 
-     // int delay = 1000/25; //milliseconds
-     // ActionListener taskPerformer = new ActionListener() {
-     //     public void actionPerformed(ActionEvent evt) {
-     //       stage.add(background);
-     //       context.repaint();
-     //     }
-     // };
-     // new Timer(delay, taskPerformer).start();
-
   }
 
   /**
@@ -153,7 +142,6 @@ public class Game implements IConfig {
     pongB.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         pongMenu();
-        isFinished.set(true);
       }
     });
 
@@ -165,13 +153,8 @@ public class Game implements IConfig {
         // Création du monde du jeu
         sppWorld = new MyWorldSPP(WIDTH, HEIGHT);
         sppMenu();
-
-        isFinished.set(true);
       }
     });
-
-    // PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
-    // background.loadTexture("src/main/resources/images/bottle.png");
 
     PGridLayout layout = new PGridLayout(2, 1);
     layout.setVgap((int) (HEIGHT / 10));
@@ -185,17 +168,6 @@ public class Game implements IConfig {
     this.context.setBackground(Color.WHITE);
     this.context.changeStage(stage);
     this.window.setVisible(true);
-
-    this.isFinished.set(false);
-
-    // int delay = 1000/25; //milliseconds
-    // ActionListener taskPerformer = new ActionListener() {
-    //     public void actionPerformed(ActionEvent evt) {
-    //       stage.add(background);
-    //       context.repaint();
-    //     }
-    // };
-    // new Timer(delay, taskPerformer).start();
   }
 
   /**
@@ -293,17 +265,6 @@ public class Game implements IConfig {
 
     this.context.changeStage(stage);
     this.window.setVisible(true);
-
-    // this.isFinished.set(false);
-
-    // int delay = 1000/25; //milliseconds
-    // ActionListener taskPerformer = new ActionListener() {
-    //     public void actionPerformed(ActionEvent evt) {
-    //       stage.add(background);
-    //       context.repaint();
-    //     }
-    // };
-    // new Timer(delay, taskPerformer).start();
    }
 
   /**
@@ -364,9 +325,6 @@ public class Game implements IConfig {
     });
     run.setEnabled(false);
 
-    // PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
-    // background.loadTexture("src/main/resources/images/context.png");
-
     PGridLayout layout = new PGridLayout(3, 3);
     layout.setVgap((int) (HEIGHT / 10));
     stage.getGUI().setLayout(layout);
@@ -378,21 +336,6 @@ public class Game implements IConfig {
 
     this.context.changeStage(stage);
     this.window.setVisible(true);
-
-    // new Thread() {
-    //   public void run() {
-    //     while (!isFinished.get()) {
-    //
-    //       stage.add(background);
-    //       context.repaint();
-    //       try {
-    //         Thread.sleep(1000 / 25);
-    //       } catch (Exception e) {
-    //         e.printStackTrace();
-    //       }
-    //     }
-    //   }
-    // }.start();
   }
 
   /**
@@ -527,7 +470,7 @@ public class Game implements IConfig {
   /**
    * Permet de créer une partie de PONG avec une IA
    *
-   * @param le niveau de l'IA
+   * @param level le niveau de l'IA ou -1 si pas d'IA
    */
   public void pongIA(int level) {
     pongEnd = false;
@@ -604,25 +547,6 @@ public class Game implements IConfig {
 
     this.context.changeStage(stage);
     this.window.setVisible(true);
-
-    this.isFinished.set(false);
-
-    // new Thread() {
-    //   public void run() {
-    //     while (!isFinished.get()) {
-    //
-    //       stage.add(background);
-    //
-    //       context.repaint();
-    //
-    //       try {
-    //         Thread.sleep(1000 / 25);
-    //       } catch (Exception e) {
-    //         e.printStackTrace();
-    //       }
-    //     }
-    //   }
-    // }.start();
   }
 
   /**

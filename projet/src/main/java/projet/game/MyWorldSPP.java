@@ -23,8 +23,8 @@ public class MyWorldSPP extends PWorld implements IConfig {
   private int players_nb;
 
   /**
-  * @param largeur du jeu
-  * @param hauteur du jeu
+  * @param width largeur du jeu
+  * @param height hauteur du jeu
   */
   public MyWorldSPP(float width, float height){
     super(width, height);
@@ -81,6 +81,8 @@ public class MyWorldSPP extends PWorld implements IConfig {
 
   /**
   * Permet de mettre à jour les informations d'une raquette
+  * @param num le numéro de la raquette
+  * @param racket la nouvelle valeur de raquette
   */
   public void setRacket(int num, PastisRacket racket){
     PastisRacket gameRacket = this.getRacket(num);
@@ -92,7 +94,6 @@ public class MyWorldSPP extends PWorld implements IConfig {
 
   /**
   * Permet de mettre à jour la liste d'entités du monde
-  * @return les entités actualisées
   */
   public void setMyWorld(Vector<MyEntity> entitiesList){
     int i;
@@ -160,7 +161,7 @@ public class MyWorldSPP extends PWorld implements IConfig {
   }
 
   /*g
-  * @param le numéro de la raquette qu'on souhaite récupérer
+  * @param num le numéro de la raquette qu'on souhaite récupérer
   * @return la raquette souhaité
   */
   public PastisRacket getRacket(int num){
@@ -189,6 +190,9 @@ public class MyWorldSPP extends PWorld implements IConfig {
     return pastisBall;
   }
 
+  /**
+  * @param nb le nombre de joueur maximum dans la partie
+  */
   public void setNbPlayers(int nb){
     this.playersMax= nb;
   }
