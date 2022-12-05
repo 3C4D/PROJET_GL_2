@@ -36,6 +36,7 @@ public class Game implements IConfig {
   private PButton menu;
 
   private JButton withoutAI;
+  private JButton withoutAIR;
   private JButton withAI1;
   private JButton withAI2;
   private JButton withAI3;
@@ -107,9 +108,9 @@ public class Game implements IConfig {
       }
     });
 
-    PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
-    System.out.println(background.loadTexture("src/main/resources/images/bottle.png"));
-    System.out.println("");
+    // PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
+    // System.out.println(background.loadTexture("src/main/resources/images/bottle.png"));
+    // System.out.println("");
     PGridLayout layout = new PGridLayout(2, 1);
 
     stage.getGUI().setBorder(BorderFactory.createEmptyBorder((int) (HEIGHT / 1.7), (WIDTH / 12), 0, 100));
@@ -127,14 +128,14 @@ public class Game implements IConfig {
 
      this.isFinished = new AtomicBoolean(false);
 
-     int delay = 1000/25; //milliseconds
-     ActionListener taskPerformer = new ActionListener() {
-         public void actionPerformed(ActionEvent evt) {
-           stage.add(background);
-           context.repaint();
-         }
-     };
-     new Timer(delay, taskPerformer).start();
+     // int delay = 1000/25; //milliseconds
+     // ActionListener taskPerformer = new ActionListener() {
+     //     public void actionPerformed(ActionEvent evt) {
+     //       stage.add(background);
+     //       context.repaint();
+     //     }
+     // };
+     // new Timer(delay, taskPerformer).start();
 
   }
 
@@ -171,8 +172,8 @@ public class Game implements IConfig {
       }
     });
 
-    PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
-    background.loadTexture("src/main/resources/images/bottle.png");
+    // PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
+    // background.loadTexture("src/main/resources/images/bottle.png");
 
     PGridLayout layout = new PGridLayout(2, 1);
     layout.setVgap((int) (HEIGHT / 10));
@@ -189,14 +190,14 @@ public class Game implements IConfig {
 
     this.isFinished.set(false);
 
-    int delay = 1000/25; //milliseconds
-    ActionListener taskPerformer = new ActionListener() {
-        public void actionPerformed(ActionEvent evt) {
-          stage.add(background);
-          context.repaint();
-        }
-    };
-    new Timer(delay, taskPerformer).start();
+    // int delay = 1000/25; //milliseconds
+    // ActionListener taskPerformer = new ActionListener() {
+    //     public void actionPerformed(ActionEvent evt) {
+    //       stage.add(background);
+    //       context.repaint();
+    //     }
+    // };
+    // new Timer(delay, taskPerformer).start();
   }
 
   /**
@@ -210,6 +211,13 @@ public class Game implements IConfig {
 
     withoutAI = new PButton("Jouer à deux joueurs");
     withoutAI.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        pongIA(-1);
+      }
+    });
+
+    withoutAIR = new PButton("Jouer à deux joueurs en réseau");
+    withoutAIR.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         pongMenuNetwork();
       }
@@ -236,14 +244,15 @@ public class Game implements IConfig {
       }
     });
 
-    PGridLayout layout = new PGridLayout(4, 1);
+    PGridLayout layout = new PGridLayout(5, 1);
     layout.setVgap((int) (HEIGHT / 10));
     stage.getGUI().setLayout(layout);
 
+    stage.getGUI().add(withoutAI);
     stage.getGUI().add(withAI1);
     stage.getGUI().add(withAI2);
     stage.getGUI().add(withAI3);
-    stage.getGUI().add(withoutAI);
+    stage.getGUI().add(withoutAIR);
 
     this.context.changeStage(stage);
     this.window.setVisible(true);
@@ -275,8 +284,8 @@ public class Game implements IConfig {
       }
     });
 
-    PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
-    System.out.println(background.loadTexture("src/main/resources/images/bottle.png"));
+    // PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
+    // System.out.println(background.loadTexture("src/main/resources/images/bottle.png"));
 
     PGridLayout layout = new PGridLayout(2, 1);
     stage.getGUI().setBorder(BorderFactory.createEmptyBorder((int) (HEIGHT / 1.7), (WIDTH / 12), 0, 100));
@@ -290,16 +299,16 @@ public class Game implements IConfig {
     this.context.changeStage(stage);
     this.window.setVisible(true);
 
-    this.isFinished.set(false);
+    // this.isFinished.set(false);
 
-    int delay = 1000/25; //milliseconds
-    ActionListener taskPerformer = new ActionListener() {
-        public void actionPerformed(ActionEvent evt) {
-          stage.add(background);
-          context.repaint();
-        }
-    };
-    new Timer(delay, taskPerformer).start();
+    // int delay = 1000/25; //milliseconds
+    // ActionListener taskPerformer = new ActionListener() {
+    //     public void actionPerformed(ActionEvent evt) {
+    //       stage.add(background);
+    //       context.repaint();
+    //     }
+    // };
+    // new Timer(delay, taskPerformer).start();
    }
 
   /**
@@ -318,20 +327,6 @@ public class Game implements IConfig {
         clientPort = Integer.parseInt(port.getText());
           run.setEnabled(true);
 
-        } catch (Exception ex) {
-          System.out.println("Dommage");
-        }
-      }
-    });
-
-    this.playersNbL = new PLabel("Nombre de joueurs :");
-    this.playersNb = new JTextArea("4");
-    this.playersNbB = new PButton("Valider");
-    playersNbB.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        try {
-          int players = Integer.parseInt(playersNb.getText());
-          sppWorld.setNbPlayers(players);
         } catch (Exception ex) {
           System.out.println("Dommage");
         }
@@ -374,8 +369,8 @@ public class Game implements IConfig {
     });
     run.setEnabled(false);
 
-    PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
-    background.loadTexture("src/main/resources/images/context.png");
+    // PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
+    // background.loadTexture("src/main/resources/images/context.png");
 
     PGridLayout layout = new PGridLayout(3, 3);
     layout.setVgap((int) (HEIGHT / 10));
@@ -384,28 +379,25 @@ public class Game implements IConfig {
     stage.getGUI().add(portL);
     stage.getGUI().add(port);
     stage.getGUI().add(portB);
-    stage.getGUI().add(playersNbL);
-    stage.getGUI().add(playersNb);
-    stage.getGUI().add(playersNbB);
     stage.getGUI().add(run);
 
     this.context.changeStage(stage);
     this.window.setVisible(true);
 
-    new Thread() {
-      public void run() {
-        while (!isFinished.get()) {
-
-          stage.add(background);
-          context.repaint();
-          try {
-            Thread.sleep(1000 / 25);
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
-        }
-      }
-    }.start();
+    // new Thread() {
+    //   public void run() {
+    //     while (!isFinished.get()) {
+    //
+    //       stage.add(background);
+    //       context.repaint();
+    //       try {
+    //         Thread.sleep(1000 / 25);
+    //       } catch (Exception e) {
+    //         e.printStackTrace();
+    //       }
+    //     }
+    //   }
+    // }.start();
   }
 
   /**
@@ -606,8 +598,8 @@ public class Game implements IConfig {
       }
     });
 
-    PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
-    System.out.println(background.loadTexture("src/main/resources/images/bottle.png"));
+    // PFixedTexturedDrawable background = new PFixedTexturedDrawable(0, 0, WIDTH, HEIGHT);
+    // System.out.println(background.loadTexture("src/main/resources/images/bottle.png"));
 
     PGridLayout layout = new PGridLayout(2, 1);
     stage.getGUI().setBorder(BorderFactory.createEmptyBorder((int) (HEIGHT / 1.7), (WIDTH / 12), 0, 100));
@@ -623,22 +615,22 @@ public class Game implements IConfig {
 
     this.isFinished.set(false);
 
-    new Thread() {
-      public void run() {
-        while (!isFinished.get()) {
-
-          stage.add(background);
-
-          context.repaint();
-
-          try {
-            Thread.sleep(1000 / 25);
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
-        }
-      }
-    }.start();
+    // new Thread() {
+    //   public void run() {
+    //     while (!isFinished.get()) {
+    //
+    //       stage.add(background);
+    //
+    //       context.repaint();
+    //
+    //       try {
+    //         Thread.sleep(1000 / 25);
+    //       } catch (Exception e) {
+    //         e.printStackTrace();
+    //       }
+    //     }
+    //   }
+    // }.start();
   }
 
   /**
