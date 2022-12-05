@@ -115,7 +115,7 @@ public class Game implements IConfig {
 
      this.isFinished = new AtomicBoolean(false);
 
-     int delay = 1000/60; //milliseconds
+     int delay = 1000/25; //milliseconds
      ActionListener taskPerformer = new ActionListener() {
          public void actionPerformed(ActionEvent evt) {
            stage.add(background);
@@ -177,7 +177,7 @@ public class Game implements IConfig {
 
     this.isFinished.set(false);
 
-    int delay = 1000/60; //milliseconds
+    int delay = 1000/25; //milliseconds
     ActionListener taskPerformer = new ActionListener() {
         public void actionPerformed(ActionEvent evt) {
           stage.add(background);
@@ -280,7 +280,7 @@ public class Game implements IConfig {
 
     this.isFinished.set(false);
 
-    int delay = 1000/60; //milliseconds
+    int delay = 1000/25; //milliseconds
     ActionListener taskPerformer = new ActionListener() {
         public void actionPerformed(ActionEvent evt) {
           stage.add(background);
@@ -379,7 +379,7 @@ public class Game implements IConfig {
           stage.add(background);
           context.repaint();
           try {
-            Thread.sleep(1000 / 60);
+            Thread.sleep(1000 / 25);
           } catch (Exception e) {
             e.printStackTrace();
           }
@@ -519,7 +519,7 @@ public class Game implements IConfig {
 
   /**
    * Permet de créer une partie de PONG avec une IA
-   * 
+   *
    * @param le niveau de l'IA
    */
   public void pongIA(int level) {
@@ -612,7 +612,7 @@ public class Game implements IConfig {
           context.repaint();
 
           try {
-            Thread.sleep(1000 / 60);
+            Thread.sleep(1000 / 25);
           } catch (Exception e) {
             e.printStackTrace();
           }
