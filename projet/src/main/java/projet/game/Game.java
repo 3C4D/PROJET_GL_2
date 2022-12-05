@@ -58,6 +58,9 @@ public class Game implements IConfig {
 
   private boolean boolIp = false, boolPort = false;
 
+  public static float x;
+  public static float y;
+
   // Réseau
   PongServer server;
   PongPlayer player;
@@ -71,6 +74,16 @@ public class Game implements IConfig {
     this.window = new PWindow("Menu", WIDTH, HEIGHT);
     this.context = new PContext(WIDTH, HEIGHT);
     PStage stage = new PStage(WIDTH, HEIGHT);
+    this.x = (float) (Math.random() * (3 - 2) + 1) / 10f;
+    this.y = (float) (Math.random() * (3 - 2) + 1) / 10f;
+    double sx = (Math.random());
+    double sy = (Math.random());
+    if (sx > 0.5) {
+      this.x *= -1;
+    }
+    if (sy > 0.5) {
+      this.y *= -1;
+    }
 
     pongB = new PButton("PONG");
     pongB.setBackground(new Color(0, 0, 0, 255));
@@ -294,7 +307,7 @@ public class Game implements IConfig {
    */
   public void hostMenuPong() {
     PStage stage = new PStage(WIDTH, HEIGHT);
-    this.window.setTitle("SUPER PASTIS PONG");
+    this.window.setTitle("PONG");
 
     this.portL = new PLabel("Port: ");
     this.port = new JTextArea("Port");
@@ -353,6 +366,9 @@ public class Game implements IConfig {
         }
 
         // Lancement de la partie de pong
+        String message = "MVT BALL "+x+";"+y;
+        server.sendMessage(message, "RACKET_A");
+        server.sendMessage(message, "RACKET_B");
         pong();
       }
     });
@@ -486,7 +502,7 @@ public class Game implements IConfig {
     });
 
     // Création du monde du jeu
-    this.pongWorld = new MyWorldPong(WIDTH, HEIGHT, -2);
+    this.pongWorld = new MyWorldPong(WIDTH, HEIGHT, -2, player);
     this.pongWorld.getStage().getGUI().add(menu);
     this.context.changeStage(this.pongWorld.getStage());
     this.context.setBackground(Color.BLACK);

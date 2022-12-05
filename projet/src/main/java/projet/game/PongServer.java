@@ -17,7 +17,7 @@ public class PongServer extends Server {
 
     /**
      * Constructor for the PongServer class
-     * 
+     *
      * @param _port
      * @param _clientsNumber
      */
@@ -29,7 +29,7 @@ public class PongServer extends Server {
 
     /**
      * Definition of the server routine
-     * 
+     *
      * @param username The username of the client
      */
     @Override

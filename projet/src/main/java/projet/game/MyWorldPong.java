@@ -15,7 +15,7 @@ import java.awt.Font;
 public class MyWorldPong extends PWorld {
   private int WIDTH = 500; // Largeur du monde
   private int HEIGHT = 500; // Hauteur du mond
-  private static float BALL_SIZE = 20f;
+  public static float BALL_SIZE = 20f;
   public static float RACKET_WIDTH = 20f, RACKET_HEIGHT = 150f;
   private int pointA;
   private int pointB;
@@ -25,6 +25,8 @@ public class MyWorldPong extends PWorld {
   private int ia;
 
   private PLabel scoreA, scoreB;
+
+  private PongPlayer player;
 
   public class LineTexture extends PFixedTexturedDrawable {
 
@@ -111,6 +113,77 @@ public class MyWorldPong extends PWorld {
 
   }
 
+  /**
+   * @param largeur du jeu
+   * @param hauteur du jeu
+   * @param qui     spécifie si il y a une racket IA dans le jeu
+   */
+  public MyWorldPong(float width, float height, int ia, PongPlayer player) {
+    super(width, height);
+
+    // Création de mon monde physique
+    this.physicWorld = new MyPhysicWorldPong(width, height, this);
+
+    WIDTH = (int) width;
+    HEIGHT = (int) height;
+    // Création de la balle
+    maxX = 0.27f;
+    maxY = 0.27f;
+    minX = -0.27f;
+    minY = -0.27f;
+    float x = (float) (Math.random() * (3 - 2) + 1) / 10f;
+    float y = (float) (Math.random() * (3 - 2) + 1) / 10f;
+    double sx = (Math.random());
+    double sy = (Math.random());
+    if (sx > 0.5) {
+      x *= -1;
+    }
+    if (sy > 0.5) {
+      y *= -1;
+    }
+    this.x = x;
+    this.y = y;
+
+
+    this.ia = ia;
+    if(ia == -2){
+      Ball ball = new Ball(new Point(width/2f,height/2f), BALL_SIZE, Color.WHITE);
+      ball.getBody().setVelocity(new Vector2D(0,0));
+      this.addEntity(ball);
+      this.player  = player;
+    }else{
+      Ball ball = new Ball(new Point(width/2f,height/2f), BALL_SIZE, Color.WHITE);
+      ball.getBody().setVelocity(new Vector2D(x,y));
+      if(ia == -1){
+        // Création de la première raquette
+        RacketPong racket1 = new RacketPong(new Point(RACKET_WIDTH / 2f, height / 2f), MyEntity.RACKET_A, RACKET_WIDTH,
+            RACKET_HEIGHT);
+        this.addEntity(racket1);
+      } else {
+        // Création de la première raqutte qui est une IA
+        AIpong racket1 = new AIpong(WIDTH, HEIGHT, new Point(RACKET_WIDTH / 2f, height / 2f), MyEntity.RACKET_A, 0, ia);
+        this.addEntity(racket1);
+      }
+
+      // Création de la deuxième raquette
+      RacketPong racket2 = new RacketPong(new Point(width - RACKET_WIDTH / 2f, height / 2f), MyEntity.RACKET_B,
+          RACKET_WIDTH, RACKET_HEIGHT);
+      this.addEntity(racket2);
+      this.addEntity(ball);
+    }
+
+    pointA = 0;
+    pointB = 0;
+    scoreA = new PLabel("" + pointA);
+    scoreB = new PLabel("" + pointB);
+    scoreA.setFont(new Font(Font.DIALOG, Font.PLAIN, 40));
+    scoreB.setFont(new Font(Font.DIALOG, Font.PLAIN, 40));
+    this.getStage().add(new LineTexture((int) (WIDTH / 2f), 0, 150, (int) (HEIGHT)));
+    this.getStage().getGUI().add(scoreA);
+    this.getStage().getGUI().add(scoreB);
+
+  }
+
   @Override
   public void processPhysic(float dt) {
     int i;
@@ -135,6 +208,38 @@ public class MyWorldPong extends PWorld {
       this.getStage().add(entities.get(i).getDrawable());
     }
 
+  }
+
+
+  /**
+  * Permet de tirer aléatoirement une vitesse
+  */
+  public Vector2D randomVelocity(){
+    float x = (float) (Math.random() * (3 - 2) + 1) / 10f;
+    float y = (float) (Math.random() * (3 - 2) + 1) / 10f;
+    double sx = (Math.random());
+    double sy = (Math.random());
+    if (sx > 0.5) {
+      x *= -1;
+    }
+    if (sy > 0.5) {
+      y *= -1;
+    }
+    return new Vector2D(x,y);
+  }
+
+  /**
+  *
+  */
+  public void setX(float x){
+    this.x = x;
+  }
+
+  /**
+  *
+  */
+  public void setY(float y){
+    this.y = y;
   }
 
   /**
@@ -194,7 +299,10 @@ public class MyWorldPong extends PWorld {
   *
   */
   public void removeBall() {
-    this.removeEntity(this.getBall());
+    Ball ball = this.getBall();
+    if(ball != null){
+      this.removeEntity(ball);
+    }
   }
 
   /**
@@ -233,33 +341,58 @@ public class MyWorldPong extends PWorld {
   public void replay() {
     // On recrée une balle que l'on ajoute au jeu
     Ball ball = new Ball(new Point(WIDTH / 2f, HEIGHT / 2f), BALL_SIZE, Color.WHITE);
-    double sx = (Math.random());
-    double sy = (Math.random());
-    count++;
-    if (sx > 0.5) {
-      x *= -1;
-    }
-    if (sy > 0.5) {
-      y *= -1;
-    }
-
-    if (count > 4 && x < maxX && y < maxY && x > minX && y > minY) {
-      x *= 1.3f;
-      y *= 1.3f;
-      pow++;
-    }
-    if (count == 10) {
-      count = 0;
-      x /= (float) (Math.pow(1.3f, pow));
-      y /= (float) (Math.pow(1.3f, pow));
-      pow = 0;
-    }
 
     if(ia == -2){
-      ball.getBody().setVelocity(new Vector2D(0,0));
+      float x = Game.x;
+      float y = Game.y;
+      double sx = (Math.random());
+      double sy = (Math.random());
+      count++;
+      if (sx > 0.5) {
+        x *= -1;
+      }
+      if (sy > 0.5) {
+        y *= -1;
+      }
+
+      if (count > 4 && x < maxX && y < maxY && x > minX && y > minY) {
+        x *= 1.3f;
+        y *= 1.3f;
+        pow++;
+      }
+      if (count == 10) {
+        count = 0;
+        x /= (float) (Math.pow(1.3f, pow));
+        y /= (float) (Math.pow(1.3f, pow));
+        pow = 0;
+      }
+      String message = "MVT INITBALL "+x+";"+y;
+        player.sendMessage(message);
+
     }else{
+      double sx = (Math.random());
+      double sy = (Math.random());
+      count++;
+      if (sx > 0.5) {
+        x *= -1;
+      }
+      if (sy > 0.5) {
+        y *= -1;
+      }
+
+      if (count > 4 && x < maxX && y < maxY && x > minX && y > minY) {
+        x *= 1.3f;
+        y *= 1.3f;
+        pow++;
+      }
+      if (count == 10) {
+        count = 0;
+        x /= (float) (Math.pow(1.3f, pow));
+        y /= (float) (Math.pow(1.3f, pow));
+        pow = 0;
+      }
       ball.getBody().setVelocity(new Vector2D(x, y));
+      this.addEntity(ball);
     }
-    this.addEntity(ball);
   }
 }
