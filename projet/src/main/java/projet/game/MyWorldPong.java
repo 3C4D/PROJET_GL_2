@@ -118,8 +118,8 @@ public class MyWorldPong extends PWorld {
     // On calcule lance l'écouteur de collision
     ((MyPhysicWorldPong) physicWorld).launchCollisionListener();
 
-    if (ia != -1) {
-      ((AIpong) getRacketA()).racketDecision(getBall());
+    if(ia != -1 && ia != -2){
+      ((AIpong)getRacketA()).racketDecision(getBall());
     }
 
     // On calcule le déplacement de chacune des corps des entités
@@ -139,9 +139,23 @@ public class MyWorldPong extends PWorld {
   }
 
   /**
-   * @return la racketA du jeu
-   */
-  public RacketPong getRacketA() {
+  * Pemet d'ajouter une raquette au jeu
+  */
+  public void addPongRacket(int type, PongPlayer player){
+    RacketPong racket;
+    if(type == MyEntity.RACKET_A){
+      racket = new RacketPong(new Point(RACKET_WIDTH/2f, HEIGHT/2f), MyEntity.RACKET_A, RACKET_WIDTH, RACKET_HEIGHT, player);
+    }else{
+      racket = new RacketPong(new Point(WIDTH - RACKET_WIDTH/2f, HEIGHT/2f), MyEntity.RACKET_B, RACKET_WIDTH, RACKET_HEIGHT, player);
+    }
+
+    this.addEntity(racket);
+  }
+
+  /**
+  * @return la racketA du jeu
+  */
+  public RacketPong getRacketA(){
     int i;
     for (i = 0; i < this.entities.size(); i++) {
       if (this.entities.get(i).getType() == MyEntity.RACKET_A) {
