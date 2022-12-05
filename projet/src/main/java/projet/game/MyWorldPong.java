@@ -338,38 +338,17 @@ public class MyWorldPong extends PWorld {
   /**
   *
   */
+  public boolean isNetwork(){
+    return (ia == -2);
+  }
+
+  /**
+  *
+  */
   public void replay() {
     // On recrée une balle que l'on ajoute au jeu
     Ball ball = new Ball(new Point(WIDTH / 2f, HEIGHT / 2f), BALL_SIZE, Color.WHITE);
 
-    if(ia == -2){
-      float x = Game.x;
-      float y = Game.y;
-      double sx = (Math.random());
-      double sy = (Math.random());
-      count++;
-      if (sx > 0.5) {
-        x *= -1;
-      }
-      if (sy > 0.5) {
-        y *= -1;
-      }
-
-      if (count > 4 && x < maxX && y < maxY && x > minX && y > minY) {
-        x *= 1.3f;
-        y *= 1.3f;
-        pow++;
-      }
-      if (count == 10) {
-        count = 0;
-        x /= (float) (Math.pow(1.3f, pow));
-        y /= (float) (Math.pow(1.3f, pow));
-        pow = 0;
-      }
-      String message = "MVT INITBALL "+x+";"+y;
-        player.sendMessage(message);
-
-    }else{
       double sx = (Math.random());
       double sy = (Math.random());
       count++;
@@ -393,6 +372,50 @@ public class MyWorldPong extends PWorld {
       }
       ball.getBody().setVelocity(new Vector2D(x, y));
       this.addEntity(ball);
+    
+  }
+
+  /**
+  *
+  */
+  public void replay(int a) {
+    // On recrée une balle que l'on ajoute au jeu
+    Ball ball = new Ball(new Point(WIDTH / 2f, HEIGHT / 2f), BALL_SIZE, Color.WHITE);
+    float x = Game.x;
+    float y = Game.y;
+    double sx = (Math.random());
+    double sy = (Math.random());
+    count++;
+    if (sx > 0.5) {
+      x *= -1;
     }
+    if (sy > 0.5) {
+      y *= -1;
+    }
+
+    if (count > 4 && x < maxX && y < maxY && x > minX && y > minY) {
+      x *= 1.3f;
+      y *= 1.3f;
+      pow++;
+    }
+    if (count == 10) {
+      count = 0;
+      x /= (float) (Math.pow(1.3f, pow));
+      y /= (float) (Math.pow(1.3f, pow));
+      pow = 0;
+    }
+
+    String message;
+    if(a == 0){ //+1 pour RACKET_A
+      message = "MVT INITBALLA "+x+";"+y;
+    }else{
+      message = "MVT INITBALLB "+x+";"+y;
+
+    }
+    player.sendMessage(message);
+
+
+
+
   }
 }

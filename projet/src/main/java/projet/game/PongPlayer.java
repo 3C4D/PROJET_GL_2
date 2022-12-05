@@ -48,7 +48,7 @@ public class PongPlayer extends Client implements IConfig {
                 vector = message.split(" ")[2];
 
                 switch (concern) {
-                    case "INITBALL":
+                    case "INITBALLA":
                         world.removeBall();
                         Ball ball = new Ball(new Point(WIDTH/2f,HEIGHT/2f), MyWorldPong.BALL_SIZE, Color.WHITE);
                         ball.getBody().setVelocity((new Vector2D(
@@ -57,6 +57,19 @@ public class PongPlayer extends Client implements IConfig {
                         world.addEntity(ball);
                         world.setX(Float.parseFloat(vector.split(";")[0]));
                         world.setY(Float.parseFloat(vector.split(";")[1]));
+                        world.addPointA();
+                        System.out.println("Création nouvelle balle");
+                        break;
+                     case "INITBALLB":
+                        world.removeBall();
+                        Ball ball2= new Ball(new Point(WIDTH/2f,HEIGHT/2f), MyWorldPong.BALL_SIZE, Color.WHITE);
+                        ball2.getBody().setVelocity((new Vector2D(
+                                    Float.parseFloat(vector.split(";")[0]),
+                                    Float.parseFloat(vector.split(";")[1]))));
+                        world.addEntity(ball2);
+                        world.setX(Float.parseFloat(vector.split(";")[0]));
+                        world.setY(Float.parseFloat(vector.split(";")[1]));
+                        world.addPointB();
                         System.out.println("Création nouvelle balle");
                         break;
                     case "BALL":

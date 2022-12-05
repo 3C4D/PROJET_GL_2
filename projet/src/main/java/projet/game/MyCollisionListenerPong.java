@@ -263,9 +263,14 @@ public class MyCollisionListenerPong extends CollisionListener{
        break;
 
        case 1: //Point pour la raquette A
-         world.removeBall();
-         world.addPointA();
-         world.replay();
+         if(!world.isNetwork()){
+           world.removeBall();
+           world.addPointA();
+           world.replay();
+         }else{
+          world.removeBall();
+           world.replay(0);
+         }
          try{
            new SoundPlayer("sounds/siuu.wav").play(false, .6f);
          }
@@ -275,9 +280,14 @@ public class MyCollisionListenerPong extends CollisionListener{
        break;
 
        case 3: //Point pour la raquette B
-         world.removeBall();
-         world.addPointB();
-         world.replay();
+         if(!world.isNetwork()){
+           world.removeBall();
+           world.addPointB();
+           world.replay();
+         }else{
+           world.removeBall();
+           world.replay(1);
+         }
          try{
            new SoundPlayer("sounds/siuu.wav").play(false, .6f);
          }
