@@ -61,9 +61,8 @@ public class Game implements IConfig {
   // Réseau
   PongServer server;
   PongPlayer player;
-  String user;
-  String hostIp;
-  int hostPort;
+  String user, hostIp;
+  int hostPort, clientPort;
 
   /**
    * Créateur d'un jeu
@@ -297,13 +296,19 @@ public class Game implements IConfig {
     PStage stage = new PStage(WIDTH, HEIGHT);
     this.window.setTitle("SUPER PASTIS PONG");
 
-    this.usernameL = new PLabel("Pseudo : ");
-    this.username = new JTextArea("username");
-    this.usernameB = new PButton("Valider");
-    usernameB.addActionListener(new ActionListener() {
+    this.portL = new PLabel("Port: ");
+    this.port = new JTextArea("Port");
+    this.portB = new PButton("Valider");
+    portB.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        user = username.getText();
-        run.setEnabled(true);
+        try {
+        clientPort = Integer.parseInt(port.getText());
+          clientBoolPort = true;
+          run.setEnabled(true);
+
+        } catch (Exception ex) {
+          System.out.println("Dommage");
+        }
       }
     });
 
@@ -325,14 +330,14 @@ public class Game implements IConfig {
     run.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         // Lancement du serveur
-        server = new PongServer(1234, 2);
+        server = new PongServer(clientPort, 2);
         server.start();
         user = "RACKET_A";
 
         // Connexion de l'hôte
         player = new PongPlayer();
         try {
-          player.connect(InetAddress.getLocalHost(), 1234, "RACKET_A");
+          player.connect(InetAddress.getLocalHost(), clientPort, "RACKET_A");
           player.startReading();
         } catch (UnknownHostException e1) {
           System.out.println("Connexion de l'hôte impossible !");
