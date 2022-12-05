@@ -47,7 +47,6 @@ public class PongPlayer extends Client {
             if (message.split(" ")[0].equals("MVT")) {
                 concern = message.split(" ")[1];
                 vector = message.split(" ")[2];
-                System.out.println("VECTOR "+vector);
 
                 switch (concern) {
                     case "BALL":
