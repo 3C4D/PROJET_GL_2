@@ -326,9 +326,10 @@ public class Game implements IConfig {
         // Lancement du serveur
         server = new PongServer(1234, 2);
         server.start();
+        user = "RACKET_A";
 
         // Connexion de l'hôte
-        player = new PongPlayer(pongWorld);
+        player = new PongPlayer();
         try {
           player.connect(InetAddress.getLocalHost(), 1234, "RACKET_A");
           player.startReading();
@@ -429,10 +430,11 @@ public class Game implements IConfig {
     run = new PButton("REJOINDRE LA PARTIE");
     run.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        player = new PongPlayer(pongWorld);
+        player = new PongPlayer();
         try {
           player.connect(InetAddress.getLocalHost(), 1234, "RACKET_B");
           player.startReading();
+          user = "RACKET_B";
         } catch (UnknownHostException e1) {
           System.out.println("Connexion impossible !");
         }
@@ -484,12 +486,24 @@ public class Game implements IConfig {
     this.context.changeStage(this.pongWorld.getStage());
     this.context.setBackground(Color.BLACK);
 
+    // Création des raquettes
+    if (user.equals("RACKET_A")) {
+      pongWorld.addPongRacket(MyEntity.RACKET_A, player);
+      pongWorld.addPongRacket(MyEntity.RACKET_B, null);
+    } else {
+      pongWorld.addPongRacket(MyEntity.RACKET_A, null);
+      pongWorld.addPongRacket(MyEntity.RACKET_B, player);
+    }
+
+    // On donne le monde au player
+    player.setWorld(pongWorld);
+
     PGridLayout layout = new PGridLayout(2, 3);
     layout.setVgap((int) (HEIGHT - HEIGHT / 6));
     this.pongWorld.getStage().getGUI().setLayout(layout);
 
     // Initialisation du contrôle clavier
-    pongKeyboard = new MyKeyboardPong(pongWorld);
+    pongKeyboard = new MyKeyboardPong(pongWorld, user);
     this.window.addKeyListener(pongKeyboard);
 
     this.window.setVisible(true);
@@ -532,7 +546,7 @@ public class Game implements IConfig {
     this.pongWorld.getStage().getGUI().setLayout(layout);
 
     // Initialisation du contrôle clavier
-    pongKeyboard = new MyKeyboardPong(pongWorld);
+    pongKeyboard = new MyKeyboardPong(pongWorld, user);
     this.window.addKeyListener(pongKeyboard);
 
     this.window.setVisible(true);
@@ -794,7 +808,9 @@ public class Game implements IConfig {
       }
 
       player.manageMessage();
-
+      /*if (user.equals("RACKET_A")) {
+        player.sendMessage("MVT BALL " + pongWorld.getBall().getBody().getVelocity().getCoordX() + ";" + pongWorld.getBall().getBody().getVelocity().getCoordY());
+      }*/
     }
   }
 

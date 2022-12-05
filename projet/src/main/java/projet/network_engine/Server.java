@@ -32,13 +32,13 @@ public abstract class Server extends Thread {
     private ExecutorService executor;
 
     // Clients
-    public HashMap<String, ObjectOutputStream> clientsOut;     // Client's names and output streams
-    public HashMap<String, ObjectInputStream> clientsIn;       // Client's names and input streams
+    public HashMap<String, ObjectOutputStream> clientsOut;      // Client's names and output streams
+    public HashMap<String, ObjectInputStream> clientsIn;        // Client's names and input streams
     private int clientsConnected;                               // The current number of clients connected
     private int clientsNumber;                                  // The maximum number of clients that should be connected
 
     // Others
-    public ConcurrentLinkedQueue<Object> messages;
+    public volatile ConcurrentLinkedQueue<Object> messages;
     private int port;                                           // Port where the server is listenning
 
     /***** CONSTRUCTORS *****/

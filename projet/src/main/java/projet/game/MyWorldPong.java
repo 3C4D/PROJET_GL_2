@@ -99,7 +99,7 @@ public class MyWorldPong extends PWorld {
     }
 
     // On les ajoute a la liste d'entité
-    this.addEntity(ball);
+    // this.addEntity(ball);
     pointA = 0;
     pointB = 0;
     scoreA = new PLabel("" + pointA);

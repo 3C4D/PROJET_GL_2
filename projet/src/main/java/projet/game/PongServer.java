@@ -17,6 +17,7 @@ public class PongServer extends Server {
 
     /**
      * Constructor for the PongServer class
+     * 
      * @param _port
      * @param _clientsNumber
      */
@@ -28,15 +29,18 @@ public class PongServer extends Server {
 
     /**
      * Definition of the server routine
+     * 
      * @param username The username of the client
      */
     @Override
     public void runningRoutine(String username) {
         String message;
         while (true) {
-            if (messages.size() > 0) {
-                message = messages.remove().toString();
-                diffuseMessage(message, message.split(" ")[1]);
+            synchronized (messages) {
+                if (messages.size() > 0) {
+                    message = messages.remove().toString();
+                    diffuseMessage(message, message.split(" ")[1]);
+                }
             }
         }
     }
