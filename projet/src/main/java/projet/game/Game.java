@@ -56,7 +56,7 @@ public class Game implements IConfig {
 
   public volatile AtomicBoolean isFinished;
 
-  private boolean boolIp = false, boolPort = false;
+  private boolean boolIp = false, boolPort = false, clientBoolPort = false;
 
   // Réseau
   PongServer server;
