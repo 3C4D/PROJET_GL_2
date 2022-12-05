@@ -82,21 +82,25 @@ public class MyWorldPong extends PWorld {
     ball.getBody().setVelocity(new Vector2D(x,y));
 
     this.ia = ia;
-    if(ia == -1){
-      // Création de la première raquette
-      RacketPong racket1 = new RacketPong(new Point(RACKET_WIDTH/2f, height/2f), MyEntity.RACKET_A, RACKET_WIDTH, RACKET_HEIGHT);
-      this.addEntity(racket1);
+    if(ia == -2){
+
     }else{
-      // Création de la première raqutte qui est une IA
-      AIpong racket1 = new AIpong(WIDTH,HEIGHT, new Point(RACKET_WIDTH/2f, height/2f), MyEntity.RACKET_A, 0, ia);
-      this.addEntity(racket1);
+      if(ia == -1){
+        // Création de la première raquette
+        RacketPong racket1 = new RacketPong(new Point(RACKET_WIDTH/2f, height/2f), MyEntity.RACKET_A, RACKET_WIDTH, RACKET_HEIGHT);
+        this.addEntity(racket1);
+      }else{
+        // Création de la première raqutte qui est une IA
+        AIpong racket1 = new AIpong(WIDTH,HEIGHT, new Point(RACKET_WIDTH/2f, height/2f), MyEntity.RACKET_A, 0, ia);
+        this.addEntity(racket1);
+      }
+
+      // Création de la deuxième raquette
+      RacketPong racket2 = new RacketPong(new Point(width - RACKET_WIDTH/2f, height/2f), MyEntity.RACKET_B, RACKET_WIDTH, RACKET_HEIGHT);
+      this.addEntity(racket2);
     }
 
-    // Création de la deuxième raquette
-    RacketPong racket2 = new RacketPong(new Point(width - RACKET_WIDTH/2f, height/2f), MyEntity.RACKET_B, RACKET_WIDTH, RACKET_HEIGHT);
-
     //On les ajoute a la liste d'entité
-    this.addEntity(racket2);
     this.addEntity(ball);
     pointA = 0;
     pointB = 0;
@@ -116,7 +120,7 @@ public class MyWorldPong extends PWorld {
     // On calcule lance l'écouteur de collision
     ((MyPhysicWorldPong)physicWorld).launchCollisionListener();
 
-    if(ia != -1){
+    if(ia != -1 && ia != -2){
       ((AIpong)getRacketA()).racketDecision(getBall());
     }
 
@@ -134,6 +138,20 @@ public class MyWorldPong extends PWorld {
   }
 
 
+  }
+
+  /**
+  * Pemet d'ajouter une raquette au jeu
+  */
+  public void addPongRacket(int type, PongPlayer player){
+    RacketPong racket;
+    if(type == MyEntity.RACKET_A){
+      racket = new RacketPong(new Point(RACKET_WIDTH/2f, HEIGHT/2f), MyEntity.RACKET_A, RACKET_WIDTH, RACKET_HEIGHT, player);
+    }else{
+      racket = new RacketPong(new Point(WIDTH - RACKET_WIDTH/2f, HEIGHT/2f), MyEntity.RACKET_B, RACKET_WIDTH, RACKET_HEIGHT, player);
+    }
+
+    this.addEntity(racket);
   }
 
   /**
