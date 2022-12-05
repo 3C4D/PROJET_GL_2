@@ -2,15 +2,11 @@ package projet.game;
 
 import projet.kernel.PWorld;
 import projet.physicEngine.common.*;
-import projet.physicEngine.*;
-
-import projet.graphic_engine.*;
 import projet.graphic_engine.GUI.*;
 import projet.graphic_engine.drawable.*;
 
 import java.awt.Graphics;
 import java.awt.Color;
-import javax.swing.JTextArea;
 import java.awt.Font;
 
 /**
@@ -101,7 +97,7 @@ public class MyWorldPong extends PWorld {
           RACKET_WIDTH, RACKET_HEIGHT);
       this.addEntity(racket2);
     }
-    
+
     // On les ajoute a la liste d'entité
     this.addEntity(ball);
     pointA = 0;

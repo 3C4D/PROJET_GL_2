@@ -618,7 +618,7 @@ public class Game implements IConfig {
     this.usernameB = new PButton("Valider");
     usernameB.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        String user = username.getText();
+        //String user = username.getText();
         // JEAN --> recupère le username
         run.setEnabled(true);
       }
@@ -679,7 +679,7 @@ public class Game implements IConfig {
     this.ipB = new PButton("Valider");
     ipB.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        String ipp = ip.getText();
+        //String ipp = ip.getText();
         // JEAN --> Récupération (jsp si ça te dit mais t'as compris mdr) de l'IP
         boolIp = true;
         if (boolPort == true) {
@@ -694,7 +694,7 @@ public class Game implements IConfig {
     portB.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         try {
-          int portt = Integer.parseInt(port.getText());
+          //int portt = Integer.parseInt(port.getText());
           // JEAN --> Récupération du port (pas pas du cochon lol)
           boolPort = true;
           if (boolIp) {

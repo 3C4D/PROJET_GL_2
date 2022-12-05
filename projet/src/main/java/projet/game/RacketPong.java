@@ -7,8 +7,6 @@ import projet.physicEngine.Body.BodyType;
 import projet.physicEngine.*;
 
 import projet.graphic_engine.drawable.*;
-
-import java.lang.Math;
 import java.awt.Graphics;
 import java.awt.Color;
 
