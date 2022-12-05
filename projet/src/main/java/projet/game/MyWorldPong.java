@@ -92,7 +92,6 @@ public class MyWorldPong extends PWorld {
     scoreB = new PLabel("" + pointB);
     scoreA.setFont(new Font(Font.DIALOG, Font.PLAIN, 40));
     scoreB.setFont(new Font(Font.DIALOG, Font.PLAIN, 40));
-    this.getStage().add(new LineTexture((int) (WIDTH / 2f), 0, 150, (int) (HEIGHT)));
     this.getStage().getGUI().add(scoreA);
     this.getStage().getGUI().add(scoreB);
 
@@ -164,7 +163,6 @@ public class MyWorldPong extends PWorld {
     scoreB = new PLabel("" + pointB);
     scoreA.setFont(new Font(Font.DIALOG, Font.PLAIN, 40));
     scoreB.setFont(new Font(Font.DIALOG, Font.PLAIN, 40));
-    this.getStage().add(new LineTexture((int) (WIDTH / 2f), 0, 150, (int) (HEIGHT)));
     this.getStage().getGUI().add(scoreA);
     this.getStage().getGUI().add(scoreB);
 
