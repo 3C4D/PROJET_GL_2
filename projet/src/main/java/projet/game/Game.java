@@ -61,8 +61,14 @@ public class Game implements IConfig {
   // Réseau
   PongServer server;
   PongPlayer player;
+<<<<<<< HEAD
   String user, hostIp;
   int hostPort, clientPort;
+=======
+  String user;
+  String hostIp;
+  int hostPort;
+>>>>>>> 1fc3cf04ebb450eb9349fadc1ebe98015be82922
 
   /**
    * Créateur d'un jeu
@@ -438,7 +444,7 @@ public class Game implements IConfig {
       public void actionPerformed(ActionEvent e) {
         player = new PongPlayer();
         try {
-          player.connect(InetAddress.getLocalHost(), 1234, "RACKET_B");
+          player.connect(InetAddress.getByName(hostIp), hostPort, "RACKET_B");
           player.startReading();
           user = "RACKET_B";
         } catch (UnknownHostException e1) {
