@@ -56,7 +56,7 @@ public class Game implements IConfig {
 
   public volatile AtomicBoolean isFinished;
 
-  private boolean boolIp = false, boolPort = false, clientBoolPort = false;
+  private boolean boolIp = false, boolPort = false;
 
   // Réseau
   PongServer server;
@@ -303,7 +303,6 @@ public class Game implements IConfig {
       public void actionPerformed(ActionEvent e) {
         try {
         clientPort = Integer.parseInt(port.getText());
-          clientBoolPort = true;
           run.setEnabled(true);
 
         } catch (Exception ex) {
@@ -366,9 +365,9 @@ public class Game implements IConfig {
     layout.setVgap((int) (HEIGHT / 10));
     stage.getGUI().setLayout(layout);
 
-    stage.getGUI().add(usernameL);
-    stage.getGUI().add(username);
-    stage.getGUI().add(usernameB);
+    stage.getGUI().add(portL);
+    stage.getGUI().add(port);
+    stage.getGUI().add(portB);
     stage.getGUI().add(playersNbL);
     stage.getGUI().add(playersNb);
     stage.getGUI().add(playersNbB);
