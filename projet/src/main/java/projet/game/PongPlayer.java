@@ -21,6 +21,7 @@ public class PongPlayer extends Client {
 
     /**
      * Constructor
+     * 
      * @param world
      */
     PongPlayer(MyWorldPong world) {
@@ -37,38 +38,36 @@ public class PongPlayer extends Client {
         String message = "";
         String concern = "";
         String vector = "";
-        
+
         if (messages.size() > 0) {
-            do {
-                if (messages.size() > 0) {
-                    message = messages.remove().toString();
-                }  
-            } while (!message.split(" ")[0].equals("MVT"));
-            System.out.println(message);
-            concern = message.split(" ")[1];
-            vector = message.split(" ")[2];
+            message = messages.remove().toString();
 
-            switch (concern) {
-                case "BALL" : 
-                    world.getBall().getBody().setVelocity(new Vector2D(
-                        Float.parseFloat(vector.split(";")[0]), 
-                        Float.parseFloat(vector.split(";")[1]))
-                    );
-                    break;
-                
-                case "RACKET_A" :
-                    world.getRacketA().getBody().setVelocity(new Vector2D(
-                        Float.parseFloat(vector.split(";")[0]), 
-                        Float.parseFloat(vector.split(";")[1]))
-                    );
-                    break;
+            if (message.split(" ")[0].equals("MVT")) {
+                concern = message.split(" ")[1];
+                vector = message.split(" ")[2];
 
-                case "RACKET_B" :
-                    world.getRacketB().getBody().setVelocity(new Vector2D(
-                        Float.parseFloat(vector.split(";")[0]), 
-                        Float.parseFloat(vector.split(";")[1]))
-                    );
-                    break;
+                switch (concern) {
+                    case "BALL":
+                        world.getBall().getBody().setVelocity(new Vector2D(
+                                Float.parseFloat(vector.split(";")[0]),
+                                Float.parseFloat(vector.split(";")[1])));
+                        System.out.println("Mise à jour de balle");
+                        break;
+
+                    case "RACKET_A":
+                        world.getRacketA().getBody().setVelocity(new Vector2D(
+                                Float.parseFloat(vector.split(";")[0]),
+                                Float.parseFloat(vector.split(";")[1])));
+                        System.out.println("Mise à jour de raquette A");
+                        break;
+
+                    case "RACKET_B":
+                        world.getRacketB().getBody().setVelocity(new Vector2D(
+                                Float.parseFloat(vector.split(";")[0]),
+                                Float.parseFloat(vector.split(";")[1])));
+                        System.out.println("Mise à jour de raquette B");
+                        break;
+                }
             }
         }
     }
