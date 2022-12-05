@@ -73,15 +73,16 @@ public class MyWorldPong extends PWorld {
     this.x = x;
     this.y = y;
 
-    Ball ball = new Ball(new Point(width / 2f, height / 2f), BALL_SIZE, Color.WHITE);
-    ball.getBody().setVelocity(new Vector2D(x, y));
 
     this.ia = ia;
-
-    if (ia == -2) {
-
-    } else {
-      if (ia == -1) {
+    if(ia == -2){
+      Ball ball = new Ball(new Point(width/2f,height/2f), BALL_SIZE, Color.WHITE);
+      ball.getBody().setVelocity(new Vector2D(0,0));
+      this.addEntity(ball);
+    }else{
+      Ball ball = new Ball(new Point(width/2f,height/2f), BALL_SIZE, Color.WHITE);
+      ball.getBody().setVelocity(new Vector2D(x,y));
+      if(ia == -1){
         // Création de la première raquette
         RacketPong racket1 = new RacketPong(new Point(RACKET_WIDTH / 2f, height / 2f), MyEntity.RACKET_A, RACKET_WIDTH,
             RACKET_HEIGHT);
@@ -96,10 +97,9 @@ public class MyWorldPong extends PWorld {
       RacketPong racket2 = new RacketPong(new Point(width - RACKET_WIDTH / 2f, height / 2f), MyEntity.RACKET_B,
           RACKET_WIDTH, RACKET_HEIGHT);
       this.addEntity(racket2);
+      this.addEntity(ball);
     }
 
-    // On les ajoute a la liste d'entité
-    // this.addEntity(ball);
     pointA = 0;
     pointB = 0;
     scoreA = new PLabel("" + pointA);
@@ -256,7 +256,11 @@ public class MyWorldPong extends PWorld {
       pow = 0;
     }
 
-    ball.getBody().setVelocity(new Vector2D(x, y));
+    if(ia == -2){
+      ball.getBody().setVelocity(new Vector2D(0,0));
+    }else{
+      ball.getBody().setVelocity(new Vector2D(x, y));
+    }
     this.addEntity(ball);
   }
 }
