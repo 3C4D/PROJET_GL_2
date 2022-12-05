@@ -112,24 +112,16 @@ public class Game implements IConfig {
     this.window.setVisible(true);
     this.window.setFocusable(true);
 
-    this.isFinished = new AtomicBoolean(false);
+     this.isFinished = new AtomicBoolean(false);
 
-    new Thread() {
-      public void run() {
-        while (!isFinished.get()) {
-
-          stage.add(background);
-
-          context.repaint();
-
-          try {
-            Thread.sleep(1000 / 60);
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
-        }
-      }
-    }.start();
+     int delay = 1000/60; //milliseconds
+     ActionListener taskPerformer = new ActionListener() {
+         public void actionPerformed(ActionEvent evt) {
+           stage.add(background);
+           context.repaint();
+         }
+     };
+     new Timer(delay, taskPerformer).start();
 
   }
 
@@ -184,25 +176,16 @@ public class Game implements IConfig {
 
     this.isFinished.set(false);
 
-    new Thread() {
-      public void run() {
-        while (!isFinished.get()) {
-
+    int delay = 1000/60; //milliseconds
+    ActionListener taskPerformer = new ActionListener() {
+        public void actionPerformed(ActionEvent evt) {
           stage.add(background);
-
           context.repaint();
-
-          try {
-            Thread.sleep(1000 / 60);
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
         }
-      }
-    }.start();
-
+    };
+    new Timer(delay, taskPerformer).start();
   }
-
+  
   /**
    * Permet de créer le menu du pong
    */
@@ -296,23 +279,15 @@ public class Game implements IConfig {
 
     this.isFinished.set(false);
 
-    new Thread() {
-      public void run() {
-        while (!isFinished.get()) {
-
+    int delay = 1000/60; //milliseconds
+    ActionListener taskPerformer = new ActionListener() {
+        public void actionPerformed(ActionEvent evt) {
           stage.add(background);
-
           context.repaint();
-
-          try {
-            Thread.sleep(1000 / 60);
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
         }
-      }
-    }.start();
-  }
+    };
+    new Timer(delay, taskPerformer).start();
+   }
 
   /**
    * Permet de créer le menu d'hebergement d'une partie pong
