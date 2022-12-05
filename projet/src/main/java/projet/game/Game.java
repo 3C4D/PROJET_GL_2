@@ -365,9 +365,9 @@ public class Game implements IConfig {
     layout.setVgap((int) (HEIGHT / 10));
     stage.getGUI().setLayout(layout);
 
-    stage.getGUI().add(usernameL);
-    stage.getGUI().add(username);
-    stage.getGUI().add(usernameB);
+    stage.getGUI().add(portL);
+    stage.getGUI().add(port);
+    stage.getGUI().add(portB);
     stage.getGUI().add(playersNbL);
     stage.getGUI().add(playersNb);
     stage.getGUI().add(playersNbB);
