@@ -62,7 +62,7 @@ public class PWindow extends JFrame {
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        
+
 
     }
 
@@ -95,7 +95,7 @@ public class PWindow extends JFrame {
      * @param context Le contexte à ajouter
      */
     public void addContext(PContext context) {
-        
+
         this.contexts.add(context);
         this.windowSizeChanged();
 
@@ -105,4 +105,22 @@ public class PWindow extends JFrame {
 
     }
 
+    /**
+     * permet d'ajouter un contexte à la fenêtre après avoir supprimer le premier
+     * @param context Le contexte à ajouter
+     */
+    public void removeAndAddContext(PContext context) {
+        this.contexts.remove(0);
+        this.contexts.add(context);
+        this.windowSizeChanged();
+
+        this.add(context);
+
+        this.layout.setColumns(this.contexts.size());
+
+    }
+
+    public void removeContext(){
+      this.contexts.remove(0);
+    }
 }

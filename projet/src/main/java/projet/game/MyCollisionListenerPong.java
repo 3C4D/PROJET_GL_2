@@ -14,15 +14,25 @@ import java.lang.Math;
 /**
 * Classe définissant les comportenants des entités suite à une collision
 */
-public class MyCollisionListener extends CollisionListener{
+public class MyCollisionListenerPong extends CollisionListener{
   public SoundPlayer[] sp = new SoundPlayer[20];
-  private MyWorld world;
+  private MyWorldPong world;
   public int count = 0;
+
+  private SoundPlayer ballWallSound, ballRacketSound;
 
   /**
   * Son constructeur
   */
-  public MyCollisionListener(MyPhysicWorld pw, MyWorld w){
+  public MyCollisionListenerPong(MyPhysicWorldPong pw, MyWorldPong w){
+    try{
+      ballWallSound = new SoundPlayer("sounds/balle1.wav");
+      ballRacketSound = new SoundPlayer("sounds/balle2.wav");
+    }
+    catch(Exception e){
+      e.printStackTrace();
+    }
+
     this.physicW = pw;
     this.world = w;
   }
@@ -100,6 +110,13 @@ public class MyCollisionListener extends CollisionListener{
     Vector2D oppositeRotation;
     float alpha, theta=0, prodS;
 
+    try{
+      ballRacketSound.play(false, .6f);
+    }
+    catch(Exception e){
+      e.printStackTrace();
+    }
+
     //On cherche le numéro du côté de la raquette que la balle touche
     int interNum = racketCollision((CircleShape)ball.getShape(), racket);
     switch (interNum) {
@@ -160,25 +177,43 @@ public class MyCollisionListener extends CollisionListener{
       switch(interNum){
         case 0: //Tentative de sortie par le haut
         body.setVelocity(new Vector2D(0,0));
-        body.applyImpulse(new Vector2D(0, 1f));
+        body.applyImpulse(new Vector2D(0, 10f));
         break;
 
         case 1: // Tentative de sortir par le bas
         body.setVelocity(new Vector2D(0,0));
-        body.applyImpulse(new Vector2D(-1,0));
+        body.applyImpulse(new Vector2D(-1f,0));
         break;
 
         case 3: // Tentative de sortir par le bas
         body.setVelocity(new Vector2D(0,0));
-        body.applyImpulse(new Vector2D(0, -1f));
+        body.applyImpulse(new Vector2D(0, -10f));
         break;
+      }
+
+      PolygonShape racket = (PolygonShape)(body.getShape());
+      if(racket.getVertex(0).getY() <= outline.getVertex(0).getY()){
+        body.setVelocity(new Vector2D(0,0));
+        body.applyImpulse(new Vector2D(0, 1f));
+      }
+      if(racket.getVertex(2).getY() >= outline.getVertex(2).getY()){
+        body.setVelocity(new Vector2D(0,0));
+        body.applyImpulse(new Vector2D(0, -1f));
       }
     }
 
     //Si c'est une ball
     if(body.getShape().getType() == ShapeType.CIRCLE){
+
       switch (interNum) {
        case 0: // Côté haut
+         try{
+           ballWallSound.play(false, .6f);
+         }
+         catch(Exception e){
+           e.printStackTrace();
+         }
+
          if(velocity.getCoordX() > 0){ //arrive de la gauche
            normal = new Vector2D(velocity.getStart(),1,0);
            prodS = velocity.scalarProduct(normal);
@@ -198,6 +233,13 @@ public class MyCollisionListener extends CollisionListener{
        break;
 
        case 2: //Côté bas
+         try{
+           ballWallSound.play(false, .6f);
+         }
+         catch(Exception e){
+           e.printStackTrace();
+         }
+
          if(velocity.getCoordX() > 0){ //arrive de la gauche
            normal = new Vector2D(velocity.getStart(),1,0);
            prodS = velocity.scalarProduct(normal);
@@ -218,15 +260,37 @@ public class MyCollisionListener extends CollisionListener{
        break;
 
        case 1: //Point pour la raquette A
-         world.removeBall();
-         world.addPointA();
-         world.replay();
+         if(!world.isNetwork()){
+           world.removeBall();
+           world.addPointA();
+           world.replay();
+         }else{
+          world.removeBall();
+           world.replay(0);
+         }
+         try{
+           new SoundPlayer("sounds/siuu.wav").play(false, .6f);
+         }
+         catch(Exception e){
+           e.printStackTrace();
+         }
        break;
 
        case 3: //Point pour la raquette B
-         world.removeBall();
-         world.addPointB();
-         world.replay();
+         if(!world.isNetwork()){
+           world.removeBall();
+           world.addPointB();
+           world.replay();
+         }else{
+           world.removeBall();
+           world.replay(1);
+         }
+         try{
+           new SoundPlayer("sounds/siuu.wav").play(false, .6f);
+         }
+         catch(Exception e){
+           e.printStackTrace();
+         }
        break;
 
        default:

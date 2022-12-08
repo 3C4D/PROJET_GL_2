@@ -43,9 +43,16 @@ public class PStage {
      * @param g
      */
     public void paint(Graphics g) {
+      try{
         while(this.listToPaint.size() != 0) {
             this.listToPaint.poll().paint(g);
         }
+      }
+      catch(Exception e){
+        // e.printStackTrace();
+      }
+
+      this.GUI.repaint();
     }
 
     /**

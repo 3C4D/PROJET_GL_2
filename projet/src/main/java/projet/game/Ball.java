@@ -18,22 +18,26 @@ public class Ball extends MyEntity{
   * Classe représentant l'aspect graphique d'une balle
   */
   public class BallTexture extends PFixedTexturedDrawable{
+    private Color color;
 
-    public BallTexture(int x, int y, int width, int height){
+    public BallTexture(int x, int y, int width, int height, Color color){
       super(x,y,width,height);
     }
 
     @Override
     public void paint(Graphics g){
-      g.setColor(Color.WHITE);
+      g.setColor(this.color);
       g.fillOval(this.x-this.width, this.y-this.width, this.width*2, this.width*2);
     }
   }
 
   /**
   * Permet de créer une balle à partir de son centre et de son rayon (taille)
+  * @param son centre
+  * @param la longueur de son rayon
+  * @param la couleur de la balle 
   */
-  public Ball(Point center, float ray){
+  public Ball(Point center, float ray, Color color){
     super(MyEntity.BALL);
     //On créer son enveloppe
     CircleShape ballShape = new CircleShape(center, ray);
@@ -44,7 +48,7 @@ public class Ball extends MyEntity{
     this.body.getFilter().setMaskBits(MyFilter.BALL_MASK);
 
     // On ajoute une fixture
-    BallTexture texture = new BallTexture((int)center.getX(), (int)center.getY(), (int)ray, (int)ray);
+    BallTexture texture = new BallTexture((int)center.getX(), (int)center.getY(), (int)ray, (int)ray, color);
     this.setDrawable(texture);
   }
 
